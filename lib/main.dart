@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'views/screens/splash_screen.dart'; // Use relative path
+import 'views/screens/splash_screen.dart';
 
 void main() {
   // We will add database initialization and other async setup here later.

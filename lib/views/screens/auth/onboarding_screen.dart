@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'offline_warning_screen.dart'; // Relative import
-import '../home/home_screen.dart'; // Relative import
+import 'offline_warning_screen.dart';
+import '../home/home_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
