@@ -1,56 +1,85 @@
 import 'package:flutter/material.dart';
-import '../home/home_screen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:worldorganizer_app/core/config/app_theme.dart';
+import 'package:worldorganizer_app/views/screens/home/home_screen.dart';
 
-class OfflineWarningScreen extends StatelessWidget {
+class OfflineWarningScreen extends StatefulWidget {
   const OfflineWarningScreen({super.key});
 
-  /// Handles the Google Sign-In flow from the warning screen.
-  void _onLoginWithGoogle(BuildContext context) {
-    // TODO: Implement Google Sign-In logic here.
-    print("Login with Google pressed");
-    
-    // On successful login, navigate to the main app.
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-    );
-  }
+  @override
+  State<OfflineWarningScreen> createState() => _OfflineWarningScreenState();
+}
 
-  /// Commits the user to offline mode and proceeds to the app.
-  void _onContinueOffline(BuildContext context) {
-    // TODO: Set a flag in shared_preferences to remember this choice.
-    Navigator.of(context).pushReplacement(
+class _OfflineWarningScreenState extends State<OfflineWarningScreen> {
+  final _secureStorage = const FlutterSecureStorage();
+
+  Future<void> _handleContinueOffline() async {
+    await _secureStorage.write(key: 'session_type', value: 'offline');
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const HomeScreen()),
+      (Route<dynamic> route) => false,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Offline Mode Warning'),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Are you sure?',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
+              const Icon(Icons.cloud_off, size: 100, color: Colors.grey),
               const SizedBox(height: 20),
               const Text(
-                'Without logging in, your data will only be saved locally on this device. If you delete the app or lose your phone, your data will be lost.',
+                'You are about to proceed offline.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              Text.rich(
+                TextSpan(
+                  text:
+                      'If you don’t log in, your content might be lost since it won’t be stored in the cloud, and it won’t stay synced across your devices. ',
+                  style: const TextStyle(fontSize: 16),
+                  children: [
+                    TextSpan(
+                      text: 'You can log in at any time from settings.',
+                      style: TextStyle(
+                        color: AppTheme.turquoiseColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () => _onLoginWithGoogle(context),
-                child: const Text('Login with Google'),
+                onPressed: _handleContinueOffline,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.turquoiseColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 15,
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                child: const Text('I Understand, Continue'),
               ),
-              const SizedBox(height: 20),
               TextButton(
-                onPressed: () => _onContinueOffline(context),
-                child: const Text('Continue offline'),
-              ),
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Go Back'),
+              )
             ],
           ),
         ),

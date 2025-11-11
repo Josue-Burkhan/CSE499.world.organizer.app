@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'views/screens/splash_screen.dart';
+import 'package:worldorganizer_app/core/config/app_theme.dart';
+import 'package:worldorganizer_app/views/screens/splash_screen.dart';
 
 void main() {
   // We will add database initialization and other async setup here later.
@@ -18,16 +19,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'World Organizer',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-      ),
-      // SplashScreen is the app's entry point, which will handle
-      // navigation logic (e.g., to auth or home).
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
       home: const SplashScreen(),
     );
   }
