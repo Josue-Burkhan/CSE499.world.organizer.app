@@ -1,0 +1,271 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_form/character_form_screen.dart';
+
+final characterListStreamProvider = StreamProvider.family
+  .autoDispose<List<CharacterEntity>, String>((ref, worldLocalId) {
+    return ref.watch(characterRepositoryProvider).watchCharactersInWorld(worldLocalId);
+});
+
+final characterSyncProvider = FutureProvider.autoDispose
+  .family<void, ({String worldLocalId, String? worldServerId})>((ref, ids) async {
+    
+    if (ids.worldServerId != null) {
+      final syncService = ref.watch(characterSyncServiceProvider);
+      await syncService.syncDirtyCharacters();
+      await syncService.fetchAndMergeCharacters(ids.worldLocalId, ids.worldServerId!);
+    }
+});
+
+class CharacterListScreen extends ConsumerWidget {
+  final String worldLocalId;
+  final String? worldServerId;
+  final String worldName;
+
+  const CharacterListScreen({
+    super.key,
+    required this.worldLocalId,
+    this.worldServerId,
+    required this.worldName,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(characterSyncProvider(
+      (worldLocalId: worldLocalId, worldServerId: worldServerId)
+    ));
+
+    final asyncChars = ref.watch(characterListStreamProvider(worldLocalId));
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Characters in $worldName'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CharacterScreen(
+                    worldLocalId: worldLocalId,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: asyncChars.when(
+        data: (characters) {
+          if (characters.isEmpty) {
+            return _buildEmptyView(context);
+          }
+          return RefreshIndicator(
+            onRefresh: () async {
+              await ref.refresh(characterSyncProvider(
+                (worldLocalId: worldLocalId, worldServerId: worldServerId)
+              ).future);
+            },
+            child: ListView.builder(
+              itemCount: characters.length,
+              itemBuilder: (context, index) {
+                final character = characters[index];
+                return _buildCharacterCard(context, ref, character);
+              },
+            ),
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, st) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text('Failed to load characters: $e'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyView(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.people_outline, size: 80, color: Colors.grey),
+            const SizedBox(height: 20),
+            const Text(
+              'No characters yet.',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Create your first character to populate your world!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Create a Character'),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CharacterScreen(
+                      worldLocalId: worldLocalId,
+                    ),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                textStyle: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCharacterCard(
+    BuildContext context, 
+    WidgetRef ref, 
+    CharacterEntity character
+  ) {
+    final color = _getTagColor(character.tagColor);
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      elevation: 2,
+      clipBehavior: Clip.antiAlias,
+      child: Dismissible(
+        key: Key(character.localId),
+        background: _buildSwipeAction(
+          context,
+          'Delete',
+          Icons.delete,
+          Colors.red,
+          Alignment.centerLeft,
+        ),
+        secondaryBackground: _buildSwipeAction(
+          context,
+          'Edit',
+          Icons.edit,
+          Colors.blue,
+          Alignment.centerRight,
+        ),
+        confirmDismiss: (direction) async {
+          if (direction == DismissDirection.startToEnd) {
+            return await _showDeleteConfirmation(context, character.name);
+          } else if (direction == DismissDirection.endToStart) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CharacterScreen(
+                  worldLocalId: worldLocalId,
+                  characterLocalId: character.localId,
+                ),
+              ),
+            );
+            return false;
+          }
+          return false;
+        },
+        onDismissed: (direction) {
+          if (direction == DismissDirection.startToEnd) {
+            try {
+              ref.read(characterRepositoryProvider).deleteCharacter(character.localId);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('"${character.name}" was deleted.')),
+              );
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error: $e')),
+              );
+            }
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: color, width: 4),
+            ),
+          ),
+          child: ListTile(
+            title: Text(character.name),
+            subtitle: Text(
+              character.customNotes ?? 'No custom notes',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            onTap: () {
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color _getTagColor(String tagColor) {
+    switch (tagColor) {
+      case 'blue': return Colors.blue.shade400;
+      case 'purple': return Colors.purple.shade400;
+      case 'green': return Colors.green.shade400;
+      case 'red': return Colors.red.shade400;
+      case 'amber': return Colors.amber.shade400;
+      case 'lime': return Colors.lime.shade400;
+      case 'black': return Colors.black87;
+      case 'neutral': default: return Colors.grey.shade400;
+    }
+  }
+
+  Widget _buildSwipeAction(
+    BuildContext context,
+    String label,
+    IconData icon,
+    Color color,
+    Alignment alignment,
+  ) {
+    final bool isLeft = alignment == Alignment.centerLeft;
+    return Container(
+      color: color,
+      alignment: alignment,
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isLeft) Icon(icon, color: Colors.white),
+          if (isLeft) const SizedBox(width: 8),
+          Text(label, style: const TextStyle(color: Colors.white)),
+          if (!isLeft) const SizedBox(width: 8),
+          if (!isLeft) Icon(icon, color: Colors.white),
+        ],
+      ),
+    );
+  }
+
+  Future<bool> _showDeleteConfirmation(BuildContext context, String name) async {
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Character'),
+        content: Text('Are you sure you want to delete "$name"? This action cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    return confirmed ?? false;
+  }
+}

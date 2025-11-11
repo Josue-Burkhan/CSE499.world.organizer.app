@@ -6,6 +6,10 @@ part of 'app_database.dart';
 mixin _$WorldsDaoMixin on DatabaseAccessor<AppDatabase> {
   $WorldsTable get worlds => attachedDatabase.worlds;
 }
+mixin _$CharactersDaoMixin on DatabaseAccessor<AppDatabase> {
+  $WorldsTable get worlds => attachedDatabase.worlds;
+  $CharactersTable get characters => attachedDatabase.characters;
+}
 
 class $UserProfileTable extends UserProfile
     with TableInfo<$UserProfileTable, UserProfileEntity> {
@@ -1095,17 +1099,1657 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
   }
 }
 
+class $CharactersTable extends Characters
+    with TableInfo<$CharactersTable, CharacterEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CharactersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _localIdMeta = const VerificationMeta(
+    'localId',
+  );
+  @override
+  late final GeneratedColumn<String> localId = GeneratedColumn<String>(
+    'local_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => const Uuid().v4(),
+  );
+  static const VerificationMeta _serverIdMeta = const VerificationMeta(
+    'serverId',
+  );
+  @override
+  late final GeneratedColumn<String> serverId = GeneratedColumn<String>(
+    'server_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<SyncStatus, String> syncStatus =
+      GeneratedColumn<String>(
+        'sync_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        clientDefault: () => 'created',
+      ).withConverter<SyncStatus>($CharactersTable.$convertersyncStatus);
+  static const VerificationMeta _worldLocalIdMeta = const VerificationMeta(
+    'worldLocalId',
+  );
+  @override
+  late final GeneratedColumn<String> worldLocalId = GeneratedColumn<String>(
+    'world_local_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES worlds (local_id)',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ageMeta = const VerificationMeta('age');
+  @override
+  late final GeneratedColumn<int> age = GeneratedColumn<int>(
+    'age',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _genderMeta = const VerificationMeta('gender');
+  @override
+  late final GeneratedColumn<String> gender = GeneratedColumn<String>(
+    'gender',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _nicknameMeta = const VerificationMeta(
+    'nickname',
+  );
+  @override
+  late final GeneratedColumn<String> nickname = GeneratedColumn<String>(
+    'nickname',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _customNotesMeta = const VerificationMeta(
+    'customNotes',
+  );
+  @override
+  late final GeneratedColumn<String> customNotes = GeneratedColumn<String>(
+    'custom_notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _tagColorMeta = const VerificationMeta(
+    'tagColor',
+  );
+  @override
+  late final GeneratedColumn<String> tagColor = GeneratedColumn<String>(
+    'tag_color',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('neutral'),
+  );
+  static const VerificationMeta _appearanceJsonMeta = const VerificationMeta(
+    'appearanceJson',
+  );
+  @override
+  late final GeneratedColumn<String> appearanceJson = GeneratedColumn<String>(
+    'appearance_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _personalityJsonMeta = const VerificationMeta(
+    'personalityJson',
+  );
+  @override
+  late final GeneratedColumn<String> personalityJson = GeneratedColumn<String>(
+    'personality_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _historyJsonMeta = const VerificationMeta(
+    'historyJson',
+  );
+  @override
+  late final GeneratedColumn<String> historyJson = GeneratedColumn<String>(
+    'history_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> images =
+      GeneratedColumn<String>(
+        'images',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($CharactersTable.$converterimages);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawFamily =
+      GeneratedColumn<String>(
+        'raw_family',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($CharactersTable.$converterrawFamily);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawFriends =
+      GeneratedColumn<String>(
+        'raw_friends',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($CharactersTable.$converterrawFriends);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEnemies =
+      GeneratedColumn<String>(
+        'raw_enemies',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($CharactersTable.$converterrawEnemies);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawRomance =
+      GeneratedColumn<String>(
+        'raw_romance',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($CharactersTable.$converterrawRomance);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawAbilities = GeneratedColumn<String>(
+    'raw_abilities',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawAbilities);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawItems =
+      GeneratedColumn<String>(
+        'raw_items',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($CharactersTable.$converterrawItems);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawLanguages = GeneratedColumn<String>(
+    'raw_languages',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawLanguages);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawRaces =
+      GeneratedColumn<String>(
+        'raw_races',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($CharactersTable.$converterrawRaces);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawFactions = GeneratedColumn<String>(
+    'raw_factions',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawFactions);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawLocations = GeneratedColumn<String>(
+    'raw_locations',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawLocations);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawPowerSystems = GeneratedColumn<String>(
+    'raw_power_systems',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawPowerSystems);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawReligions = GeneratedColumn<String>(
+    'raw_religions',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawReligions);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawCreatures = GeneratedColumn<String>(
+    'raw_creatures',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawCreatures);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawEconomies = GeneratedColumn<String>(
+    'raw_economies',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawEconomies);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
+      GeneratedColumn<String>(
+        'raw_stories',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($CharactersTable.$converterrawStories);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawTechnologies = GeneratedColumn<String>(
+    'raw_technologies',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($CharactersTable.$converterrawTechnologies);
+  @override
+  List<GeneratedColumn> get $columns => [
+    localId,
+    serverId,
+    syncStatus,
+    worldLocalId,
+    name,
+    age,
+    gender,
+    nickname,
+    customNotes,
+    tagColor,
+    appearanceJson,
+    personalityJson,
+    historyJson,
+    images,
+    rawFamily,
+    rawFriends,
+    rawEnemies,
+    rawRomance,
+    rawAbilities,
+    rawItems,
+    rawLanguages,
+    rawRaces,
+    rawFactions,
+    rawLocations,
+    rawPowerSystems,
+    rawReligions,
+    rawCreatures,
+    rawEconomies,
+    rawStories,
+    rawTechnologies,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'characters';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CharacterEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('local_id')) {
+      context.handle(
+        _localIdMeta,
+        localId.isAcceptableOrUnknown(data['local_id']!, _localIdMeta),
+      );
+    }
+    if (data.containsKey('server_id')) {
+      context.handle(
+        _serverIdMeta,
+        serverId.isAcceptableOrUnknown(data['server_id']!, _serverIdMeta),
+      );
+    }
+    if (data.containsKey('world_local_id')) {
+      context.handle(
+        _worldLocalIdMeta,
+        worldLocalId.isAcceptableOrUnknown(
+          data['world_local_id']!,
+          _worldLocalIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_worldLocalIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('age')) {
+      context.handle(
+        _ageMeta,
+        age.isAcceptableOrUnknown(data['age']!, _ageMeta),
+      );
+    }
+    if (data.containsKey('gender')) {
+      context.handle(
+        _genderMeta,
+        gender.isAcceptableOrUnknown(data['gender']!, _genderMeta),
+      );
+    }
+    if (data.containsKey('nickname')) {
+      context.handle(
+        _nicknameMeta,
+        nickname.isAcceptableOrUnknown(data['nickname']!, _nicknameMeta),
+      );
+    }
+    if (data.containsKey('custom_notes')) {
+      context.handle(
+        _customNotesMeta,
+        customNotes.isAcceptableOrUnknown(
+          data['custom_notes']!,
+          _customNotesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('tag_color')) {
+      context.handle(
+        _tagColorMeta,
+        tagColor.isAcceptableOrUnknown(data['tag_color']!, _tagColorMeta),
+      );
+    }
+    if (data.containsKey('appearance_json')) {
+      context.handle(
+        _appearanceJsonMeta,
+        appearanceJson.isAcceptableOrUnknown(
+          data['appearance_json']!,
+          _appearanceJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('personality_json')) {
+      context.handle(
+        _personalityJsonMeta,
+        personalityJson.isAcceptableOrUnknown(
+          data['personality_json']!,
+          _personalityJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('history_json')) {
+      context.handle(
+        _historyJsonMeta,
+        historyJson.isAcceptableOrUnknown(
+          data['history_json']!,
+          _historyJsonMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {localId};
+  @override
+  CharacterEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CharacterEntity(
+      localId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_id'],
+      )!,
+      serverId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}server_id'],
+      ),
+      syncStatus: $CharactersTable.$convertersyncStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}sync_status'],
+        )!,
+      ),
+      worldLocalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}world_local_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      age: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}age'],
+      ),
+      gender: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}gender'],
+      ),
+      nickname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nickname'],
+      ),
+      customNotes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}custom_notes'],
+      ),
+      tagColor: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tag_color'],
+      )!,
+      appearanceJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}appearance_json'],
+      ),
+      personalityJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}personality_json'],
+      ),
+      historyJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}history_json'],
+      ),
+      images: $CharactersTable.$converterimages.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}images'],
+        )!,
+      ),
+      rawFamily: $CharactersTable.$converterrawFamily.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_family'],
+        )!,
+      ),
+      rawFriends: $CharactersTable.$converterrawFriends.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_friends'],
+        )!,
+      ),
+      rawEnemies: $CharactersTable.$converterrawEnemies.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_enemies'],
+        )!,
+      ),
+      rawRomance: $CharactersTable.$converterrawRomance.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_romance'],
+        )!,
+      ),
+      rawAbilities: $CharactersTable.$converterrawAbilities.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_abilities'],
+        )!,
+      ),
+      rawItems: $CharactersTable.$converterrawItems.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_items'],
+        )!,
+      ),
+      rawLanguages: $CharactersTable.$converterrawLanguages.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_languages'],
+        )!,
+      ),
+      rawRaces: $CharactersTable.$converterrawRaces.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_races'],
+        )!,
+      ),
+      rawFactions: $CharactersTable.$converterrawFactions.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_factions'],
+        )!,
+      ),
+      rawLocations: $CharactersTable.$converterrawLocations.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_locations'],
+        )!,
+      ),
+      rawPowerSystems: $CharactersTable.$converterrawPowerSystems.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_power_systems'],
+        )!,
+      ),
+      rawReligions: $CharactersTable.$converterrawReligions.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_religions'],
+        )!,
+      ),
+      rawCreatures: $CharactersTable.$converterrawCreatures.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_creatures'],
+        )!,
+      ),
+      rawEconomies: $CharactersTable.$converterrawEconomies.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_economies'],
+        )!,
+      ),
+      rawStories: $CharactersTable.$converterrawStories.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_stories'],
+        )!,
+      ),
+      rawTechnologies: $CharactersTable.$converterrawTechnologies.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_technologies'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $CharactersTable createAlias(String alias) {
+    return $CharactersTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<SyncStatus, String> $convertersyncStatus =
+      const SyncStatusConverter();
+  static TypeConverter<List<String>, String> $converterimages =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawFamily =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawFriends =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawEnemies =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawRomance =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawAbilities =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawItems =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawLanguages =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawRaces =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawFactions =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawLocations =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawPowerSystems =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawReligions =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawCreatures =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawEconomies =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawStories =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawTechnologies =
+      const ListStringConverter();
+}
+
+class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
+  final String localId;
+  final String? serverId;
+  final SyncStatus syncStatus;
+  final String worldLocalId;
+  final String name;
+  final int? age;
+  final String? gender;
+  final String? nickname;
+  final String? customNotes;
+  final String tagColor;
+  final String? appearanceJson;
+  final String? personalityJson;
+  final String? historyJson;
+  final List<String> images;
+  final List<String> rawFamily;
+  final List<String> rawFriends;
+  final List<String> rawEnemies;
+  final List<String> rawRomance;
+  final List<String> rawAbilities;
+  final List<String> rawItems;
+  final List<String> rawLanguages;
+  final List<String> rawRaces;
+  final List<String> rawFactions;
+  final List<String> rawLocations;
+  final List<String> rawPowerSystems;
+  final List<String> rawReligions;
+  final List<String> rawCreatures;
+  final List<String> rawEconomies;
+  final List<String> rawStories;
+  final List<String> rawTechnologies;
+  const CharacterEntity({
+    required this.localId,
+    this.serverId,
+    required this.syncStatus,
+    required this.worldLocalId,
+    required this.name,
+    this.age,
+    this.gender,
+    this.nickname,
+    this.customNotes,
+    required this.tagColor,
+    this.appearanceJson,
+    this.personalityJson,
+    this.historyJson,
+    required this.images,
+    required this.rawFamily,
+    required this.rawFriends,
+    required this.rawEnemies,
+    required this.rawRomance,
+    required this.rawAbilities,
+    required this.rawItems,
+    required this.rawLanguages,
+    required this.rawRaces,
+    required this.rawFactions,
+    required this.rawLocations,
+    required this.rawPowerSystems,
+    required this.rawReligions,
+    required this.rawCreatures,
+    required this.rawEconomies,
+    required this.rawStories,
+    required this.rawTechnologies,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['local_id'] = Variable<String>(localId);
+    if (!nullToAbsent || serverId != null) {
+      map['server_id'] = Variable<String>(serverId);
+    }
+    {
+      map['sync_status'] = Variable<String>(
+        $CharactersTable.$convertersyncStatus.toSql(syncStatus),
+      );
+    }
+    map['world_local_id'] = Variable<String>(worldLocalId);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || age != null) {
+      map['age'] = Variable<int>(age);
+    }
+    if (!nullToAbsent || gender != null) {
+      map['gender'] = Variable<String>(gender);
+    }
+    if (!nullToAbsent || nickname != null) {
+      map['nickname'] = Variable<String>(nickname);
+    }
+    if (!nullToAbsent || customNotes != null) {
+      map['custom_notes'] = Variable<String>(customNotes);
+    }
+    map['tag_color'] = Variable<String>(tagColor);
+    if (!nullToAbsent || appearanceJson != null) {
+      map['appearance_json'] = Variable<String>(appearanceJson);
+    }
+    if (!nullToAbsent || personalityJson != null) {
+      map['personality_json'] = Variable<String>(personalityJson);
+    }
+    if (!nullToAbsent || historyJson != null) {
+      map['history_json'] = Variable<String>(historyJson);
+    }
+    {
+      map['images'] = Variable<String>(
+        $CharactersTable.$converterimages.toSql(images),
+      );
+    }
+    {
+      map['raw_family'] = Variable<String>(
+        $CharactersTable.$converterrawFamily.toSql(rawFamily),
+      );
+    }
+    {
+      map['raw_friends'] = Variable<String>(
+        $CharactersTable.$converterrawFriends.toSql(rawFriends),
+      );
+    }
+    {
+      map['raw_enemies'] = Variable<String>(
+        $CharactersTable.$converterrawEnemies.toSql(rawEnemies),
+      );
+    }
+    {
+      map['raw_romance'] = Variable<String>(
+        $CharactersTable.$converterrawRomance.toSql(rawRomance),
+      );
+    }
+    {
+      map['raw_abilities'] = Variable<String>(
+        $CharactersTable.$converterrawAbilities.toSql(rawAbilities),
+      );
+    }
+    {
+      map['raw_items'] = Variable<String>(
+        $CharactersTable.$converterrawItems.toSql(rawItems),
+      );
+    }
+    {
+      map['raw_languages'] = Variable<String>(
+        $CharactersTable.$converterrawLanguages.toSql(rawLanguages),
+      );
+    }
+    {
+      map['raw_races'] = Variable<String>(
+        $CharactersTable.$converterrawRaces.toSql(rawRaces),
+      );
+    }
+    {
+      map['raw_factions'] = Variable<String>(
+        $CharactersTable.$converterrawFactions.toSql(rawFactions),
+      );
+    }
+    {
+      map['raw_locations'] = Variable<String>(
+        $CharactersTable.$converterrawLocations.toSql(rawLocations),
+      );
+    }
+    {
+      map['raw_power_systems'] = Variable<String>(
+        $CharactersTable.$converterrawPowerSystems.toSql(rawPowerSystems),
+      );
+    }
+    {
+      map['raw_religions'] = Variable<String>(
+        $CharactersTable.$converterrawReligions.toSql(rawReligions),
+      );
+    }
+    {
+      map['raw_creatures'] = Variable<String>(
+        $CharactersTable.$converterrawCreatures.toSql(rawCreatures),
+      );
+    }
+    {
+      map['raw_economies'] = Variable<String>(
+        $CharactersTable.$converterrawEconomies.toSql(rawEconomies),
+      );
+    }
+    {
+      map['raw_stories'] = Variable<String>(
+        $CharactersTable.$converterrawStories.toSql(rawStories),
+      );
+    }
+    {
+      map['raw_technologies'] = Variable<String>(
+        $CharactersTable.$converterrawTechnologies.toSql(rawTechnologies),
+      );
+    }
+    return map;
+  }
+
+  CharactersCompanion toCompanion(bool nullToAbsent) {
+    return CharactersCompanion(
+      localId: Value(localId),
+      serverId: serverId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverId),
+      syncStatus: Value(syncStatus),
+      worldLocalId: Value(worldLocalId),
+      name: Value(name),
+      age: age == null && nullToAbsent ? const Value.absent() : Value(age),
+      gender: gender == null && nullToAbsent
+          ? const Value.absent()
+          : Value(gender),
+      nickname: nickname == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nickname),
+      customNotes: customNotes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customNotes),
+      tagColor: Value(tagColor),
+      appearanceJson: appearanceJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(appearanceJson),
+      personalityJson: personalityJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(personalityJson),
+      historyJson: historyJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(historyJson),
+      images: Value(images),
+      rawFamily: Value(rawFamily),
+      rawFriends: Value(rawFriends),
+      rawEnemies: Value(rawEnemies),
+      rawRomance: Value(rawRomance),
+      rawAbilities: Value(rawAbilities),
+      rawItems: Value(rawItems),
+      rawLanguages: Value(rawLanguages),
+      rawRaces: Value(rawRaces),
+      rawFactions: Value(rawFactions),
+      rawLocations: Value(rawLocations),
+      rawPowerSystems: Value(rawPowerSystems),
+      rawReligions: Value(rawReligions),
+      rawCreatures: Value(rawCreatures),
+      rawEconomies: Value(rawEconomies),
+      rawStories: Value(rawStories),
+      rawTechnologies: Value(rawTechnologies),
+    );
+  }
+
+  factory CharacterEntity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CharacterEntity(
+      localId: serializer.fromJson<String>(json['localId']),
+      serverId: serializer.fromJson<String?>(json['serverId']),
+      syncStatus: serializer.fromJson<SyncStatus>(json['syncStatus']),
+      worldLocalId: serializer.fromJson<String>(json['worldLocalId']),
+      name: serializer.fromJson<String>(json['name']),
+      age: serializer.fromJson<int?>(json['age']),
+      gender: serializer.fromJson<String?>(json['gender']),
+      nickname: serializer.fromJson<String?>(json['nickname']),
+      customNotes: serializer.fromJson<String?>(json['customNotes']),
+      tagColor: serializer.fromJson<String>(json['tagColor']),
+      appearanceJson: serializer.fromJson<String?>(json['appearanceJson']),
+      personalityJson: serializer.fromJson<String?>(json['personalityJson']),
+      historyJson: serializer.fromJson<String?>(json['historyJson']),
+      images: serializer.fromJson<List<String>>(json['images']),
+      rawFamily: serializer.fromJson<List<String>>(json['rawFamily']),
+      rawFriends: serializer.fromJson<List<String>>(json['rawFriends']),
+      rawEnemies: serializer.fromJson<List<String>>(json['rawEnemies']),
+      rawRomance: serializer.fromJson<List<String>>(json['rawRomance']),
+      rawAbilities: serializer.fromJson<List<String>>(json['rawAbilities']),
+      rawItems: serializer.fromJson<List<String>>(json['rawItems']),
+      rawLanguages: serializer.fromJson<List<String>>(json['rawLanguages']),
+      rawRaces: serializer.fromJson<List<String>>(json['rawRaces']),
+      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
+      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
+      rawPowerSystems: serializer.fromJson<List<String>>(
+        json['rawPowerSystems'],
+      ),
+      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
+      rawCreatures: serializer.fromJson<List<String>>(json['rawCreatures']),
+      rawEconomies: serializer.fromJson<List<String>>(json['rawEconomies']),
+      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
+      rawTechnologies: serializer.fromJson<List<String>>(
+        json['rawTechnologies'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'localId': serializer.toJson<String>(localId),
+      'serverId': serializer.toJson<String?>(serverId),
+      'syncStatus': serializer.toJson<SyncStatus>(syncStatus),
+      'worldLocalId': serializer.toJson<String>(worldLocalId),
+      'name': serializer.toJson<String>(name),
+      'age': serializer.toJson<int?>(age),
+      'gender': serializer.toJson<String?>(gender),
+      'nickname': serializer.toJson<String?>(nickname),
+      'customNotes': serializer.toJson<String?>(customNotes),
+      'tagColor': serializer.toJson<String>(tagColor),
+      'appearanceJson': serializer.toJson<String?>(appearanceJson),
+      'personalityJson': serializer.toJson<String?>(personalityJson),
+      'historyJson': serializer.toJson<String?>(historyJson),
+      'images': serializer.toJson<List<String>>(images),
+      'rawFamily': serializer.toJson<List<String>>(rawFamily),
+      'rawFriends': serializer.toJson<List<String>>(rawFriends),
+      'rawEnemies': serializer.toJson<List<String>>(rawEnemies),
+      'rawRomance': serializer.toJson<List<String>>(rawRomance),
+      'rawAbilities': serializer.toJson<List<String>>(rawAbilities),
+      'rawItems': serializer.toJson<List<String>>(rawItems),
+      'rawLanguages': serializer.toJson<List<String>>(rawLanguages),
+      'rawRaces': serializer.toJson<List<String>>(rawRaces),
+      'rawFactions': serializer.toJson<List<String>>(rawFactions),
+      'rawLocations': serializer.toJson<List<String>>(rawLocations),
+      'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
+      'rawReligions': serializer.toJson<List<String>>(rawReligions),
+      'rawCreatures': serializer.toJson<List<String>>(rawCreatures),
+      'rawEconomies': serializer.toJson<List<String>>(rawEconomies),
+      'rawStories': serializer.toJson<List<String>>(rawStories),
+      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+    };
+  }
+
+  CharacterEntity copyWith({
+    String? localId,
+    Value<String?> serverId = const Value.absent(),
+    SyncStatus? syncStatus,
+    String? worldLocalId,
+    String? name,
+    Value<int?> age = const Value.absent(),
+    Value<String?> gender = const Value.absent(),
+    Value<String?> nickname = const Value.absent(),
+    Value<String?> customNotes = const Value.absent(),
+    String? tagColor,
+    Value<String?> appearanceJson = const Value.absent(),
+    Value<String?> personalityJson = const Value.absent(),
+    Value<String?> historyJson = const Value.absent(),
+    List<String>? images,
+    List<String>? rawFamily,
+    List<String>? rawFriends,
+    List<String>? rawEnemies,
+    List<String>? rawRomance,
+    List<String>? rawAbilities,
+    List<String>? rawItems,
+    List<String>? rawLanguages,
+    List<String>? rawRaces,
+    List<String>? rawFactions,
+    List<String>? rawLocations,
+    List<String>? rawPowerSystems,
+    List<String>? rawReligions,
+    List<String>? rawCreatures,
+    List<String>? rawEconomies,
+    List<String>? rawStories,
+    List<String>? rawTechnologies,
+  }) => CharacterEntity(
+    localId: localId ?? this.localId,
+    serverId: serverId.present ? serverId.value : this.serverId,
+    syncStatus: syncStatus ?? this.syncStatus,
+    worldLocalId: worldLocalId ?? this.worldLocalId,
+    name: name ?? this.name,
+    age: age.present ? age.value : this.age,
+    gender: gender.present ? gender.value : this.gender,
+    nickname: nickname.present ? nickname.value : this.nickname,
+    customNotes: customNotes.present ? customNotes.value : this.customNotes,
+    tagColor: tagColor ?? this.tagColor,
+    appearanceJson: appearanceJson.present
+        ? appearanceJson.value
+        : this.appearanceJson,
+    personalityJson: personalityJson.present
+        ? personalityJson.value
+        : this.personalityJson,
+    historyJson: historyJson.present ? historyJson.value : this.historyJson,
+    images: images ?? this.images,
+    rawFamily: rawFamily ?? this.rawFamily,
+    rawFriends: rawFriends ?? this.rawFriends,
+    rawEnemies: rawEnemies ?? this.rawEnemies,
+    rawRomance: rawRomance ?? this.rawRomance,
+    rawAbilities: rawAbilities ?? this.rawAbilities,
+    rawItems: rawItems ?? this.rawItems,
+    rawLanguages: rawLanguages ?? this.rawLanguages,
+    rawRaces: rawRaces ?? this.rawRaces,
+    rawFactions: rawFactions ?? this.rawFactions,
+    rawLocations: rawLocations ?? this.rawLocations,
+    rawPowerSystems: rawPowerSystems ?? this.rawPowerSystems,
+    rawReligions: rawReligions ?? this.rawReligions,
+    rawCreatures: rawCreatures ?? this.rawCreatures,
+    rawEconomies: rawEconomies ?? this.rawEconomies,
+    rawStories: rawStories ?? this.rawStories,
+    rawTechnologies: rawTechnologies ?? this.rawTechnologies,
+  );
+  CharacterEntity copyWithCompanion(CharactersCompanion data) {
+    return CharacterEntity(
+      localId: data.localId.present ? data.localId.value : this.localId,
+      serverId: data.serverId.present ? data.serverId.value : this.serverId,
+      syncStatus: data.syncStatus.present
+          ? data.syncStatus.value
+          : this.syncStatus,
+      worldLocalId: data.worldLocalId.present
+          ? data.worldLocalId.value
+          : this.worldLocalId,
+      name: data.name.present ? data.name.value : this.name,
+      age: data.age.present ? data.age.value : this.age,
+      gender: data.gender.present ? data.gender.value : this.gender,
+      nickname: data.nickname.present ? data.nickname.value : this.nickname,
+      customNotes: data.customNotes.present
+          ? data.customNotes.value
+          : this.customNotes,
+      tagColor: data.tagColor.present ? data.tagColor.value : this.tagColor,
+      appearanceJson: data.appearanceJson.present
+          ? data.appearanceJson.value
+          : this.appearanceJson,
+      personalityJson: data.personalityJson.present
+          ? data.personalityJson.value
+          : this.personalityJson,
+      historyJson: data.historyJson.present
+          ? data.historyJson.value
+          : this.historyJson,
+      images: data.images.present ? data.images.value : this.images,
+      rawFamily: data.rawFamily.present ? data.rawFamily.value : this.rawFamily,
+      rawFriends: data.rawFriends.present
+          ? data.rawFriends.value
+          : this.rawFriends,
+      rawEnemies: data.rawEnemies.present
+          ? data.rawEnemies.value
+          : this.rawEnemies,
+      rawRomance: data.rawRomance.present
+          ? data.rawRomance.value
+          : this.rawRomance,
+      rawAbilities: data.rawAbilities.present
+          ? data.rawAbilities.value
+          : this.rawAbilities,
+      rawItems: data.rawItems.present ? data.rawItems.value : this.rawItems,
+      rawLanguages: data.rawLanguages.present
+          ? data.rawLanguages.value
+          : this.rawLanguages,
+      rawRaces: data.rawRaces.present ? data.rawRaces.value : this.rawRaces,
+      rawFactions: data.rawFactions.present
+          ? data.rawFactions.value
+          : this.rawFactions,
+      rawLocations: data.rawLocations.present
+          ? data.rawLocations.value
+          : this.rawLocations,
+      rawPowerSystems: data.rawPowerSystems.present
+          ? data.rawPowerSystems.value
+          : this.rawPowerSystems,
+      rawReligions: data.rawReligions.present
+          ? data.rawReligions.value
+          : this.rawReligions,
+      rawCreatures: data.rawCreatures.present
+          ? data.rawCreatures.value
+          : this.rawCreatures,
+      rawEconomies: data.rawEconomies.present
+          ? data.rawEconomies.value
+          : this.rawEconomies,
+      rawStories: data.rawStories.present
+          ? data.rawStories.value
+          : this.rawStories,
+      rawTechnologies: data.rawTechnologies.present
+          ? data.rawTechnologies.value
+          : this.rawTechnologies,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CharacterEntity(')
+          ..write('localId: $localId, ')
+          ..write('serverId: $serverId, ')
+          ..write('syncStatus: $syncStatus, ')
+          ..write('worldLocalId: $worldLocalId, ')
+          ..write('name: $name, ')
+          ..write('age: $age, ')
+          ..write('gender: $gender, ')
+          ..write('nickname: $nickname, ')
+          ..write('customNotes: $customNotes, ')
+          ..write('tagColor: $tagColor, ')
+          ..write('appearanceJson: $appearanceJson, ')
+          ..write('personalityJson: $personalityJson, ')
+          ..write('historyJson: $historyJson, ')
+          ..write('images: $images, ')
+          ..write('rawFamily: $rawFamily, ')
+          ..write('rawFriends: $rawFriends, ')
+          ..write('rawEnemies: $rawEnemies, ')
+          ..write('rawRomance: $rawRomance, ')
+          ..write('rawAbilities: $rawAbilities, ')
+          ..write('rawItems: $rawItems, ')
+          ..write('rawLanguages: $rawLanguages, ')
+          ..write('rawRaces: $rawRaces, ')
+          ..write('rawFactions: $rawFactions, ')
+          ..write('rawLocations: $rawLocations, ')
+          ..write('rawPowerSystems: $rawPowerSystems, ')
+          ..write('rawReligions: $rawReligions, ')
+          ..write('rawCreatures: $rawCreatures, ')
+          ..write('rawEconomies: $rawEconomies, ')
+          ..write('rawStories: $rawStories, ')
+          ..write('rawTechnologies: $rawTechnologies')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+    localId,
+    serverId,
+    syncStatus,
+    worldLocalId,
+    name,
+    age,
+    gender,
+    nickname,
+    customNotes,
+    tagColor,
+    appearanceJson,
+    personalityJson,
+    historyJson,
+    images,
+    rawFamily,
+    rawFriends,
+    rawEnemies,
+    rawRomance,
+    rawAbilities,
+    rawItems,
+    rawLanguages,
+    rawRaces,
+    rawFactions,
+    rawLocations,
+    rawPowerSystems,
+    rawReligions,
+    rawCreatures,
+    rawEconomies,
+    rawStories,
+    rawTechnologies,
+  ]);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CharacterEntity &&
+          other.localId == this.localId &&
+          other.serverId == this.serverId &&
+          other.syncStatus == this.syncStatus &&
+          other.worldLocalId == this.worldLocalId &&
+          other.name == this.name &&
+          other.age == this.age &&
+          other.gender == this.gender &&
+          other.nickname == this.nickname &&
+          other.customNotes == this.customNotes &&
+          other.tagColor == this.tagColor &&
+          other.appearanceJson == this.appearanceJson &&
+          other.personalityJson == this.personalityJson &&
+          other.historyJson == this.historyJson &&
+          other.images == this.images &&
+          other.rawFamily == this.rawFamily &&
+          other.rawFriends == this.rawFriends &&
+          other.rawEnemies == this.rawEnemies &&
+          other.rawRomance == this.rawRomance &&
+          other.rawAbilities == this.rawAbilities &&
+          other.rawItems == this.rawItems &&
+          other.rawLanguages == this.rawLanguages &&
+          other.rawRaces == this.rawRaces &&
+          other.rawFactions == this.rawFactions &&
+          other.rawLocations == this.rawLocations &&
+          other.rawPowerSystems == this.rawPowerSystems &&
+          other.rawReligions == this.rawReligions &&
+          other.rawCreatures == this.rawCreatures &&
+          other.rawEconomies == this.rawEconomies &&
+          other.rawStories == this.rawStories &&
+          other.rawTechnologies == this.rawTechnologies);
+}
+
+class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
+  final Value<String> localId;
+  final Value<String?> serverId;
+  final Value<SyncStatus> syncStatus;
+  final Value<String> worldLocalId;
+  final Value<String> name;
+  final Value<int?> age;
+  final Value<String?> gender;
+  final Value<String?> nickname;
+  final Value<String?> customNotes;
+  final Value<String> tagColor;
+  final Value<String?> appearanceJson;
+  final Value<String?> personalityJson;
+  final Value<String?> historyJson;
+  final Value<List<String>> images;
+  final Value<List<String>> rawFamily;
+  final Value<List<String>> rawFriends;
+  final Value<List<String>> rawEnemies;
+  final Value<List<String>> rawRomance;
+  final Value<List<String>> rawAbilities;
+  final Value<List<String>> rawItems;
+  final Value<List<String>> rawLanguages;
+  final Value<List<String>> rawRaces;
+  final Value<List<String>> rawFactions;
+  final Value<List<String>> rawLocations;
+  final Value<List<String>> rawPowerSystems;
+  final Value<List<String>> rawReligions;
+  final Value<List<String>> rawCreatures;
+  final Value<List<String>> rawEconomies;
+  final Value<List<String>> rawStories;
+  final Value<List<String>> rawTechnologies;
+  final Value<int> rowid;
+  const CharactersCompanion({
+    this.localId = const Value.absent(),
+    this.serverId = const Value.absent(),
+    this.syncStatus = const Value.absent(),
+    this.worldLocalId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.age = const Value.absent(),
+    this.gender = const Value.absent(),
+    this.nickname = const Value.absent(),
+    this.customNotes = const Value.absent(),
+    this.tagColor = const Value.absent(),
+    this.appearanceJson = const Value.absent(),
+    this.personalityJson = const Value.absent(),
+    this.historyJson = const Value.absent(),
+    this.images = const Value.absent(),
+    this.rawFamily = const Value.absent(),
+    this.rawFriends = const Value.absent(),
+    this.rawEnemies = const Value.absent(),
+    this.rawRomance = const Value.absent(),
+    this.rawAbilities = const Value.absent(),
+    this.rawItems = const Value.absent(),
+    this.rawLanguages = const Value.absent(),
+    this.rawRaces = const Value.absent(),
+    this.rawFactions = const Value.absent(),
+    this.rawLocations = const Value.absent(),
+    this.rawPowerSystems = const Value.absent(),
+    this.rawReligions = const Value.absent(),
+    this.rawCreatures = const Value.absent(),
+    this.rawEconomies = const Value.absent(),
+    this.rawStories = const Value.absent(),
+    this.rawTechnologies = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CharactersCompanion.insert({
+    this.localId = const Value.absent(),
+    this.serverId = const Value.absent(),
+    this.syncStatus = const Value.absent(),
+    required String worldLocalId,
+    required String name,
+    this.age = const Value.absent(),
+    this.gender = const Value.absent(),
+    this.nickname = const Value.absent(),
+    this.customNotes = const Value.absent(),
+    this.tagColor = const Value.absent(),
+    this.appearanceJson = const Value.absent(),
+    this.personalityJson = const Value.absent(),
+    this.historyJson = const Value.absent(),
+    this.images = const Value.absent(),
+    this.rawFamily = const Value.absent(),
+    this.rawFriends = const Value.absent(),
+    this.rawEnemies = const Value.absent(),
+    this.rawRomance = const Value.absent(),
+    this.rawAbilities = const Value.absent(),
+    this.rawItems = const Value.absent(),
+    this.rawLanguages = const Value.absent(),
+    this.rawRaces = const Value.absent(),
+    this.rawFactions = const Value.absent(),
+    this.rawLocations = const Value.absent(),
+    this.rawPowerSystems = const Value.absent(),
+    this.rawReligions = const Value.absent(),
+    this.rawCreatures = const Value.absent(),
+    this.rawEconomies = const Value.absent(),
+    this.rawStories = const Value.absent(),
+    this.rawTechnologies = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : worldLocalId = Value(worldLocalId),
+       name = Value(name);
+  static Insertable<CharacterEntity> custom({
+    Expression<String>? localId,
+    Expression<String>? serverId,
+    Expression<String>? syncStatus,
+    Expression<String>? worldLocalId,
+    Expression<String>? name,
+    Expression<int>? age,
+    Expression<String>? gender,
+    Expression<String>? nickname,
+    Expression<String>? customNotes,
+    Expression<String>? tagColor,
+    Expression<String>? appearanceJson,
+    Expression<String>? personalityJson,
+    Expression<String>? historyJson,
+    Expression<String>? images,
+    Expression<String>? rawFamily,
+    Expression<String>? rawFriends,
+    Expression<String>? rawEnemies,
+    Expression<String>? rawRomance,
+    Expression<String>? rawAbilities,
+    Expression<String>? rawItems,
+    Expression<String>? rawLanguages,
+    Expression<String>? rawRaces,
+    Expression<String>? rawFactions,
+    Expression<String>? rawLocations,
+    Expression<String>? rawPowerSystems,
+    Expression<String>? rawReligions,
+    Expression<String>? rawCreatures,
+    Expression<String>? rawEconomies,
+    Expression<String>? rawStories,
+    Expression<String>? rawTechnologies,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (localId != null) 'local_id': localId,
+      if (serverId != null) 'server_id': serverId,
+      if (syncStatus != null) 'sync_status': syncStatus,
+      if (worldLocalId != null) 'world_local_id': worldLocalId,
+      if (name != null) 'name': name,
+      if (age != null) 'age': age,
+      if (gender != null) 'gender': gender,
+      if (nickname != null) 'nickname': nickname,
+      if (customNotes != null) 'custom_notes': customNotes,
+      if (tagColor != null) 'tag_color': tagColor,
+      if (appearanceJson != null) 'appearance_json': appearanceJson,
+      if (personalityJson != null) 'personality_json': personalityJson,
+      if (historyJson != null) 'history_json': historyJson,
+      if (images != null) 'images': images,
+      if (rawFamily != null) 'raw_family': rawFamily,
+      if (rawFriends != null) 'raw_friends': rawFriends,
+      if (rawEnemies != null) 'raw_enemies': rawEnemies,
+      if (rawRomance != null) 'raw_romance': rawRomance,
+      if (rawAbilities != null) 'raw_abilities': rawAbilities,
+      if (rawItems != null) 'raw_items': rawItems,
+      if (rawLanguages != null) 'raw_languages': rawLanguages,
+      if (rawRaces != null) 'raw_races': rawRaces,
+      if (rawFactions != null) 'raw_factions': rawFactions,
+      if (rawLocations != null) 'raw_locations': rawLocations,
+      if (rawPowerSystems != null) 'raw_power_systems': rawPowerSystems,
+      if (rawReligions != null) 'raw_religions': rawReligions,
+      if (rawCreatures != null) 'raw_creatures': rawCreatures,
+      if (rawEconomies != null) 'raw_economies': rawEconomies,
+      if (rawStories != null) 'raw_stories': rawStories,
+      if (rawTechnologies != null) 'raw_technologies': rawTechnologies,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CharactersCompanion copyWith({
+    Value<String>? localId,
+    Value<String?>? serverId,
+    Value<SyncStatus>? syncStatus,
+    Value<String>? worldLocalId,
+    Value<String>? name,
+    Value<int?>? age,
+    Value<String?>? gender,
+    Value<String?>? nickname,
+    Value<String?>? customNotes,
+    Value<String>? tagColor,
+    Value<String?>? appearanceJson,
+    Value<String?>? personalityJson,
+    Value<String?>? historyJson,
+    Value<List<String>>? images,
+    Value<List<String>>? rawFamily,
+    Value<List<String>>? rawFriends,
+    Value<List<String>>? rawEnemies,
+    Value<List<String>>? rawRomance,
+    Value<List<String>>? rawAbilities,
+    Value<List<String>>? rawItems,
+    Value<List<String>>? rawLanguages,
+    Value<List<String>>? rawRaces,
+    Value<List<String>>? rawFactions,
+    Value<List<String>>? rawLocations,
+    Value<List<String>>? rawPowerSystems,
+    Value<List<String>>? rawReligions,
+    Value<List<String>>? rawCreatures,
+    Value<List<String>>? rawEconomies,
+    Value<List<String>>? rawStories,
+    Value<List<String>>? rawTechnologies,
+    Value<int>? rowid,
+  }) {
+    return CharactersCompanion(
+      localId: localId ?? this.localId,
+      serverId: serverId ?? this.serverId,
+      syncStatus: syncStatus ?? this.syncStatus,
+      worldLocalId: worldLocalId ?? this.worldLocalId,
+      name: name ?? this.name,
+      age: age ?? this.age,
+      gender: gender ?? this.gender,
+      nickname: nickname ?? this.nickname,
+      customNotes: customNotes ?? this.customNotes,
+      tagColor: tagColor ?? this.tagColor,
+      appearanceJson: appearanceJson ?? this.appearanceJson,
+      personalityJson: personalityJson ?? this.personalityJson,
+      historyJson: historyJson ?? this.historyJson,
+      images: images ?? this.images,
+      rawFamily: rawFamily ?? this.rawFamily,
+      rawFriends: rawFriends ?? this.rawFriends,
+      rawEnemies: rawEnemies ?? this.rawEnemies,
+      rawRomance: rawRomance ?? this.rawRomance,
+      rawAbilities: rawAbilities ?? this.rawAbilities,
+      rawItems: rawItems ?? this.rawItems,
+      rawLanguages: rawLanguages ?? this.rawLanguages,
+      rawRaces: rawRaces ?? this.rawRaces,
+      rawFactions: rawFactions ?? this.rawFactions,
+      rawLocations: rawLocations ?? this.rawLocations,
+      rawPowerSystems: rawPowerSystems ?? this.rawPowerSystems,
+      rawReligions: rawReligions ?? this.rawReligions,
+      rawCreatures: rawCreatures ?? this.rawCreatures,
+      rawEconomies: rawEconomies ?? this.rawEconomies,
+      rawStories: rawStories ?? this.rawStories,
+      rawTechnologies: rawTechnologies ?? this.rawTechnologies,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (localId.present) {
+      map['local_id'] = Variable<String>(localId.value);
+    }
+    if (serverId.present) {
+      map['server_id'] = Variable<String>(serverId.value);
+    }
+    if (syncStatus.present) {
+      map['sync_status'] = Variable<String>(
+        $CharactersTable.$convertersyncStatus.toSql(syncStatus.value),
+      );
+    }
+    if (worldLocalId.present) {
+      map['world_local_id'] = Variable<String>(worldLocalId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (age.present) {
+      map['age'] = Variable<int>(age.value);
+    }
+    if (gender.present) {
+      map['gender'] = Variable<String>(gender.value);
+    }
+    if (nickname.present) {
+      map['nickname'] = Variable<String>(nickname.value);
+    }
+    if (customNotes.present) {
+      map['custom_notes'] = Variable<String>(customNotes.value);
+    }
+    if (tagColor.present) {
+      map['tag_color'] = Variable<String>(tagColor.value);
+    }
+    if (appearanceJson.present) {
+      map['appearance_json'] = Variable<String>(appearanceJson.value);
+    }
+    if (personalityJson.present) {
+      map['personality_json'] = Variable<String>(personalityJson.value);
+    }
+    if (historyJson.present) {
+      map['history_json'] = Variable<String>(historyJson.value);
+    }
+    if (images.present) {
+      map['images'] = Variable<String>(
+        $CharactersTable.$converterimages.toSql(images.value),
+      );
+    }
+    if (rawFamily.present) {
+      map['raw_family'] = Variable<String>(
+        $CharactersTable.$converterrawFamily.toSql(rawFamily.value),
+      );
+    }
+    if (rawFriends.present) {
+      map['raw_friends'] = Variable<String>(
+        $CharactersTable.$converterrawFriends.toSql(rawFriends.value),
+      );
+    }
+    if (rawEnemies.present) {
+      map['raw_enemies'] = Variable<String>(
+        $CharactersTable.$converterrawEnemies.toSql(rawEnemies.value),
+      );
+    }
+    if (rawRomance.present) {
+      map['raw_romance'] = Variable<String>(
+        $CharactersTable.$converterrawRomance.toSql(rawRomance.value),
+      );
+    }
+    if (rawAbilities.present) {
+      map['raw_abilities'] = Variable<String>(
+        $CharactersTable.$converterrawAbilities.toSql(rawAbilities.value),
+      );
+    }
+    if (rawItems.present) {
+      map['raw_items'] = Variable<String>(
+        $CharactersTable.$converterrawItems.toSql(rawItems.value),
+      );
+    }
+    if (rawLanguages.present) {
+      map['raw_languages'] = Variable<String>(
+        $CharactersTable.$converterrawLanguages.toSql(rawLanguages.value),
+      );
+    }
+    if (rawRaces.present) {
+      map['raw_races'] = Variable<String>(
+        $CharactersTable.$converterrawRaces.toSql(rawRaces.value),
+      );
+    }
+    if (rawFactions.present) {
+      map['raw_factions'] = Variable<String>(
+        $CharactersTable.$converterrawFactions.toSql(rawFactions.value),
+      );
+    }
+    if (rawLocations.present) {
+      map['raw_locations'] = Variable<String>(
+        $CharactersTable.$converterrawLocations.toSql(rawLocations.value),
+      );
+    }
+    if (rawPowerSystems.present) {
+      map['raw_power_systems'] = Variable<String>(
+        $CharactersTable.$converterrawPowerSystems.toSql(rawPowerSystems.value),
+      );
+    }
+    if (rawReligions.present) {
+      map['raw_religions'] = Variable<String>(
+        $CharactersTable.$converterrawReligions.toSql(rawReligions.value),
+      );
+    }
+    if (rawCreatures.present) {
+      map['raw_creatures'] = Variable<String>(
+        $CharactersTable.$converterrawCreatures.toSql(rawCreatures.value),
+      );
+    }
+    if (rawEconomies.present) {
+      map['raw_economies'] = Variable<String>(
+        $CharactersTable.$converterrawEconomies.toSql(rawEconomies.value),
+      );
+    }
+    if (rawStories.present) {
+      map['raw_stories'] = Variable<String>(
+        $CharactersTable.$converterrawStories.toSql(rawStories.value),
+      );
+    }
+    if (rawTechnologies.present) {
+      map['raw_technologies'] = Variable<String>(
+        $CharactersTable.$converterrawTechnologies.toSql(rawTechnologies.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CharactersCompanion(')
+          ..write('localId: $localId, ')
+          ..write('serverId: $serverId, ')
+          ..write('syncStatus: $syncStatus, ')
+          ..write('worldLocalId: $worldLocalId, ')
+          ..write('name: $name, ')
+          ..write('age: $age, ')
+          ..write('gender: $gender, ')
+          ..write('nickname: $nickname, ')
+          ..write('customNotes: $customNotes, ')
+          ..write('tagColor: $tagColor, ')
+          ..write('appearanceJson: $appearanceJson, ')
+          ..write('personalityJson: $personalityJson, ')
+          ..write('historyJson: $historyJson, ')
+          ..write('images: $images, ')
+          ..write('rawFamily: $rawFamily, ')
+          ..write('rawFriends: $rawFriends, ')
+          ..write('rawEnemies: $rawEnemies, ')
+          ..write('rawRomance: $rawRomance, ')
+          ..write('rawAbilities: $rawAbilities, ')
+          ..write('rawItems: $rawItems, ')
+          ..write('rawLanguages: $rawLanguages, ')
+          ..write('rawRaces: $rawRaces, ')
+          ..write('rawFactions: $rawFactions, ')
+          ..write('rawLocations: $rawLocations, ')
+          ..write('rawPowerSystems: $rawPowerSystems, ')
+          ..write('rawReligions: $rawReligions, ')
+          ..write('rawCreatures: $rawCreatures, ')
+          ..write('rawEconomies: $rawEconomies, ')
+          ..write('rawStories: $rawStories, ')
+          ..write('rawTechnologies: $rawTechnologies, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $UserProfileTable userProfile = $UserProfileTable(this);
   late final $WorldsTable worlds = $WorldsTable(this);
+  late final $CharactersTable characters = $CharactersTable(this);
   late final WorldsDao worldsDao = WorldsDao(this as AppDatabase);
+  late final CharactersDao charactersDao = CharactersDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [userProfile, worlds];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    userProfile,
+    worlds,
+    characters,
+  ];
 }
 
 typedef $$UserProfileTableCreateCompanionBuilder =
@@ -1407,6 +3051,32 @@ typedef $$WorldsTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
+final class $$WorldsTableReferences
+    extends BaseReferences<_$AppDatabase, $WorldsTable, WorldEntity> {
+  $$WorldsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$CharactersTable, List<CharacterEntity>>
+  _charactersRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.characters,
+    aliasName: $_aliasNameGenerator(
+      db.worlds.localId,
+      db.characters.worldLocalId,
+    ),
+  );
+
+  $$CharactersTableProcessedTableManager get charactersRefs {
+    final manager = $$CharactersTableTableManager($_db, $_db.characters).filter(
+      (f) =>
+          f.worldLocalId.localId.sqlEquals($_itemColumn<String>('local_id')!),
+    );
+
+    final cache = $_typedResult.readTableOrNull(_charactersRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
 class $$WorldsTableFilterComposer
     extends Composer<_$AppDatabase, $WorldsTable> {
   $$WorldsTableFilterComposer({
@@ -1456,6 +3126,31 @@ class $$WorldsTableFilterComposer
     column: $table.customImage,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> charactersRefs(
+    Expression<bool> Function($$CharactersTableFilterComposer f) f,
+  ) {
+    final $$CharactersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.localId,
+      referencedTable: $db.characters,
+      getReferencedColumn: (t) => t.worldLocalId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CharactersTableFilterComposer(
+            $db: $db,
+            $table: $db.characters,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$WorldsTableOrderingComposer
@@ -1549,6 +3244,31 @@ class $$WorldsTableAnnotationComposer
     column: $table.customImage,
     builder: (column) => column,
   );
+
+  Expression<T> charactersRefs<T extends Object>(
+    Expression<T> Function($$CharactersTableAnnotationComposer a) f,
+  ) {
+    final $$CharactersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.localId,
+      referencedTable: $db.characters,
+      getReferencedColumn: (t) => t.worldLocalId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CharactersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.characters,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$WorldsTableTableManager
@@ -1562,12 +3282,9 @@ class $$WorldsTableTableManager
           $$WorldsTableAnnotationComposer,
           $$WorldsTableCreateCompanionBuilder,
           $$WorldsTableUpdateCompanionBuilder,
-          (
-            WorldEntity,
-            BaseReferences<_$AppDatabase, $WorldsTable, WorldEntity>,
-          ),
+          (WorldEntity, $$WorldsTableReferences),
           WorldEntity,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool charactersRefs})
         > {
   $$WorldsTableTableManager(_$AppDatabase db, $WorldsTable table)
     : super(
@@ -1625,9 +3342,39 @@ class $$WorldsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) =>
+                    (e.readTable(table), $$WorldsTableReferences(db, table, e)),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({charactersRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (charactersRefs) db.characters],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (charactersRefs)
+                    await $_getPrefetchedData<
+                      WorldEntity,
+                      $WorldsTable,
+                      CharacterEntity
+                    >(
+                      currentTable: table,
+                      referencedTable: $$WorldsTableReferences
+                          ._charactersRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$WorldsTableReferences(db, table, p0).charactersRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where(
+                            (e) => e.worldLocalId == item.localId,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
         ),
       );
 }
@@ -1642,9 +3389,871 @@ typedef $$WorldsTableProcessedTableManager =
       $$WorldsTableAnnotationComposer,
       $$WorldsTableCreateCompanionBuilder,
       $$WorldsTableUpdateCompanionBuilder,
-      (WorldEntity, BaseReferences<_$AppDatabase, $WorldsTable, WorldEntity>),
+      (WorldEntity, $$WorldsTableReferences),
       WorldEntity,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool charactersRefs})
+    >;
+typedef $$CharactersTableCreateCompanionBuilder =
+    CharactersCompanion Function({
+      Value<String> localId,
+      Value<String?> serverId,
+      Value<SyncStatus> syncStatus,
+      required String worldLocalId,
+      required String name,
+      Value<int?> age,
+      Value<String?> gender,
+      Value<String?> nickname,
+      Value<String?> customNotes,
+      Value<String> tagColor,
+      Value<String?> appearanceJson,
+      Value<String?> personalityJson,
+      Value<String?> historyJson,
+      Value<List<String>> images,
+      Value<List<String>> rawFamily,
+      Value<List<String>> rawFriends,
+      Value<List<String>> rawEnemies,
+      Value<List<String>> rawRomance,
+      Value<List<String>> rawAbilities,
+      Value<List<String>> rawItems,
+      Value<List<String>> rawLanguages,
+      Value<List<String>> rawRaces,
+      Value<List<String>> rawFactions,
+      Value<List<String>> rawLocations,
+      Value<List<String>> rawPowerSystems,
+      Value<List<String>> rawReligions,
+      Value<List<String>> rawCreatures,
+      Value<List<String>> rawEconomies,
+      Value<List<String>> rawStories,
+      Value<List<String>> rawTechnologies,
+      Value<int> rowid,
+    });
+typedef $$CharactersTableUpdateCompanionBuilder =
+    CharactersCompanion Function({
+      Value<String> localId,
+      Value<String?> serverId,
+      Value<SyncStatus> syncStatus,
+      Value<String> worldLocalId,
+      Value<String> name,
+      Value<int?> age,
+      Value<String?> gender,
+      Value<String?> nickname,
+      Value<String?> customNotes,
+      Value<String> tagColor,
+      Value<String?> appearanceJson,
+      Value<String?> personalityJson,
+      Value<String?> historyJson,
+      Value<List<String>> images,
+      Value<List<String>> rawFamily,
+      Value<List<String>> rawFriends,
+      Value<List<String>> rawEnemies,
+      Value<List<String>> rawRomance,
+      Value<List<String>> rawAbilities,
+      Value<List<String>> rawItems,
+      Value<List<String>> rawLanguages,
+      Value<List<String>> rawRaces,
+      Value<List<String>> rawFactions,
+      Value<List<String>> rawLocations,
+      Value<List<String>> rawPowerSystems,
+      Value<List<String>> rawReligions,
+      Value<List<String>> rawCreatures,
+      Value<List<String>> rawEconomies,
+      Value<List<String>> rawStories,
+      Value<List<String>> rawTechnologies,
+      Value<int> rowid,
+    });
+
+final class $$CharactersTableReferences
+    extends BaseReferences<_$AppDatabase, $CharactersTable, CharacterEntity> {
+  $$CharactersTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $WorldsTable _worldLocalIdTable(_$AppDatabase db) =>
+      db.worlds.createAlias(
+        $_aliasNameGenerator(db.characters.worldLocalId, db.worlds.localId),
+      );
+
+  $$WorldsTableProcessedTableManager get worldLocalId {
+    final $_column = $_itemColumn<String>('world_local_id')!;
+
+    final manager = $$WorldsTableTableManager(
+      $_db,
+      $_db.worlds,
+    ).filter((f) => f.localId.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_worldLocalIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$CharactersTableFilterComposer
+    extends Composer<_$AppDatabase, $CharactersTable> {
+  $$CharactersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get localId => $composableBuilder(
+    column: $table.localId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get serverId => $composableBuilder(
+    column: $table.serverId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<SyncStatus, SyncStatus, String>
+  get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get age => $composableBuilder(
+    column: $table.age,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get gender => $composableBuilder(
+    column: $table.gender,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nickname => $composableBuilder(
+    column: $table.nickname,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get customNotes => $composableBuilder(
+    column: $table.customNotes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get tagColor => $composableBuilder(
+    column: $table.tagColor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get appearanceJson => $composableBuilder(
+    column: $table.appearanceJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get personalityJson => $composableBuilder(
+    column: $table.personalityJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get historyJson => $composableBuilder(
+    column: $table.historyJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get images => $composableBuilder(
+    column: $table.images,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawFamily => $composableBuilder(
+    column: $table.rawFamily,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawFriends => $composableBuilder(
+    column: $table.rawFriends,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawEnemies => $composableBuilder(
+    column: $table.rawEnemies,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawRomance => $composableBuilder(
+    column: $table.rawRomance,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawAbilities => $composableBuilder(
+    column: $table.rawAbilities,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawItems => $composableBuilder(
+    column: $table.rawItems,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawLanguages => $composableBuilder(
+    column: $table.rawLanguages,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawRaces => $composableBuilder(
+    column: $table.rawRaces,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawFactions => $composableBuilder(
+    column: $table.rawFactions,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawLocations => $composableBuilder(
+    column: $table.rawLocations,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawReligions => $composableBuilder(
+    column: $table.rawReligions,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawCreatures => $composableBuilder(
+    column: $table.rawCreatures,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawEconomies => $composableBuilder(
+    column: $table.rawEconomies,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawStories => $composableBuilder(
+    column: $table.rawStories,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  $$WorldsTableFilterComposer get worldLocalId {
+    final $$WorldsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableFilterComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CharactersTableOrderingComposer
+    extends Composer<_$AppDatabase, $CharactersTable> {
+  $$CharactersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get localId => $composableBuilder(
+    column: $table.localId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get serverId => $composableBuilder(
+    column: $table.serverId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get age => $composableBuilder(
+    column: $table.age,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get gender => $composableBuilder(
+    column: $table.gender,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nickname => $composableBuilder(
+    column: $table.nickname,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get customNotes => $composableBuilder(
+    column: $table.customNotes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get tagColor => $composableBuilder(
+    column: $table.tagColor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get appearanceJson => $composableBuilder(
+    column: $table.appearanceJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get personalityJson => $composableBuilder(
+    column: $table.personalityJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get historyJson => $composableBuilder(
+    column: $table.historyJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get images => $composableBuilder(
+    column: $table.images,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawFamily => $composableBuilder(
+    column: $table.rawFamily,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawFriends => $composableBuilder(
+    column: $table.rawFriends,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawEnemies => $composableBuilder(
+    column: $table.rawEnemies,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawRomance => $composableBuilder(
+    column: $table.rawRomance,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawAbilities => $composableBuilder(
+    column: $table.rawAbilities,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawItems => $composableBuilder(
+    column: $table.rawItems,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawLanguages => $composableBuilder(
+    column: $table.rawLanguages,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawRaces => $composableBuilder(
+    column: $table.rawRaces,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawFactions => $composableBuilder(
+    column: $table.rawFactions,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawLocations => $composableBuilder(
+    column: $table.rawLocations,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawReligions => $composableBuilder(
+    column: $table.rawReligions,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawCreatures => $composableBuilder(
+    column: $table.rawCreatures,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawEconomies => $composableBuilder(
+    column: $table.rawEconomies,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawStories => $composableBuilder(
+    column: $table.rawStories,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$WorldsTableOrderingComposer get worldLocalId {
+    final $$WorldsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableOrderingComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CharactersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CharactersTable> {
+  $$CharactersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get localId =>
+      $composableBuilder(column: $table.localId, builder: (column) => column);
+
+  GeneratedColumn<String> get serverId =>
+      $composableBuilder(column: $table.serverId, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SyncStatus, String> get syncStatus =>
+      $composableBuilder(
+        column: $table.syncStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get age =>
+      $composableBuilder(column: $table.age, builder: (column) => column);
+
+  GeneratedColumn<String> get gender =>
+      $composableBuilder(column: $table.gender, builder: (column) => column);
+
+  GeneratedColumn<String> get nickname =>
+      $composableBuilder(column: $table.nickname, builder: (column) => column);
+
+  GeneratedColumn<String> get customNotes => $composableBuilder(
+    column: $table.customNotes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get tagColor =>
+      $composableBuilder(column: $table.tagColor, builder: (column) => column);
+
+  GeneratedColumn<String> get appearanceJson => $composableBuilder(
+    column: $table.appearanceJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get personalityJson => $composableBuilder(
+    column: $table.personalityJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get historyJson => $composableBuilder(
+    column: $table.historyJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get images =>
+      $composableBuilder(column: $table.images, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawFamily =>
+      $composableBuilder(column: $table.rawFamily, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawFriends =>
+      $composableBuilder(
+        column: $table.rawFriends,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawEnemies =>
+      $composableBuilder(
+        column: $table.rawEnemies,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawRomance =>
+      $composableBuilder(
+        column: $table.rawRomance,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawAbilities =>
+      $composableBuilder(
+        column: $table.rawAbilities,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawItems =>
+      $composableBuilder(column: $table.rawItems, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawLanguages =>
+      $composableBuilder(
+        column: $table.rawLanguages,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawRaces =>
+      $composableBuilder(column: $table.rawRaces, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+      $composableBuilder(
+        column: $table.rawFactions,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+      $composableBuilder(
+        column: $table.rawLocations,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawPowerSystems =>
+      $composableBuilder(
+        column: $table.rawPowerSystems,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+      $composableBuilder(
+        column: $table.rawReligions,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawCreatures =>
+      $composableBuilder(
+        column: $table.rawCreatures,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawEconomies =>
+      $composableBuilder(
+        column: $table.rawEconomies,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+      $composableBuilder(
+        column: $table.rawStories,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
+      $composableBuilder(
+        column: $table.rawTechnologies,
+        builder: (column) => column,
+      );
+
+  $$WorldsTableAnnotationComposer get worldLocalId {
+    final $$WorldsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CharactersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CharactersTable,
+          CharacterEntity,
+          $$CharactersTableFilterComposer,
+          $$CharactersTableOrderingComposer,
+          $$CharactersTableAnnotationComposer,
+          $$CharactersTableCreateCompanionBuilder,
+          $$CharactersTableUpdateCompanionBuilder,
+          (CharacterEntity, $$CharactersTableReferences),
+          CharacterEntity,
+          PrefetchHooks Function({bool worldLocalId})
+        > {
+  $$CharactersTableTableManager(_$AppDatabase db, $CharactersTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CharactersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CharactersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CharactersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> localId = const Value.absent(),
+                Value<String?> serverId = const Value.absent(),
+                Value<SyncStatus> syncStatus = const Value.absent(),
+                Value<String> worldLocalId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<int?> age = const Value.absent(),
+                Value<String?> gender = const Value.absent(),
+                Value<String?> nickname = const Value.absent(),
+                Value<String?> customNotes = const Value.absent(),
+                Value<String> tagColor = const Value.absent(),
+                Value<String?> appearanceJson = const Value.absent(),
+                Value<String?> personalityJson = const Value.absent(),
+                Value<String?> historyJson = const Value.absent(),
+                Value<List<String>> images = const Value.absent(),
+                Value<List<String>> rawFamily = const Value.absent(),
+                Value<List<String>> rawFriends = const Value.absent(),
+                Value<List<String>> rawEnemies = const Value.absent(),
+                Value<List<String>> rawRomance = const Value.absent(),
+                Value<List<String>> rawAbilities = const Value.absent(),
+                Value<List<String>> rawItems = const Value.absent(),
+                Value<List<String>> rawLanguages = const Value.absent(),
+                Value<List<String>> rawRaces = const Value.absent(),
+                Value<List<String>> rawFactions = const Value.absent(),
+                Value<List<String>> rawLocations = const Value.absent(),
+                Value<List<String>> rawPowerSystems = const Value.absent(),
+                Value<List<String>> rawReligions = const Value.absent(),
+                Value<List<String>> rawCreatures = const Value.absent(),
+                Value<List<String>> rawEconomies = const Value.absent(),
+                Value<List<String>> rawStories = const Value.absent(),
+                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CharactersCompanion(
+                localId: localId,
+                serverId: serverId,
+                syncStatus: syncStatus,
+                worldLocalId: worldLocalId,
+                name: name,
+                age: age,
+                gender: gender,
+                nickname: nickname,
+                customNotes: customNotes,
+                tagColor: tagColor,
+                appearanceJson: appearanceJson,
+                personalityJson: personalityJson,
+                historyJson: historyJson,
+                images: images,
+                rawFamily: rawFamily,
+                rawFriends: rawFriends,
+                rawEnemies: rawEnemies,
+                rawRomance: rawRomance,
+                rawAbilities: rawAbilities,
+                rawItems: rawItems,
+                rawLanguages: rawLanguages,
+                rawRaces: rawRaces,
+                rawFactions: rawFactions,
+                rawLocations: rawLocations,
+                rawPowerSystems: rawPowerSystems,
+                rawReligions: rawReligions,
+                rawCreatures: rawCreatures,
+                rawEconomies: rawEconomies,
+                rawStories: rawStories,
+                rawTechnologies: rawTechnologies,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> localId = const Value.absent(),
+                Value<String?> serverId = const Value.absent(),
+                Value<SyncStatus> syncStatus = const Value.absent(),
+                required String worldLocalId,
+                required String name,
+                Value<int?> age = const Value.absent(),
+                Value<String?> gender = const Value.absent(),
+                Value<String?> nickname = const Value.absent(),
+                Value<String?> customNotes = const Value.absent(),
+                Value<String> tagColor = const Value.absent(),
+                Value<String?> appearanceJson = const Value.absent(),
+                Value<String?> personalityJson = const Value.absent(),
+                Value<String?> historyJson = const Value.absent(),
+                Value<List<String>> images = const Value.absent(),
+                Value<List<String>> rawFamily = const Value.absent(),
+                Value<List<String>> rawFriends = const Value.absent(),
+                Value<List<String>> rawEnemies = const Value.absent(),
+                Value<List<String>> rawRomance = const Value.absent(),
+                Value<List<String>> rawAbilities = const Value.absent(),
+                Value<List<String>> rawItems = const Value.absent(),
+                Value<List<String>> rawLanguages = const Value.absent(),
+                Value<List<String>> rawRaces = const Value.absent(),
+                Value<List<String>> rawFactions = const Value.absent(),
+                Value<List<String>> rawLocations = const Value.absent(),
+                Value<List<String>> rawPowerSystems = const Value.absent(),
+                Value<List<String>> rawReligions = const Value.absent(),
+                Value<List<String>> rawCreatures = const Value.absent(),
+                Value<List<String>> rawEconomies = const Value.absent(),
+                Value<List<String>> rawStories = const Value.absent(),
+                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CharactersCompanion.insert(
+                localId: localId,
+                serverId: serverId,
+                syncStatus: syncStatus,
+                worldLocalId: worldLocalId,
+                name: name,
+                age: age,
+                gender: gender,
+                nickname: nickname,
+                customNotes: customNotes,
+                tagColor: tagColor,
+                appearanceJson: appearanceJson,
+                personalityJson: personalityJson,
+                historyJson: historyJson,
+                images: images,
+                rawFamily: rawFamily,
+                rawFriends: rawFriends,
+                rawEnemies: rawEnemies,
+                rawRomance: rawRomance,
+                rawAbilities: rawAbilities,
+                rawItems: rawItems,
+                rawLanguages: rawLanguages,
+                rawRaces: rawRaces,
+                rawFactions: rawFactions,
+                rawLocations: rawLocations,
+                rawPowerSystems: rawPowerSystems,
+                rawReligions: rawReligions,
+                rawCreatures: rawCreatures,
+                rawEconomies: rawEconomies,
+                rawStories: rawStories,
+                rawTechnologies: rawTechnologies,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$CharactersTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({worldLocalId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (worldLocalId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.worldLocalId,
+                                referencedTable: $$CharactersTableReferences
+                                    ._worldLocalIdTable(db),
+                                referencedColumn: $$CharactersTableReferences
+                                    ._worldLocalIdTable(db)
+                                    .localId,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$CharactersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CharactersTable,
+      CharacterEntity,
+      $$CharactersTableFilterComposer,
+      $$CharactersTableOrderingComposer,
+      $$CharactersTableAnnotationComposer,
+      $$CharactersTableCreateCompanionBuilder,
+      $$CharactersTableUpdateCompanionBuilder,
+      (CharacterEntity, $$CharactersTableReferences),
+      CharacterEntity,
+      PrefetchHooks Function({bool worldLocalId})
     >;
 
 class $AppDatabaseManager {
@@ -1654,4 +4263,6 @@ class $AppDatabaseManager {
       $$UserProfileTableTableManager(_db, _db.userProfile);
   $$WorldsTableTableManager get worlds =>
       $$WorldsTableTableManager(_db, _db.worlds);
+  $$CharactersTableTableManager get characters =>
+      $$CharactersTableTableManager(_db, _db.characters);
 }

@@ -15,8 +15,8 @@ class WorldSyncService {
   WorldSyncService({
     required WorldsDao worldsDao,
     required FlutterSecureStorage storage,
-  })  : _worldsDao = worldsDao,
-        _storage = storage;
+  }) : _worldsDao = worldsDao,
+       _storage = storage;
 
   Future<String?> _getToken() => _storage.read(key: 'token');
 
@@ -184,6 +184,43 @@ class WorldSyncService {
       return body.map((dynamic item) => Activity.fromJson(item)).toList();
     } else {
       throw Exception('Failed to load timeline');
+    }
+  }
+
+  Future<void> fetchAndMergeSingleWorld(String serverId) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final uri = Uri.parse('$_baseUrl/$serverId');
+
+    try {
+      final response = await http.get(uri, headers: headers);
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Failed to fetch world $serverId: ${response.statusCode}',
+        );
+      }
+
+      final apiWorld = World.fromJson(jsonDecode(response.body));
+      final existing = await _worldsDao.getWorldByServerId(apiWorld.id);
+
+      if (existing == null) return;
+
+      final companion = WorldsCompanion(
+        localId: Value(existing.localId),
+        serverId: Value(apiWorld.id),
+        name: Value(apiWorld.name),
+        description: Value(apiWorld.description),
+        modules: Value(apiWorld.modules?.toJson()),
+        coverImage: Value(apiWorld.coverImage),
+        customImage: Value(apiWorld.customImage),
+        syncStatus: const Value(SyncStatus.synced),
+      );
+
+      await _worldsDao.insertWorld(companion);
+    } catch (e) {
+      throw Exception('Failed to fetch/merge single world: $e');
     }
   }
 }
