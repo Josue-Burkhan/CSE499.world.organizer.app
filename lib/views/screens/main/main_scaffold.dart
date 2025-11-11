@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:worldorganizer_app/views/screens/home/home_screen.dart';
-import 'package:worldorganizer_app/views/screens/home/profile_screen.dart';
-import 'package:worldorganizer_app/views/screens/home/settings_screen.dart';
-import 'package:worldorganizer_app/views/screens/home/worlds_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/home/home_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/profile/profile_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/settings/settings_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/worlds_screen.dart';
 
 class MainScaffold extends StatefulWidget {
   const MainScaffold({super.key});
@@ -17,7 +17,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
     const WorldsScreen(),
-    Container(),
+    Container(), 
     const ProfileScreen(),
     const SettingsScreen(),
   ];

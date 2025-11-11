@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:worldorganizer_app/core/config/app_theme.dart';
-import 'package:worldorganizer_app/views/screens/home/home_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/main_scaffold.dart';
 
 class OfflineWarningScreen extends StatefulWidget {
   const OfflineWarningScreen({super.key});
@@ -17,7 +17,7 @@ class _OfflineWarningScreenState extends State<OfflineWarningScreen> {
     await _secureStorage.write(key: 'session_type', value: 'offline');
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const MainScaffold()),
       (Route<dynamic> route) => false,
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:circular_reveal_animation/circular_reveal_animation.dart';
-import 'package:worldorganizer_app/views/screens/home/home_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/home/home_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});

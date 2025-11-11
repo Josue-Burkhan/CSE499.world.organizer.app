@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:worldorganizer_app/views/screens/home/home_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/main_scaffold.dart';
 import 'package:worldorganizer_app/views/screens/auth/offline_warning_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
             );
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
+                builder: (context) => const MainScaffold(),
               ),
             );
           } else {

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:circular_reveal_animation/circular_reveal_animation.dart';
 import 'package:worldorganizer_app/views/screens/auth/welcome_screen.dart';
-import 'package:worldorganizer_app/views/screens/home/home_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/main_scaffold.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.of(context).pushAndRemoveUntil(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              const HomeScreen(),
+              const MainScaffold(),
           transitionDuration: const Duration(milliseconds: 1000),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return CircularRevealAnimation(

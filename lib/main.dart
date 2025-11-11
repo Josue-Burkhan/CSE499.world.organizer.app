@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/config/app_theme.dart';
+import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/views/screens/splash_screen.dart';
 
-void main() {
-  // We will add database initialization and other async setup here later.
+import 'package:worldorganizer_app/providers/core_providers.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final appDatabase = AppDatabase();
+
   runApp(
-    // ProviderScope enables Riverpod state management for the entire app.
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      overrides: [appDatabaseProvider.overrideWithValue(appDatabase)],
+      child: const MyApp(),
     ),
   );
 }
