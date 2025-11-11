@@ -9,6 +9,10 @@ class CharacterRepository {
   Stream<List<CharacterEntity>> watchCharactersInWorld(String worldLocalId) {
     return _dao.watchCharactersInWorld(worldLocalId);
   }
+  
+  Stream<CharacterEntity?> watchCharacterByServerId(String serverId) {
+    return _dao.watchCharacterByServerId(serverId);
+  }
 
   Future<void> deleteCharacter(String localId) async {
     final char = await _dao.getCharacterByLocalId(localId);

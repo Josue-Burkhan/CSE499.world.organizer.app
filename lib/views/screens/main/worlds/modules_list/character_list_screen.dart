@@ -3,21 +3,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_form/character_form_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
 
 final characterListStreamProvider = StreamProvider.family
-  .autoDispose<List<CharacterEntity>, String>((ref, worldLocalId) {
-    return ref.watch(characterRepositoryProvider).watchCharactersInWorld(worldLocalId);
-});
+    .autoDispose<List<CharacterEntity>, String>((ref, worldLocalId) {
+      return ref
+          .watch(characterRepositoryProvider)
+          .watchCharactersInWorld(worldLocalId);
+    });
 
 final characterSyncProvider = FutureProvider.autoDispose
-  .family<void, ({String worldLocalId, String? worldServerId})>((ref, ids) async {
-    
-    if (ids.worldServerId != null) {
-      final syncService = ref.watch(characterSyncServiceProvider);
-      await syncService.syncDirtyCharacters();
-      await syncService.fetchAndMergeCharacters(ids.worldLocalId, ids.worldServerId!);
-    }
-});
+    .family<void, ({String worldLocalId, String? worldServerId})>((
+      ref,
+      ids,
+    ) async {
+      if (ids.worldServerId != null) {
+        final syncService = ref.watch(characterSyncServiceProvider);
+        await syncService.syncDirtyCharacters();
+        await syncService.fetchAndMergeCharacters(
+          ids.worldLocalId,
+          ids.worldServerId!,
+        );
+      }
+    });
 
 class CharacterListScreen extends ConsumerWidget {
   final String worldLocalId;
@@ -33,9 +41,12 @@ class CharacterListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(characterSyncProvider(
-      (worldLocalId: worldLocalId, worldServerId: worldServerId)
-    ));
+    final asyncSync = ref.watch(
+      characterSyncProvider((
+        worldLocalId: worldLocalId,
+        worldServerId: worldServerId,
+      )),
+    );
 
     final asyncChars = ref.watch(characterListStreamProvider(worldLocalId));
 
@@ -48,7 +59,7 @@ class CharacterListScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => CharacterScreen(
+                  builder: (context) => CharacterFormScreen(
                     worldLocalId: worldLocalId,
                   ),
                 ),
@@ -59,29 +70,48 @@ class CharacterListScreen extends ConsumerWidget {
       ),
       body: asyncChars.when(
         data: (characters) {
-          if (characters.isEmpty) {
-            return _buildEmptyView(context);
-          }
-          return RefreshIndicator(
-            onRefresh: () async {
-              await ref.refresh(characterSyncProvider(
-                (worldLocalId: worldLocalId, worldServerId: worldServerId)
-              ).future);
-            },
-            child: ListView.builder(
-              itemCount: characters.length,
-              itemBuilder: (context, index) {
-                final character = characters[index];
-                return _buildCharacterCard(context, ref, character);
+          if (characters.isNotEmpty) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                await ref.refresh(
+                  characterSyncProvider((
+                    worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
+                  )).future,
+                );
               },
-            ),
+              child: ListView.builder(
+                itemCount: characters.length,
+                itemBuilder: (context, index) {
+                  final character = characters[index];
+                  return _buildCharacterCard(context, ref, character);
+                },
+              ),
+            );
+          }
+
+          return asyncSync.when(
+            data: (_) {
+              return _buildEmptyView(context);
+            },
+            loading: () {
+              return const Center(child: CircularProgressIndicator());
+            },
+            error: (e, st) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text('Failed to load characters: $e'),
+                ),
+              );
+            },
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Failed to load characters: $e'),
+            child: Text('Failed to read local database: $e'),
           ),
         ),
       ),
@@ -112,16 +142,19 @@ class CharacterListScreen extends ConsumerWidget {
               icon: const Icon(Icons.add),
               label: const Text('Create a Character'),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CharacterScreen(
-                      worldLocalId: worldLocalId,
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CharacterFormScreen(
+                        worldLocalId: worldLocalId,
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 15,
+                ),
                 textStyle: const TextStyle(fontSize: 16),
               ),
             ),
@@ -132,9 +165,9 @@ class CharacterListScreen extends ConsumerWidget {
   }
 
   Widget _buildCharacterCard(
-    BuildContext context, 
-    WidgetRef ref, 
-    CharacterEntity character
+    BuildContext context,
+    WidgetRef ref,
+    CharacterEntity character,
   ) {
     final color = _getTagColor(character.tagColor);
 
@@ -161,38 +194,38 @@ class CharacterListScreen extends ConsumerWidget {
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.startToEnd) {
             return await _showDeleteConfirmation(context, character.name);
-          } else if (direction == DismissDirection.endToStart) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CharacterScreen(
-                  worldLocalId: worldLocalId,
-                  characterLocalId: character.localId,
+            } else if (direction == DismissDirection.endToStart) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CharacterFormScreen(
+                    worldLocalId: worldLocalId,
+                    characterLocalId: character.localId,
+                  ),
                 ),
-              ),
-            );
-            return false;
-          }
+              );
+              return false;
+            }
           return false;
         },
         onDismissed: (direction) {
           if (direction == DismissDirection.startToEnd) {
             try {
-              ref.read(characterRepositoryProvider).deleteCharacter(character.localId);
+              ref
+                  .read(characterRepositoryProvider)
+                  .deleteCharacter(character.localId);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('"${character.name}" was deleted.')),
               );
             } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error: $e')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text('Error: $e')));
             }
           }
         },
         child: Container(
           decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(color: color, width: 4),
-            ),
+            border: Border(bottom: BorderSide(color: color, width: 4)),
           ),
           child: ListTile(
             title: Text(character.name),
@@ -202,6 +235,22 @@ class CharacterListScreen extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
             ),
             onTap: () {
+              if (character.serverId != null) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CharacterDetailScreen(
+                      characterServerId: character.serverId!,
+                    ),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('This character has not been synced yet.'),
+                    backgroundColor: Colors.orange,
+                  )
+                );
+              }
             },
           ),
         ),
@@ -211,14 +260,23 @@ class CharacterListScreen extends ConsumerWidget {
 
   Color _getTagColor(String tagColor) {
     switch (tagColor) {
-      case 'blue': return Colors.blue.shade400;
-      case 'purple': return Colors.purple.shade400;
-      case 'green': return Colors.green.shade400;
-      case 'red': return Colors.red.shade400;
-      case 'amber': return Colors.amber.shade400;
-      case 'lime': return Colors.lime.shade400;
-      case 'black': return Colors.black87;
-      case 'neutral': default: return Colors.grey.shade400;
+      case 'blue':
+        return Colors.blue.shade400;
+      case 'purple':
+        return Colors.purple.shade400;
+      case 'green':
+        return Colors.green.shade400;
+      case 'red':
+        return Colors.red.shade400;
+      case 'amber':
+        return Colors.amber.shade400;
+      case 'lime':
+        return Colors.lime.shade400;
+      case 'black':
+        return Colors.black87;
+      case 'neutral':
+      default:
+        return Colors.grey.shade400;
     }
   }
 
@@ -247,12 +305,17 @@ class CharacterListScreen extends ConsumerWidget {
     );
   }
 
-  Future<bool> _showDeleteConfirmation(BuildContext context, String name) async {
+  Future<bool> _showDeleteConfirmation(
+    BuildContext context,
+    String name,
+  ) async {
     final bool? confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Character'),
-        content: Text('Are you sure you want to delete "$name"? This action cannot be undone.'),
+        content: Text(
+          'Are you sure you want to delete "$name"? This action cannot be undone.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),

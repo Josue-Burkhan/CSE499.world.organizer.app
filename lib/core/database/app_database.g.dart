@@ -1246,6 +1246,50 @@ class $CharactersTable extends Characters
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _familyJsonMeta = const VerificationMeta(
+    'familyJson',
+  );
+  @override
+  late final GeneratedColumn<String> familyJson = GeneratedColumn<String>(
+    'family_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _friendsJsonMeta = const VerificationMeta(
+    'friendsJson',
+  );
+  @override
+  late final GeneratedColumn<String> friendsJson = GeneratedColumn<String>(
+    'friends_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _enemiesJsonMeta = const VerificationMeta(
+    'enemiesJson',
+  );
+  @override
+  late final GeneratedColumn<String> enemiesJson = GeneratedColumn<String>(
+    'enemies_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _romanceJsonMeta = const VerificationMeta(
+    'romanceJson',
+  );
+  @override
+  late final GeneratedColumn<String> romanceJson = GeneratedColumn<String>(
+    'romance_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   late final GeneratedColumnWithTypeConverter<List<String>, String> images =
       GeneratedColumn<String>(
@@ -1431,6 +1475,10 @@ class $CharactersTable extends Characters
     appearanceJson,
     personalityJson,
     historyJson,
+    familyJson,
+    friendsJson,
+    enemiesJson,
+    romanceJson,
     images,
     rawFamily,
     rawFriends,
@@ -1552,6 +1600,39 @@ class $CharactersTable extends Characters
         ),
       );
     }
+    if (data.containsKey('family_json')) {
+      context.handle(
+        _familyJsonMeta,
+        familyJson.isAcceptableOrUnknown(data['family_json']!, _familyJsonMeta),
+      );
+    }
+    if (data.containsKey('friends_json')) {
+      context.handle(
+        _friendsJsonMeta,
+        friendsJson.isAcceptableOrUnknown(
+          data['friends_json']!,
+          _friendsJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('enemies_json')) {
+      context.handle(
+        _enemiesJsonMeta,
+        enemiesJson.isAcceptableOrUnknown(
+          data['enemies_json']!,
+          _enemiesJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('romance_json')) {
+      context.handle(
+        _romanceJsonMeta,
+        romanceJson.isAcceptableOrUnknown(
+          data['romance_json']!,
+          _romanceJsonMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1614,6 +1695,22 @@ class $CharactersTable extends Characters
       historyJson: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}history_json'],
+      ),
+      familyJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}family_json'],
+      ),
+      friendsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}friends_json'],
+      ),
+      enemiesJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}enemies_json'],
+      ),
+      romanceJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}romance_json'],
       ),
       images: $CharactersTable.$converterimages.fromSql(
         attachedDatabase.typeMapping.read(
@@ -1777,6 +1874,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
   final String? appearanceJson;
   final String? personalityJson;
   final String? historyJson;
+  final String? familyJson;
+  final String? friendsJson;
+  final String? enemiesJson;
+  final String? romanceJson;
   final List<String> images;
   final List<String> rawFamily;
   final List<String> rawFriends;
@@ -1808,6 +1909,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
     this.appearanceJson,
     this.personalityJson,
     this.historyJson,
+    this.familyJson,
+    this.friendsJson,
+    this.enemiesJson,
+    this.romanceJson,
     required this.images,
     required this.rawFamily,
     required this.rawFriends,
@@ -1861,6 +1966,18 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
     }
     if (!nullToAbsent || historyJson != null) {
       map['history_json'] = Variable<String>(historyJson);
+    }
+    if (!nullToAbsent || familyJson != null) {
+      map['family_json'] = Variable<String>(familyJson);
+    }
+    if (!nullToAbsent || friendsJson != null) {
+      map['friends_json'] = Variable<String>(friendsJson);
+    }
+    if (!nullToAbsent || enemiesJson != null) {
+      map['enemies_json'] = Variable<String>(enemiesJson);
+    }
+    if (!nullToAbsent || romanceJson != null) {
+      map['romance_json'] = Variable<String>(romanceJson);
     }
     {
       map['images'] = Variable<String>(
@@ -1979,6 +2096,18 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
       historyJson: historyJson == null && nullToAbsent
           ? const Value.absent()
           : Value(historyJson),
+      familyJson: familyJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(familyJson),
+      friendsJson: friendsJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(friendsJson),
+      enemiesJson: enemiesJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(enemiesJson),
+      romanceJson: romanceJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(romanceJson),
       images: Value(images),
       rawFamily: Value(rawFamily),
       rawFriends: Value(rawFriends),
@@ -2018,6 +2147,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
       appearanceJson: serializer.fromJson<String?>(json['appearanceJson']),
       personalityJson: serializer.fromJson<String?>(json['personalityJson']),
       historyJson: serializer.fromJson<String?>(json['historyJson']),
+      familyJson: serializer.fromJson<String?>(json['familyJson']),
+      friendsJson: serializer.fromJson<String?>(json['friendsJson']),
+      enemiesJson: serializer.fromJson<String?>(json['enemiesJson']),
+      romanceJson: serializer.fromJson<String?>(json['romanceJson']),
       images: serializer.fromJson<List<String>>(json['images']),
       rawFamily: serializer.fromJson<List<String>>(json['rawFamily']),
       rawFriends: serializer.fromJson<List<String>>(json['rawFriends']),
@@ -2058,6 +2191,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
       'appearanceJson': serializer.toJson<String?>(appearanceJson),
       'personalityJson': serializer.toJson<String?>(personalityJson),
       'historyJson': serializer.toJson<String?>(historyJson),
+      'familyJson': serializer.toJson<String?>(familyJson),
+      'friendsJson': serializer.toJson<String?>(friendsJson),
+      'enemiesJson': serializer.toJson<String?>(enemiesJson),
+      'romanceJson': serializer.toJson<String?>(romanceJson),
       'images': serializer.toJson<List<String>>(images),
       'rawFamily': serializer.toJson<List<String>>(rawFamily),
       'rawFriends': serializer.toJson<List<String>>(rawFriends),
@@ -2092,6 +2229,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
     Value<String?> appearanceJson = const Value.absent(),
     Value<String?> personalityJson = const Value.absent(),
     Value<String?> historyJson = const Value.absent(),
+    Value<String?> familyJson = const Value.absent(),
+    Value<String?> friendsJson = const Value.absent(),
+    Value<String?> enemiesJson = const Value.absent(),
+    Value<String?> romanceJson = const Value.absent(),
     List<String>? images,
     List<String>? rawFamily,
     List<String>? rawFriends,
@@ -2127,6 +2268,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
         ? personalityJson.value
         : this.personalityJson,
     historyJson: historyJson.present ? historyJson.value : this.historyJson,
+    familyJson: familyJson.present ? familyJson.value : this.familyJson,
+    friendsJson: friendsJson.present ? friendsJson.value : this.friendsJson,
+    enemiesJson: enemiesJson.present ? enemiesJson.value : this.enemiesJson,
+    romanceJson: romanceJson.present ? romanceJson.value : this.romanceJson,
     images: images ?? this.images,
     rawFamily: rawFamily ?? this.rawFamily,
     rawFriends: rawFriends ?? this.rawFriends,
@@ -2172,6 +2317,18 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
       historyJson: data.historyJson.present
           ? data.historyJson.value
           : this.historyJson,
+      familyJson: data.familyJson.present
+          ? data.familyJson.value
+          : this.familyJson,
+      friendsJson: data.friendsJson.present
+          ? data.friendsJson.value
+          : this.friendsJson,
+      enemiesJson: data.enemiesJson.present
+          ? data.enemiesJson.value
+          : this.enemiesJson,
+      romanceJson: data.romanceJson.present
+          ? data.romanceJson.value
+          : this.romanceJson,
       images: data.images.present ? data.images.value : this.images,
       rawFamily: data.rawFamily.present ? data.rawFamily.value : this.rawFamily,
       rawFriends: data.rawFriends.present
@@ -2234,6 +2391,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
           ..write('appearanceJson: $appearanceJson, ')
           ..write('personalityJson: $personalityJson, ')
           ..write('historyJson: $historyJson, ')
+          ..write('familyJson: $familyJson, ')
+          ..write('friendsJson: $friendsJson, ')
+          ..write('enemiesJson: $enemiesJson, ')
+          ..write('romanceJson: $romanceJson, ')
           ..write('images: $images, ')
           ..write('rawFamily: $rawFamily, ')
           ..write('rawFriends: $rawFriends, ')
@@ -2270,6 +2431,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
     appearanceJson,
     personalityJson,
     historyJson,
+    familyJson,
+    friendsJson,
+    enemiesJson,
+    romanceJson,
     images,
     rawFamily,
     rawFriends,
@@ -2305,6 +2470,10 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
           other.appearanceJson == this.appearanceJson &&
           other.personalityJson == this.personalityJson &&
           other.historyJson == this.historyJson &&
+          other.familyJson == this.familyJson &&
+          other.friendsJson == this.friendsJson &&
+          other.enemiesJson == this.enemiesJson &&
+          other.romanceJson == this.romanceJson &&
           other.images == this.images &&
           other.rawFamily == this.rawFamily &&
           other.rawFriends == this.rawFriends &&
@@ -2338,6 +2507,10 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
   final Value<String?> appearanceJson;
   final Value<String?> personalityJson;
   final Value<String?> historyJson;
+  final Value<String?> familyJson;
+  final Value<String?> friendsJson;
+  final Value<String?> enemiesJson;
+  final Value<String?> romanceJson;
   final Value<List<String>> images;
   final Value<List<String>> rawFamily;
   final Value<List<String>> rawFriends;
@@ -2370,6 +2543,10 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     this.appearanceJson = const Value.absent(),
     this.personalityJson = const Value.absent(),
     this.historyJson = const Value.absent(),
+    this.familyJson = const Value.absent(),
+    this.friendsJson = const Value.absent(),
+    this.enemiesJson = const Value.absent(),
+    this.romanceJson = const Value.absent(),
     this.images = const Value.absent(),
     this.rawFamily = const Value.absent(),
     this.rawFriends = const Value.absent(),
@@ -2403,6 +2580,10 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     this.appearanceJson = const Value.absent(),
     this.personalityJson = const Value.absent(),
     this.historyJson = const Value.absent(),
+    this.familyJson = const Value.absent(),
+    this.friendsJson = const Value.absent(),
+    this.enemiesJson = const Value.absent(),
+    this.romanceJson = const Value.absent(),
     this.images = const Value.absent(),
     this.rawFamily = const Value.absent(),
     this.rawFriends = const Value.absent(),
@@ -2437,6 +2618,10 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     Expression<String>? appearanceJson,
     Expression<String>? personalityJson,
     Expression<String>? historyJson,
+    Expression<String>? familyJson,
+    Expression<String>? friendsJson,
+    Expression<String>? enemiesJson,
+    Expression<String>? romanceJson,
     Expression<String>? images,
     Expression<String>? rawFamily,
     Expression<String>? rawFriends,
@@ -2470,6 +2655,10 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
       if (appearanceJson != null) 'appearance_json': appearanceJson,
       if (personalityJson != null) 'personality_json': personalityJson,
       if (historyJson != null) 'history_json': historyJson,
+      if (familyJson != null) 'family_json': familyJson,
+      if (friendsJson != null) 'friends_json': friendsJson,
+      if (enemiesJson != null) 'enemies_json': enemiesJson,
+      if (romanceJson != null) 'romance_json': romanceJson,
       if (images != null) 'images': images,
       if (rawFamily != null) 'raw_family': rawFamily,
       if (rawFriends != null) 'raw_friends': rawFriends,
@@ -2505,6 +2694,10 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     Value<String?>? appearanceJson,
     Value<String?>? personalityJson,
     Value<String?>? historyJson,
+    Value<String?>? familyJson,
+    Value<String?>? friendsJson,
+    Value<String?>? enemiesJson,
+    Value<String?>? romanceJson,
     Value<List<String>>? images,
     Value<List<String>>? rawFamily,
     Value<List<String>>? rawFriends,
@@ -2538,6 +2731,10 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
       appearanceJson: appearanceJson ?? this.appearanceJson,
       personalityJson: personalityJson ?? this.personalityJson,
       historyJson: historyJson ?? this.historyJson,
+      familyJson: familyJson ?? this.familyJson,
+      friendsJson: friendsJson ?? this.friendsJson,
+      enemiesJson: enemiesJson ?? this.enemiesJson,
+      romanceJson: romanceJson ?? this.romanceJson,
       images: images ?? this.images,
       rawFamily: rawFamily ?? this.rawFamily,
       rawFriends: rawFriends ?? this.rawFriends,
@@ -2602,6 +2799,18 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     }
     if (historyJson.present) {
       map['history_json'] = Variable<String>(historyJson.value);
+    }
+    if (familyJson.present) {
+      map['family_json'] = Variable<String>(familyJson.value);
+    }
+    if (friendsJson.present) {
+      map['friends_json'] = Variable<String>(friendsJson.value);
+    }
+    if (enemiesJson.present) {
+      map['enemies_json'] = Variable<String>(enemiesJson.value);
+    }
+    if (romanceJson.present) {
+      map['romance_json'] = Variable<String>(romanceJson.value);
     }
     if (images.present) {
       map['images'] = Variable<String>(
@@ -2710,6 +2919,10 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
           ..write('appearanceJson: $appearanceJson, ')
           ..write('personalityJson: $personalityJson, ')
           ..write('historyJson: $historyJson, ')
+          ..write('familyJson: $familyJson, ')
+          ..write('friendsJson: $friendsJson, ')
+          ..write('enemiesJson: $enemiesJson, ')
+          ..write('romanceJson: $romanceJson, ')
           ..write('images: $images, ')
           ..write('rawFamily: $rawFamily, ')
           ..write('rawFriends: $rawFriends, ')
@@ -3408,6 +3621,10 @@ typedef $$CharactersTableCreateCompanionBuilder =
       Value<String?> appearanceJson,
       Value<String?> personalityJson,
       Value<String?> historyJson,
+      Value<String?> familyJson,
+      Value<String?> friendsJson,
+      Value<String?> enemiesJson,
+      Value<String?> romanceJson,
       Value<List<String>> images,
       Value<List<String>> rawFamily,
       Value<List<String>> rawFriends,
@@ -3442,6 +3659,10 @@ typedef $$CharactersTableUpdateCompanionBuilder =
       Value<String?> appearanceJson,
       Value<String?> personalityJson,
       Value<String?> historyJson,
+      Value<String?> familyJson,
+      Value<String?> friendsJson,
+      Value<String?> enemiesJson,
+      Value<String?> romanceJson,
       Value<List<String>> images,
       Value<List<String>> rawFamily,
       Value<List<String>> rawFriends,
@@ -3553,6 +3774,26 @@ class $$CharactersTableFilterComposer
 
   ColumnFilters<String> get historyJson => $composableBuilder(
     column: $table.historyJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get familyJson => $composableBuilder(
+    column: $table.familyJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get friendsJson => $composableBuilder(
+    column: $table.friendsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get enemiesJson => $composableBuilder(
+    column: $table.enemiesJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get romanceJson => $composableBuilder(
+    column: $table.romanceJson,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3751,6 +3992,26 @@ class $$CharactersTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get familyJson => $composableBuilder(
+    column: $table.familyJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get friendsJson => $composableBuilder(
+    column: $table.friendsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get enemiesJson => $composableBuilder(
+    column: $table.enemiesJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get romanceJson => $composableBuilder(
+    column: $table.romanceJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get images => $composableBuilder(
     column: $table.images,
     builder: (column) => ColumnOrderings(column),
@@ -3916,6 +4177,26 @@ class $$CharactersTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get familyJson => $composableBuilder(
+    column: $table.familyJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get friendsJson => $composableBuilder(
+    column: $table.friendsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get enemiesJson => $composableBuilder(
+    column: $table.enemiesJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get romanceJson => $composableBuilder(
+    column: $table.romanceJson,
+    builder: (column) => column,
+  );
+
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
@@ -4071,6 +4352,10 @@ class $$CharactersTableTableManager
                 Value<String?> appearanceJson = const Value.absent(),
                 Value<String?> personalityJson = const Value.absent(),
                 Value<String?> historyJson = const Value.absent(),
+                Value<String?> familyJson = const Value.absent(),
+                Value<String?> friendsJson = const Value.absent(),
+                Value<String?> enemiesJson = const Value.absent(),
+                Value<String?> romanceJson = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
                 Value<List<String>> rawFamily = const Value.absent(),
                 Value<List<String>> rawFriends = const Value.absent(),
@@ -4103,6 +4388,10 @@ class $$CharactersTableTableManager
                 appearanceJson: appearanceJson,
                 personalityJson: personalityJson,
                 historyJson: historyJson,
+                familyJson: familyJson,
+                friendsJson: friendsJson,
+                enemiesJson: enemiesJson,
+                romanceJson: romanceJson,
                 images: images,
                 rawFamily: rawFamily,
                 rawFriends: rawFriends,
@@ -4137,6 +4426,10 @@ class $$CharactersTableTableManager
                 Value<String?> appearanceJson = const Value.absent(),
                 Value<String?> personalityJson = const Value.absent(),
                 Value<String?> historyJson = const Value.absent(),
+                Value<String?> familyJson = const Value.absent(),
+                Value<String?> friendsJson = const Value.absent(),
+                Value<String?> enemiesJson = const Value.absent(),
+                Value<String?> romanceJson = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
                 Value<List<String>> rawFamily = const Value.absent(),
                 Value<List<String>> rawFriends = const Value.absent(),
@@ -4169,6 +4462,10 @@ class $$CharactersTableTableManager
                 appearanceJson: appearanceJson,
                 personalityJson: personalityJson,
                 historyJson: historyJson,
+                familyJson: familyJson,
+                friendsJson: friendsJson,
+                enemiesJson: enemiesJson,
+                romanceJson: romanceJson,
                 images: images,
                 rawFamily: rawFamily,
                 rawFriends: rawFriends,

@@ -22,7 +22,9 @@ class World {
       id: json['_id'],
       name: json['name'] ?? 'Unnamed World',
       description: json['description'] ?? '',
-      modules: json['modules'] != null ? Modules.fromJson(json['modules']) : null,
+      modules: json['modules'] != null
+          ? Modules.fromJson(json['modules'])
+          : null,
       coverImage: json['cover_image'],
       customImage: json['custom_image'],
     );
@@ -81,22 +83,22 @@ class Modules {
     );
   }
 
-  Map<String, bool> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      'Characters': characters,
-      'Locations': locations,
-      'Factions': factions,
-      'Items': items,
-      'Events': events,
-      'Languages': languages,
-      'Abilities': abilities,
-      'Technology': technology,
-      'Power System': powerSystem,
-      'Creatures': creatures,
-      'Religion': religion,
-      'Story': story,
-      'Races': races,
-      'Economy': economy,
+      'characters': characters,
+      'locations': locations,
+      'factions': factions,
+      'items': items,
+      'events': events,
+      'languages': languages,
+      'abilities': abilities,
+      'technology': technology,
+      'powerSystem': powerSystem,
+      'creatures': creatures,
+      'religion': religion,
+      'story': story,
+      'races': races,
+      'economy': economy,
     };
   }
 

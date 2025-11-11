@@ -10,6 +10,7 @@ import 'package:worldorganizer_app/core/services/world_sync_service.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/character_list_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/world_stats_widget.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/world_timeline_widget.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/world_search_screen.dart';
 
 final worldDetailStreamProvider = StreamProvider.family<WorldEntity?, String>((
   ref,
@@ -32,8 +33,8 @@ final worldStatsProvider = FutureProvider.family<WorldStats, String>((
   return ref.watch(worldSyncServiceProvider).getStats(serverWorldId);
 });
 
-final worldDetailSyncProvider = FutureProvider.family
-    .autoDispose<void, String?>((ref, serverId) async {
+  final worldDetailSyncProvider = 
+    FutureProvider.family<void, String?>((ref, serverId) async {
       if (serverId == null) {
         return;
       }
@@ -48,46 +49,63 @@ class WorldDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
     final worldAsyncValue = ref.watch(worldDetailStreamProvider(localWorldId));
-    final worldSyncAsyncValue = ref.watch(
-      worldDetailSyncProvider(worldAsyncValue.value?.serverId),
-    );
+    final worldData = worldAsyncValue.value;
+
+    ref.listen(worldDetailSyncProvider(worldData?.serverId), (prev, next) {
+      if (prev is AsyncLoading && next is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to sync. Check connection.'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    });
 
     return worldAsyncValue.when(
       data: (world) {
         if (world == null) {
           return const Scaffold(
-            body: Center(child: Text('World not found or has been deleted.')),
+            body: Center(child: Text('World not found or has been deleted.'))
           );
         }
-
+        
         final serverId = world.serverId;
-        final bool hasLocalModules = world.modules != null;
-        Modules? modules = hasLocalModules
-            ? Modules.fromJson(jsonDecode(world.modules!))
-            : null;
-
-        if (!hasLocalModules) {
-          return Scaffold(
-            appBar: AppBar(title: Text(world.name)),
-            body: worldSyncAsyncValue.when(
-              data: (_) => const Center(child: Text('Loading modules...')),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, st) => Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text('Failed to load world details: $e'),
-                ),
-              ),
-            ),
-          );
-        }
+        final modules = world.modules != null 
+          ? Modules.fromJson(jsonDecode(world.modules!)) 
+          : null;
 
         return DefaultTabController(
           length: 3,
           child: Scaffold(
             appBar: AppBar(
               title: Text(world.name),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    if (world.serverId != null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => WorldSearchScreen(
+                            worldServerId: world.serverId!,
+                          ),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Search is unavailable for unsynced worlds.'),
+                          backgroundColor: Colors.orange,
+                        )
+                      );
+                    }
+                  },
+                ),
+              ],
               bottom: const TabBar(
                 tabs: [
                   Tab(text: 'Overview'),
@@ -99,7 +117,7 @@ class WorldDetailScreen extends ConsumerWidget {
             body: TabBarView(
               children: [
                 _buildModulesList(context, world, modules),
-
+                
                 if (serverId != null)
                   WorldTimelineWidget(worldId: serverId)
                 else
@@ -114,9 +132,8 @@ class WorldDetailScreen extends ConsumerWidget {
           ),
         );
       },
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (err, stack) => Scaffold(body: Center(child: Text('Error: $err'))),
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (err, stack) => Scaffold(body: Center(child: Text('Error reading local DB: $err'))),
     );
   }
 
@@ -129,7 +146,7 @@ class WorldDetailScreen extends ConsumerWidget {
       return const Center(child: Text('No modules enabled for this world.'));
     }
 
-    final Map<String, bool> moduleMap = modules.toMap();
+    final Map<String, dynamic> moduleMap = modules.toMap();
     final List<String> enabledModules = moduleMap.entries
         .where((entry) => entry.value == true)
         .map((entry) => entry.key)
@@ -152,7 +169,7 @@ class WorldDetailScreen extends ConsumerWidget {
               moduleIcon,
               color: Theme.of(context).colorScheme.primary,
             ),
-            title: Text(moduleName),
+            title: Text(_getModuleDisplayName(moduleName)),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               _navigateToModule(context, moduleName, world);
@@ -165,45 +182,61 @@ class WorldDetailScreen extends ConsumerWidget {
 
   IconData _getModuleIcon(String moduleName) {
     switch (moduleName) {
-      case 'Characters':
+      case 'characters':
         return Icons.people;
-      case 'Locations':
+      case 'locations':
         return Icons.map;
-      case 'Factions':
+      case 'factions':
         return Icons.group_work;
-      case 'Items':
+      case 'items':
         return Icons.shield;
-      case 'Events':
+      case 'events':
         return Icons.event;
-      case 'Languages':
+      case 'languages':
         return Icons.language;
-      case 'Abilities':
+      case 'abilities':
         return Icons.star;
-      case 'Technology':
+      case 'technology':
         return Icons.memory;
-      case 'Power System':
+      case 'powerSystem':
         return Icons.flash_on;
-      case 'Creatures':
+      case 'creatures':
         return Icons.adb;
-      case 'Religion':
+      case 'religion':
         return Icons.book;
-      case 'Story':
+      case 'story':
         return Icons.auto_stories;
-      case 'Races':
+      case 'races':
         return Icons.face;
-      case 'Economy':
+      case 'economy':
         return Icons.monetization_on;
       default:
         return Icons.category;
     }
   }
 
-  void _navigateToModule(
-    BuildContext context,
-    String moduleName,
-    WorldEntity world,
-  ) {
-    if (moduleName == 'Characters') {
+  String _getModuleDisplayName(String moduleName) {
+    switch (moduleName) {
+      case 'characters': return 'Characters';
+      case 'locations': return 'Locations';
+      case 'factions': return 'Factions';
+      case 'items': return 'Items';
+      case 'events': return 'Events';
+      case 'languages': return 'Languages';
+      case 'abilities': return 'Abilities';
+      case 'technology': return 'Technology';
+      case 'powerSystem': return 'Power System';
+      case 'creatures': return 'Creatures';
+      case 'religion': return 'Religion';
+      case 'story': return 'Story';
+      case 'races': return 'Races';
+      case 'economy': return 'Economy';
+      default: return 'Other';
+    }
+  }
+
+  void _navigateToModule(BuildContext context, String moduleName, WorldEntity world) {
+    if (moduleName == 'characters') {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => CharacterListScreen(

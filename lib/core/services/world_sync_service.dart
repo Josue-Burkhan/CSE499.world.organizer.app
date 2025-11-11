@@ -6,11 +6,13 @@ import 'package:drift/drift.dart';
 import 'package:worldorganizer_app/models/api_models/world_model.dart';
 import 'package:worldorganizer_app/models/api_models/world_stats_model.dart';
 import 'package:worldorganizer_app/models/api_models/world_timeline_model.dart';
+import 'package:worldorganizer_app/models/api_models/search_result_model.dart';
 
 class WorldSyncService {
   final WorldsDao _worldsDao;
   final FlutterSecureStorage _storage;
   final String _baseUrl = 'https://login.wild-fantasy.com/api/worlds';
+  final String _searchBaseUrl = 'https://login.wild-fantasy.com/api/search';
 
   WorldSyncService({
     required WorldsDao worldsDao,
@@ -221,6 +223,31 @@ class WorldSyncService {
       await _worldsDao.insertWorld(companion);
     } catch (e) {
       throw Exception('Failed to fetch/merge single world: $e');
+    }
+  }
+
+  Future<List<SearchResult>> searchInWorld(String worldId, String query) async {
+    if (query.isEmpty) {
+      return [];
+    }
+
+    final token = await _getToken();
+    if (token == null) throw Exception('Not authenticated');
+
+    final headers = await _getHeaders();
+    final uri = Uri.parse('$_searchBaseUrl?q=$query&worldId=$worldId');
+
+    try {
+      final response = await http.get(uri, headers: headers);
+      if (response.statusCode != 200) {
+        throw Exception('Search failed: ${response.statusCode}');
+      }
+
+      final List<dynamic> body = jsonDecode(response.body);
+      return body.map((json) => SearchResult.fromJson(json)).toList();
+    
+    } catch (e) {
+      throw Exception('Search failed: $e');
     }
   }
 }

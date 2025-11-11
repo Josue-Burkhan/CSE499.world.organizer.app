@@ -1,8 +1,27 @@
 import 'dart:convert';
 
+class CharacterRelation {
+  final String id;
+  final String name;
+
+  CharacterRelation({required this.id, required this.name});
+
+  factory CharacterRelation.fromJson(Map<String, dynamic> json) {
+    return CharacterRelation(
+      id: json['_id'],
+      name: json['name'] ?? 'Unknown',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    '_id': id,
+    'name': name,
+  };
+}
+
 class Character {
   final String id;
-  final String worldId;
+  final String? worldId;
   final String name;
   final int? age;
   final String? gender;
@@ -15,10 +34,11 @@ class Character {
   final History? history;
   final List<String> images;
 
-  final List<String> rawFamily;
-  final List<String> rawFriends;
-  final List<String> rawEnemies;
-  final List<String> rawRomance;
+  final List<CharacterRelation> family;
+  final List<CharacterRelation> friends;
+  final List<CharacterRelation> enemies;
+  final List<CharacterRelation> romance;
+
   final List<String> rawAbilities;
   final List<String> rawItems;
   final List<String> rawLanguages;
@@ -34,7 +54,7 @@ class Character {
 
   Character({
     required this.id,
-    required this.worldId,
+    this.worldId,
     required this.name,
     this.age,
     this.gender,
@@ -45,10 +65,10 @@ class Character {
     this.personality,
     this.history,
     required this.images,
-    required this.rawFamily,
-    required this.rawFriends,
-    required this.rawEnemies,
-    required this.rawRomance,
+    required this.family,
+    required this.friends,
+    required this.enemies,
+    required this.romance,
     required this.rawAbilities,
     required this.rawItems,
     required this.rawLanguages,
@@ -66,6 +86,18 @@ class Character {
   static List<String> _listFromRaw(dynamic raw) {
     if (raw is List) {
       return List<String>.from(raw.map((item) => item.toString()));
+    }
+    return [];
+  }
+
+  static List<CharacterRelation> _relationsFromRaw(dynamic raw) {
+    if (raw is List) {
+      return raw.map((item) {
+        if (item is Map<String, dynamic>) {
+          return CharacterRelation.fromJson(item);
+        }
+        return null; 
+      }).whereType<CharacterRelation>().toList();
     }
     return [];
   }
@@ -91,10 +123,10 @@ class Character {
           ? History.fromJson(json['history'])
           : null,
       images: _listFromRaw(json['images']),
-      rawFamily: _listFromRaw(relationships['rawFamily']),
-      rawFriends: _listFromRaw(relationships['rawFriends']),
-      rawEnemies: _listFromRaw(relationships['rawEnemies']),
-      rawRomance: _listFromRaw(relationships['rawRomance']),
+      family: _relationsFromRaw(relationships['family']),
+      friends: _relationsFromRaw(relationships['friends']),
+      enemies: _relationsFromRaw(relationships['enemies']),
+      romance: _relationsFromRaw(relationships['romance']),
       rawAbilities: _listFromRaw(json['rawAbilities']),
       rawItems: _listFromRaw(json['rawItems']),
       rawLanguages: _listFromRaw(json['rawLanguages']),
@@ -108,41 +140,6 @@ class Character {
       rawStories: _listFromRaw(json['rawStories']),
       rawTechnologies: _listFromRaw(json['rawTechnologies']),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'world': worldId,
-      'name': name,
-      'age': age,
-      'gender': gender,
-      'nickname': nickname,
-      'customNotes': customNotes,
-      'tagColor': tagColor,
-      'appearance': appearance?.toJson(),
-      'personality': personality?.toJson(),
-      'history': history?.toJson(),
-      'images': images,
-      'relationships': {
-        'rawFamily': rawFamily,
-        'rawFriends': rawFriends,
-        'rawEnemies': rawEnemies,
-        'rawRomance': rawRomance,
-      },
-      'rawAbilities': rawAbilities,
-      'rawItems': rawItems,
-      'rawLanguages': rawLanguages,
-      'rawRaces': rawRaces,
-      'rawFactions': rawFactions,
-      'rawLocations': rawLocations,
-      'rawPowerSystems': rawPowerSystems,
-      'rawReligions': rawReligions,
-      'rawCreatures': rawCreatures,
-      'rawEconomies': rawEconomies,
-      'rawStories': rawStories,
-      'rawTechnologies': rawTechnologies,
-    };
   }
 }
 

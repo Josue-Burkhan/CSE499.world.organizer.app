@@ -53,6 +53,7 @@ final characterRepositoryProvider = Provider<CharacterRepository>((ref) {
 final characterSyncServiceProvider = Provider<CharacterSyncService>((ref) {
   return CharacterSyncService(
     dao: ref.watch(charactersDaoProvider),
+    worldsDao: ref.watch(worldsDaoProvider),
     storage: ref.watch(secureStorageProvider),
   );
 });

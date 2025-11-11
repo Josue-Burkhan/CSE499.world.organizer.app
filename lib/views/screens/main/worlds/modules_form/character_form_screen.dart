@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 
-class CharacterScreen extends StatelessWidget {
+class CharacterFormScreen extends StatelessWidget {
   final String? characterLocalId;
   final String worldLocalId;
   
-  const CharacterScreen({
+  const CharacterFormScreen({
     super.key, 
     this.characterLocalId,
     required this.worldLocalId,

@@ -87,6 +87,10 @@ class Characters extends Table {
   TextColumn get personalityJson => text().named('personality_json').nullable()();
   TextColumn get historyJson => text().named('history_json').nullable()();
 
+  TextColumn get familyJson => text().named('family_json').nullable()();
+  TextColumn get friendsJson => text().named('friends_json').nullable()();
+  TextColumn get enemiesJson => text().named('enemies_json').nullable()();
+  TextColumn get romanceJson => text().named('romance_json').nullable()();
   TextColumn get images => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawFamily => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawFriends => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
@@ -167,6 +171,12 @@ class CharactersDao extends DatabaseAccessor<AppDatabase> with _$CharactersDaoMi
           ..where((t) => t.worldLocalId.equals(worldLocalId))
           ..where((t) => t.syncStatus.equals('deleted').not()))
           .watch();
+  }
+
+  Stream<CharacterEntity?> watchCharacterByServerId(String serverId) {
+    return (select(characters)
+          ..where((t) => t.serverId.equals(serverId)))
+          .watchSingleOrNull();
   }
 
   Future<CharacterEntity?> getCharacterByServerId(String serverId) {
