@@ -60,18 +60,6 @@ class Ability {
         return [];
     }
 
-    static List<AbilityRelation> _relationsFromRaw(dynamic raw) {
-        if (raw is List) {
-            return raw.map((item) {
-                if (item is Map<String, dynamic>) {
-                    return AbilityRelation.fromJson(item);
-                }
-                return null;
-            }).whereType<AbilityRelation>().toList();
-        }
-        return [];
-    }
-
     factory Ability.fromJson(Map<String, dynamic> json) {
         final relationships = json['relationships'] ?? {};
         return Ability(
