@@ -6,7 +6,7 @@ class AbilityRelation {
 
     AbilityRelation({required this.id, required this.name});
 
-    factory AbilityRelation.fromjson(Map<String, dynamic> json) {
+    factory AbilityRelation.fromJson(Map<String, dynamic> json) {
         return AbilityRelation(
             id: json['_id'],
             name: json['name'] ?? 'Unknown',
@@ -36,6 +36,16 @@ class Ability {
     final List<String> images;
     final String tagColor;
 
+    final List<String> rawCharacters;
+    final List<String> rawPowerSystems;
+    final List<String> rawStories;
+    final List<String> rawEvents;
+    final List<String> rawItems;
+    final List<String> rawReligions;
+    final List<String> rawTechnologies;
+    final List<String> rawCreatures;
+    final List<String> rawRaces;
+
     Ability({
         required this.id,
         this.worldId,
@@ -51,6 +61,15 @@ class Ability {
         this.customNotes,
         required this.images,
         required this.tagColor,
+        required this.rawCharacters,
+        required this.rawPowerSystems,
+        required this.rawStories,
+        required this.rawEvents,
+        required this.rawItems,
+        required this.rawReligions,
+        required this.rawTechnologies,
+        required this.rawCreatures,
+        required this.rawRaces,
     });
 
     static List<String> _listFromRaw(dynamic raw) {
@@ -61,7 +80,6 @@ class Ability {
     }
 
     factory Ability.fromJson(Map<String, dynamic> json) {
-        final relationships = json['relationships'] ?? {};
         return Ability(
             id: json['_id'],
             worldId: json['world'],
@@ -77,6 +95,16 @@ class Ability {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
+
+            rawCharacters: _listFromRaw(json['rawCharacters']),
+            rawPowerSystems: _listFromRaw(json['rawPowerSystems']),
+            rawStories: _listFromRaw(json['rawStories']),
+            rawEvents: _listFromRaw(json['rawEvents']),
+            rawItems: _listFromRaw(json['rawItems']),
+            rawReligions: _listFromRaw(json['rawReligions']),
+            rawTechnologies: _listFromRaw(json['rawTechnologies']),
+            rawCreatures: _listFromRaw(json['rawCreatures']),
+            rawRaces: _listFromRaw(json['rawRaces']),
         )
     }
 }
