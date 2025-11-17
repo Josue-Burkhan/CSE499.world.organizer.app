@@ -153,42 +153,6 @@ class ProfileScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: 24),
-          Card(
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Subscription Details',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const Divider(height: 20),
-                  ListTile(
-                    leading: const Icon(Icons.workspace_premium_outlined),
-                    title: Text(profile.plan ?? 'No Plan'),
-                    subtitle: const Text('Current Plan'),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.calendar_today_outlined),
-                    title: Text(expiresAt),
-                    subtitle: const Text('Expires On'),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.autorenew_outlined),
-                    title: Text(
-                      profile.autoRenew == true
-                          ? 'Enabled'
-                          : 'Disabled',
-                    ),
-                    subtitle: const Text('Auto-Renew'),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
