@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class FactionRelation {
   final String id;
   final String name;
@@ -94,6 +92,6 @@ class PowerSystem {
             rawCreatures: _listFromRaw(json['rawCreatures']),
             rawReligions: _listFromRaw(json['rawReligions']),
             rawTechnologies: _listFromRaw(json['rawTechnologies']),
-        )
+        );
     }
 }

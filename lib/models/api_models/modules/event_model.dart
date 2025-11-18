@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class EventRelation {
   final String id;
   final String name;

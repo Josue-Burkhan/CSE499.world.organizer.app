@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class StoryRelation {
   final String id;
   final String name;
@@ -64,7 +62,7 @@ class Timeline {
     }
 
     Map<String, dynamic> toJson() => {
-        'timelineEvents': timelineEvents.map((e) => e.toJson()).toList(),
+        'timelineEvents': timelineEvents?.map((e) => e.toJson()).toList(),
     };
 }
 

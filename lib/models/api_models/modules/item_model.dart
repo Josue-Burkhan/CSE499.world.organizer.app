@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class ItemRelation {
   final String id;
   final String name;
@@ -53,7 +51,7 @@ class Item {
     final List<String> rawAbilities;
 
     Item({
-        required this.id;
+        required this.id,
         this.worldId,
         required this.name,
         this.description,
@@ -93,35 +91,37 @@ class Item {
     }
 
     factory Item.fromJson(Map<String, dynamic> json) {
-        id: json['_id'],
-        worldId: json['world'],
-        name: json['name'] ?? 'Unnamed',
-        description: json['description'],
-        type: json['type'],
-        origin: json['origin'],
-        material: json['material'],
-        weight: json['weight'],
-        value: json['value'],
-        rarity: json['rarity'],
-        magicalProperties: _listFromRaw(json['magicalProperties']),
-        technologicalFeatures: _listFromRaw(json['technologicalFeatures']),
-        customEffects: _listFromRaw(json['customEffects']),
-        isUnique: json['isUnique'] ?? false,
-        isDestroyed: json['isDestroyed'] ?? false,
-        customNotes: json['customNotes'],
-        images: _listFromRaw(json['images']),
-        tagColor: json['tagColor'] ?? 'neutral',
-        rawCreatedBy: _listFromRaw(json['rawCharacters']),
-        rawUsedBy: _listFromRaw(json['rawCharacters']),
-        rawCurrentOwnerCharacter: _listFromRaw(json['rawCharacters']),
-        rawFactions: _listFromRaw(json['rawFactions']),
-        rawEvents: _listFromRaw(json['rawEvents']),
-        rawStories: _listFromRaw(json['rawStories']),
-        rawLocations: _listFromRaw(json['rawLocations']),
-        rawReligions: _listFromRaw(json['rawReligions']),
-        rawTechnologies: _listFromRaw(json['rawTechnologies']),
-        rawPowerSystems: _listFromRaw(json['rawPowerSystems']),
-        rawLanguages: _listFromRaw(json['rawLanguages']),
-        rawAbilities: _listFromRaw(json['rawAbilities']),
+        return Item(
+          id: json['_id'],
+          worldId: json['world'],
+          name: json['name'] ?? 'Unnamed',
+          description: json['description'],
+          type: json['type'],
+          origin: json['origin'],
+          material: json['material'],
+          weight: json['weight'],
+          value: json['value'],
+          rarity: json['rarity'],
+          magicalProperties: _listFromRaw(json['magicalProperties']),
+          technologicalFeatures: _listFromRaw(json['technologicalFeatures']),
+          customEffects: _listFromRaw(json['customEffects']),
+          isUnique: json['isUnique'] ?? false,
+          isDestroyed: json['isDestroyed'] ?? false,
+          customNotes: json['customNotes'],
+          images: _listFromRaw(json['images']),
+          tagColor: json['tagColor'] ?? 'neutral',
+          rawCreatedBy: _listFromRaw(json['rawCharacters']),
+          rawUsedBy: _listFromRaw(json['rawCharacters']),
+          rawCurrentOwnerCharacter: _listFromRaw(json['rawCharacters']),
+          rawFactions: _listFromRaw(json['rawFactions']),
+          rawEvents: _listFromRaw(json['rawEvents']),
+          rawStories: _listFromRaw(json['rawStories']),
+          rawLocations: _listFromRaw(json['rawLocations']),
+          rawReligions: _listFromRaw(json['rawReligions']),
+          rawTechnologies: _listFromRaw(json['rawTechnologies']),
+          rawPowerSystems: _listFromRaw(json['rawPowerSystems']),
+          rawLanguages: _listFromRaw(json['rawLanguages']),
+          rawAbilities: _listFromRaw(json['rawAbilities']),
+        );
     }
 }

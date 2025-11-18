@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class LanguageRelation {
   final String id;
   final String name;
@@ -85,6 +83,6 @@ class Language {
             rawLocations: _listFromRaw(json['rawLocations']),
             rawStories: _listFromRaw(json['rawStories']),
             rawReligions: _listFromRaw(json['rawReligions']),
-        )
+        );
     }
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class AbilityRelation {
     final String id;
     final String name;
@@ -11,12 +9,7 @@ class AbilityRelation {
             id: json['_id'],
             name: json['name'] ?? 'Unknown',
         );
-
-        Map<String, dynamic> toJson() => {
-            '_id': id,
-            'name': name,
-        }
-    };
+    }
 }
 
 class Ability {
@@ -105,6 +98,6 @@ class Ability {
             rawTechnologies: _listFromRaw(json['rawTechnologies']),
             rawCreatures: _listFromRaw(json['rawCreatures']),
             rawRaces: _listFromRaw(json['rawRaces']),
-        )
+        );
     }
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class LocationRelation {
   final String id;
   final String name;
@@ -51,10 +49,10 @@ class Location {
         this.climate,
         this.terrain,
         this.population,
-        this.economicSystem,
+        this.economy,
         this.customNotes,
         required this.images,
-        this.tagColor,
+        required this.tagColor,
         required this.rawLocations,
         required this.rawFactions,
         required this.rawEvents,
@@ -83,7 +81,7 @@ class Location {
             climate: json['climate'],
             terrain: json['terrain'],
             population: json['population'],
-            economicSystem: json['economicSystem'],
+            economy: json['economicSystem'],
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
@@ -91,6 +89,8 @@ class Location {
             rawFactions: _listFromRaw(json['rawFactions']),
             rawEvents: _listFromRaw(json['rawEvents']),
             rawCharacters: _listFromRaw(json['rawCharacters']),
+            rawItems: _listFromRaw(json['rawItems']),
+            rawCreatures: _listFromRaw(json['rawCreatures']),
             rawStories: _listFromRaw(json['rawStories']),
             rawLanguages: _listFromRaw(json['rawLanguages']),
             rawReligions: _listFromRaw(json['rawReligions']),

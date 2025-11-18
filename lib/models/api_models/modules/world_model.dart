@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class WorldRelation {
   final String id;
   final String name;

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class TechnologyRelation {
   final String id;
   final String name;
@@ -56,7 +54,7 @@ class Technology {
         this.energySource,
         this.customNotes,
         required this.images,
-        this.tagColor,
+        required this.tagColor,
         required this.rawCreators,
         required this.rawCharacters,
         required this.rawFactions,

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class ActivityRelation {
     final String id;
     final String name;
@@ -11,12 +9,7 @@ class ActivityRelation {
             id: json['_id'],
             name: json['name'] ?? 'Unknown',
         );
-
-        Map<String, dynamic> toJson() => {
-            '_id': id,
-            'name': name,
-        }
-    };
+    }
 }
 
 class Activity {
@@ -32,11 +25,11 @@ class Activity {
         this.worldId,
         required this.name,
         required this.type,
-        required this.description
+        required this.description,
         required this.actionType,
     });
 
-    factory Ability.fromJson(Map<String, dynamic> json) {
+    factory Activity.fromJson(Map<String, dynamic> json) {
         return Activity(
             id: json['_id'],
             worldId: json['world'],
@@ -44,6 +37,6 @@ class Activity {
             type: json['type'],
             description: json['description'],
             actionType: json['actionType']
-        )
+        );
     }
 }

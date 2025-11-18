@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class EconomyRelation {
     final String id;
     final String name;
@@ -11,12 +9,7 @@ class EconomyRelation {
             id: json['_id'],
             name: json['name'] ?? 'Unknown',
         );
-
-        Map<String, dynamic> toJson() => {
-            '_id': id,
-            'name': name,
-        }
-    };
+    }
 }
 
 class Economy {
@@ -46,7 +39,7 @@ class Economy {
         this.currency,
         required this.tradeGoods,
         required this.keyIndustries,
-        this.economicSystem,
+        required this.economicSystem,
         required this.images,
         required this.tagColor,
         required this.rawCharacters,
@@ -84,7 +77,7 @@ class Economy {
             rawItems: _listFromRaw(json['rawItems']),
             rawRaces: _listFromRaw(json['rawRaces']),
             rawStories: _listFromRaw(json['rawStories']),
-        )
+        );
     }
 }
 

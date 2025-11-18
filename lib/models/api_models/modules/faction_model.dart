@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class FactionRelation {
   final String id;
   final String name;
@@ -62,7 +60,7 @@ class Faction {
         this.history,
         this.customNotes,
         required this.images,
-        this.tagColor,
+        required this.tagColor,
         required this.allies,
         required this.enemies,
         required this.rawCharacters,
@@ -85,14 +83,14 @@ class Faction {
         return [];
     }
 
-    static List<CharacterRelation> _relationsFromRaw(dynamic raw) {
+    static List<FactionRelation> _relationsFromRaw(dynamic raw) {
         if (raw is List) {
             return raw.map((item) {
                 if (item is Map<String, dynamic>) {
-                return CharacterRelation.fromJson(item);
+                return FactionRelation.fromJson(item);
                 }
                 return null; 
-            }).whereType<CharacterRelation>().toList();
+            }).whereType<FactionRelation>().toList();
         }
         return [];
     }

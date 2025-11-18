@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class ReligionRelation {
   final String id;
   final String name;

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class CreatureRelation {
   final String id;
   final String name;
@@ -12,11 +10,6 @@ class CreatureRelation {
       name: json['name'] ?? 'Unknown',
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    '_id': id,
-    'name': name,
-  };
 }
 
 class Creature {
@@ -46,8 +39,8 @@ class Creature {
         this.worldId,
         required this.name,
         this.speciesType,
-        this.description,
-        this.habitat,
+        required this.description,
+        required this.habitat,
         required this.weaknesses,
         this.domesticated,
         this.customNotes,
@@ -92,6 +85,6 @@ class Creature {
             rawLocations: _listFromRaw(json['rawLocations']),
             rawPowerSystems: _listFromRaw(json['rawPowerSystems']),
             rawReligions: _listFromRaw(json['rawReligions']),
-        )
+        );
     }
 }

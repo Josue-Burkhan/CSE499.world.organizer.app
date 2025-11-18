@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class CharacterRelation {
   final String id;
   final String name;
