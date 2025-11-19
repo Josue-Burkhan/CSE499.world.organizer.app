@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:circular_reveal_animation/circular_reveal_animation.dart';
 import 'package:worldorganizer_app/views/screens/auth/welcome_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/main_scaffold.dart';
+import 'package:worldorganizer_app/core/services/api_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,6 +16,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   final _secureStorage = const FlutterSecureStorage();
+  final ApiService _apiService = ApiService();
   late AnimationController animationController;
   late Animation<double> animation;
 
@@ -46,12 +48,25 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (!mounted) return;
 
-    if ((sessionType == 'offline') || (token != null && token.isNotEmpty)) {
+    if (sessionType == 'offline') {
       _navigateToHome();
+      return;
+    }
+
+    if (token != null && token.isNotEmpty) {
+      try {
+        final response = await _apiService.authenticatedRequest('/api/account/me');
+        
+        if (response.statusCode == 200) {
+          _navigateToHome();
+        } else {
+          _navigateToWelcome();
+        }
+      } catch (e) {
+        _navigateToWelcome();
+      }
     } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-      );
+      _navigateToWelcome();
     }
   }
 
@@ -73,6 +88,12 @@ class _SplashScreenState extends State<SplashScreen>
         (Route<dynamic> route) => false,
       );
     });
+  }
+
+  void _navigateToWelcome() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+    );
   }
 
   @override
