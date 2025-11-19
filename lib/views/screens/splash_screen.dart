@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
           _navigateToWelcome();
         }
       } catch (e) {
-        _navigateToWelcome();
+        _navigateToHome();
       }
     } else {
       _navigateToWelcome();
