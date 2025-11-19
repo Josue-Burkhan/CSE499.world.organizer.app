@@ -7,7 +7,6 @@ import 'package:worldorganizer_app/core/services/api_service.dart';
 class ProfileRepository {
   final AppDatabase db;
   final FlutterSecureStorage storage;
-  
   final ApiService _apiService = ApiService();
 
   ProfileRepository({required this.db, required this.storage});
@@ -29,15 +28,16 @@ class ProfileRepository {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body)['accountData'];
         await _saveProfileToDb(data);
-      } else {
-        print('Sync failed: ${response.statusCode}');
-      }
+      } 
     } catch (e) {
        print('Sync error: $e');
     }
   }
 
   Future<void> _saveProfileToDb(Map<String, dynamic> data) async {
+    
+    await db.delete(db.userProfile).go();
+
     final profile = UserProfileCompanion(
       serverId: d.Value(data['userId']),
       firstName: d.Value(data['account_firstname'] ?? 'User'),
@@ -51,7 +51,7 @@ class ProfileRepository {
       autoRenew: d.Value(data['account_auto_renew'] ?? false),
     );
 
-    await db.into(db.userProfile).insert(profile, mode: d.InsertMode.replace);
+    await db.into(db.userProfile).insert(profile);
   }
 
   Future<void> updateUserProfile(String name, String lang) async {
@@ -65,9 +65,7 @@ class ProfileRepository {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final accountData = data['accountData'];
-        
         await _saveProfileToDb(accountData);
-        
       } else {
         throw Exception('Failed to update profile: ${response.statusCode}');
       }
