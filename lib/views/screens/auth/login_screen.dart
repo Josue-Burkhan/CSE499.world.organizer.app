@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:worldorganizer_app/core/services/api_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,12 +17,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final ApiService _apiService = ApiService();
   final String _backendUrl = 'https://login.wild-fantasy.com';
   final _secureStorage = const FlutterSecureStorage();
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email'],
-    serverClientId: '23514983718-j2up767vacptp67j0o6apb5nuiv0i784.apps.googleusercontent.com'
+    serverClientId: '23514983718-j2up767vacptp67j0o6apb5nuiv0i784.apps.googleusercontent.com',
   );
 
   Future<void> _handleGoogleSignIn() async {
@@ -36,8 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final String? idToken = googleAuth.idToken;
 
       if (idToken == null) {
@@ -59,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content:
-                  Text('Login failed: Server Error ${response.statusCode}')),
+            content: Text('Login failed: Server Error ${response.statusCode}'),
+          ),
         );
         return;
       }
@@ -74,11 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await _secureStorage.write(key: 'refreshToken', value: refreshToken);
 
         try {
-          final Uri meUrl = Uri.parse('$_backendUrl/api/account/me');
-          final meResponse = await http.get(
-            meUrl,
-            headers: {'Authorization': 'Bearer $token'},
-          );
+          final meResponse = await _apiService.authenticatedRequest('/api/account/me');
 
           if (meResponse.statusCode == 200) {
             final Map<String, dynamic> meData = jsonDecode(meResponse.body);
@@ -90,9 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SnackBar(content: Text('Login successful, welcome $userName!')),
             );
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => const MainScaffold(),
-              ),
+              MaterialPageRoute(builder: (context) => const MainScaffold()),
             );
           } else {
             throw Exception('Failed to load user data: ${meResponse.statusCode}');
@@ -112,10 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e, s) {
-      print('--- CATCH BLOCK HIT ---');
       print('Error during Google Sign-In: $e');
       print('Stack trace: $s');
-      print('Error type: ${e.runtimeType}');
 
       String errorMessage = 'Error during login: $e';
       if (e is SocketException) {
@@ -124,12 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
         errorMessage = 'Client Error: ${e.message}';
       }
 
-      print('Displaying SnackBar: $errorMessage');
-
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(errorMessage)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
     }
   }
 
@@ -143,14 +132,13 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  'assets/images/logo-black.svg',
-                  height: 150,
-                ),
+                SvgPicture.asset('assets/images/logo-black.svg', height: 150),
                 const SizedBox(height: 24),
                 Text(
                   'Welcome Back',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(

@@ -21,7 +21,6 @@ final profileSyncProvider = FutureProvider<void>((ref) {
   return profileRepo.fetchAndSyncProfile();
 });
 
-
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -103,10 +102,6 @@ class ProfileScreen extends ConsumerWidget {
     WidgetRef ref, 
     UserProfileEntity profile
   ) {
-    final expiresAt = profile.planExpiresAt != null
-        ? profile.planExpiresAt!.toLocal().toString().split(' ')[0]
-        : 'N/A';
-
     return RefreshIndicator(
       onRefresh: () async {
         await ref.refresh(profileSyncProvider.future);
@@ -124,7 +119,9 @@ class ProfileScreen extends ConsumerWidget {
                       : null,
                   child: profile.pictureUrl == null
                       ? Text(
-                          profile.firstName[0].toUpperCase(),
+                          profile.firstName.isNotEmpty 
+                            ? profile.firstName[0].toUpperCase() 
+                            : '?',
                           style: const TextStyle(fontSize: 40),
                         )
                       : null,
@@ -205,19 +202,19 @@ class ProfileScreen extends ConsumerWidget {
               const Icon(Icons.cloud_off, color: Colors.grey, size: 60),
               const SizedBox(height: 16),
               Text(
-                'Perfil no disponible',
+                'Profile Unavailable',
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               const Text(
-                'No has iniciado sesión. Por favor, inicia sesión para gestionar tu perfil.',
+                'You are not logged in. Please login to manage your profile.',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => _logout(context, ref),
-                child: const Text('Iniciar Sesión'),
+                child: const Text('Login'),
               ),
             ],
           ),
@@ -270,11 +267,13 @@ class ProfileScreen extends ConsumerWidget {
                         nameController.text, 
                         langController.text
                       );
+                  
                   if (context.mounted) {
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Profile updated successfully!')),
                     );
+                    ref.invalidate(profileSyncProvider);
                   }
                 } catch (e) {
                   if (context.mounted) {

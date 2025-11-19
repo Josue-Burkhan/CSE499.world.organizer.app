@@ -227,32 +227,32 @@ class CharacterListScreen extends ConsumerWidget {
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: color, width: 4)),
           ),
-          child: ListTile(
-            title: Text(character.name),
-            subtitle: Text(
-              character.customNotes ?? 'No custom notes',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            onTap: () {
-              if (character.serverId != null) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CharacterDetailScreen(
-                      characterServerId: character.serverId!,
-                    ),
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('This character has not been synced yet.'),
-                    backgroundColor: Colors.orange,
-                  )
-                );
-              }
-            },
+        child: ListTile(
+          title: Text(character.name),
+          subtitle: Text(
+            character.customNotes ?? 'No custom notes',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
+          onTap: () {
+            if (character.serverId != null) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CharacterDetailScreen(
+                    characterServerId: character.serverId!,
+                  ),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('This character has not been synced yet.'),
+                  backgroundColor: Colors.orange,
+                )
+              );
+            }
+          },
+        ),
         ),
       ),
     );

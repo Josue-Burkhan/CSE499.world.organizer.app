@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:drift/drift.dart' as d;
+import 'package:worldorganizer_app/core/services/api_service.dart';
 
 class ProfileRepository {
   final AppDatabase db;
   final FlutterSecureStorage storage;
-  final String _backendUrl = 'https://login.wild-fantasy.com';
+  
+  final ApiService _apiService = ApiService();
 
   ProfileRepository({required this.db, required this.storage});
 
-  Future<String?> _getToken() => storage.read(key: 'token');
   Future<String?> _getSessionType() => storage.read(key: 'session_type');
 
   Stream<UserProfileEntity?> watchUserProfile() {
@@ -19,30 +19,21 @@ class ProfileRepository {
   }
 
   Future<void> fetchAndSyncProfile() async {
-    final token = await _getToken();
-    if (token == null) {
-      final sessionType = await _getSessionType();
-      if (sessionType != 'offline') {
-        throw Exception('Not authenticated');
-      }
-      return;
-    }
-
     try {
-      final Uri meUrl = Uri.parse('$_backendUrl/api/account/me');
-      final response = await http.get(
-        meUrl,
-        headers: {'Authorization': 'Bearer $token'},
-      );
+      final sessionType = await _getSessionType();
+      
+      if (sessionType == 'offline') return;
+
+      final response = await _apiService.authenticatedRequest('/api/account/me');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body)['accountData'];
         await _saveProfileToDb(data);
       } else {
-        throw Exception('Failed to fetch profile: ${response.statusCode}');
+        print('Sync failed: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Failed to fetch profile: $e');
+       print('Sync error: $e');
     }
   }
 
@@ -60,36 +51,33 @@ class ProfileRepository {
       autoRenew: d.Value(data['account_auto_renew'] ?? false),
     );
 
-    await db.into(db.userProfile).insert(
-          profile, 
-          mode: d.InsertMode.replace
-        );
+    await db.into(db.userProfile).insert(profile, mode: d.InsertMode.replace);
   }
 
   Future<void> updateUserProfile(String name, String lang) async {
-    final token = await _getToken();
-    if (token == null) throw Exception('Not authenticated');
+    try {
+      final response = await _apiService.authenticatedRequest(
+        '/api/account/me',
+        method: 'PUT',
+        body: {'name': name, 'lang': lang},
+      );
 
-    final Uri meUrl = Uri.parse('$_backendUrl/api/account/me');
-    final response = await http.put(
-      meUrl,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({'name': name, 'lang': lang}),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)['accountData'];
-      await _saveProfileToDb(data);
-    } else {
-      throw Exception('Failed to update profile: ${response.body}');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final accountData = data['accountData'];
+        
+        await _saveProfileToDb(accountData);
+        
+      } else {
+        throw Exception('Failed to update profile: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 
   Future<void> logout() async {
     await storage.deleteAll();
-    await db.deleteAllData();
+    await db.delete(db.userProfile).go(); 
   }
 }
