@@ -113,6 +113,43 @@ class Characters extends Table {
   Set<Column> get primaryKey => {localId};
 }
 
+@DataClassName('FactionEntity')
+class Factions extends Table {
+  TextColumn get localId => text().clientDefault(() => const Uuid().v4())();
+  TextColumn get serverId => text().nullable()();
+  TextColumn get syncStatus => text().map(const SyncStatusConverter()).clientDefault(() => 'created')();
+  TextColumn get worldLocalId => text().references(Worlds, #localId)();
+
+  TextColumn get name => text()();
+  TextColumn get description => text().nullable()();
+  TextColumn get type => text().nullable()();
+  TextColumn get symbol => text().nullable()();
+  TextColumn get economicSystem => text().nullable()();
+  TextColumn get technology => text().nullable()();
+  TextColumn get goals => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get history => text().nullable()();
+  TextColumn get customNotes => text().nullable()();
+  TextColumn get tagColor => text().withDefault(const Constant('neutral'))();
+  TextColumn get images => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+
+  TextColumn get alliesJson => text().named('allies_json').nullable()();
+  TextColumn get enemiesJson => text().named('enemies_json').nullable()();
+  TextColumn get rawCharacters => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawLocations => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawHeadquarters => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawTerritory => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawEvents => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawItems => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawStories => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawReligions => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawTechnologies => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawLanguages => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawPowerSystems => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+
+  @override
+  Set<Column> get primaryKey => {localId};
+}
+
 @DriftAccessor(tables: [Worlds])
 class WorldsDao extends DatabaseAccessor<AppDatabase> with _$WorldsDaoMixin {
   WorldsDao(AppDatabase db) : super(db);
@@ -212,7 +249,58 @@ class CharactersDao extends DatabaseAccessor<AppDatabase> with _$CharactersDaoMi
   }
 }
 
-@DriftDatabase(tables: [UserProfile, Worlds, Characters], daos: [WorldsDao, CharactersDao])
+@DriftAccessor(tables: [Factions])
+class FactionsDao extends DatabaseAccessor<AppDatabase> with _$FactionsDaoMixIn {
+  FactionsDao(AppDatabase db) : super(db);
+
+  Stream<List<FactionEntity>> watchFactionsInWorld(String worldLocalId) {
+    return (select(factions)
+          ..where((t) => t.worldLocalId.equals(worldLocalId))
+          ..where((t) => t.syncStatus.equals('deleted').not()))
+          .watch();
+  }
+
+  Stream<FactionEntity?> watchFactionByServerId(String serverId) {
+    return (select(factions)
+          ..where((t) => t.serverId.equals(serverId)))
+          .watchSingleOrNull();
+  }
+
+  Future<FactionEntity?> getFactionByServerId(String serverId) {
+    return (select(factions)
+          ..where((t) => t.serverId.equals(serverId)))
+          .getSingleOrNull();
+  }
+
+  Future<List<FactionEntity>> getDirtyFactions() {
+    return (select(factions)
+          ..where((t) => t.syncStatus.equals('synced').not()))
+          .get();
+  }
+
+  Future<void> insertFaction(FactionsCompanion char) {
+    return into(factions).insert(char, mode: InsertMode.replace);
+  }
+
+  Future<void> updateFaction(FactionsCompanion char) {
+    return update(factions).replace(char);
+  }
+
+  Future<void> deleteFaction(String localId) {
+    return (delete(factions)
+          ..where((t) => t.localId.equals(localId)))
+          .go();
+  }
+
+  Future<FactionEntity?> getFactionByLocalId(String localId) {
+    return (select(factions)
+          ..where((t) => t.localId.equals(localId)))
+          .getSingleOrNull();
+  }
+}
+
+
+@DriftDatabase(tables: [UserProfile, Worlds, Characters, Factions], daos: [WorldsDao, CharactersDao, FactionsDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

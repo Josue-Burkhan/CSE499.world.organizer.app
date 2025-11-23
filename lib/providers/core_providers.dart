@@ -6,6 +6,8 @@ import 'package:worldorganizer_app/repositories/world_repository.dart';
 import 'package:worldorganizer_app/core/services/world_sync_service.dart';
 import 'package:worldorganizer_app/repositories/modules/character_repository.dart';
 import 'package:worldorganizer_app/core/services/modules/character_sync_service.dart';
+import 'package:worldorganizer_app/repositories/modules/faction_repository.dart';
+import 'package:worldorganizer_app/core/services/modules/faction_sync_service.dart';
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   return AppDatabase();
@@ -53,6 +55,25 @@ final characterRepositoryProvider = Provider<CharacterRepository>((ref) {
 final characterSyncServiceProvider = Provider<CharacterSyncService>((ref) {
   return CharacterSyncService(
     dao: ref.watch(charactersDaoProvider),
+    worldsDao: ref.watch(worldsDaoProvider),
+    storage: ref.watch(secureStorageProvider),
+  );
+});
+
+// factions
+final factionsDaoProvider = Provider<FactionsDao>((ref) {
+  return ref.watch(appDatabaseProvider).factionsDao;
+});
+
+final factionRepositoryProvider = Provider<FactionRepository>((ref) {
+  return FactionRepository(
+    dao: ref.watch(factionsDaoProvider),
+  );
+});
+
+final factionSyncServiceProvider = Provider<FactionSyncService>((ref) {
+  return FactionSyncService(
+    dao: ref.watch(factionsDaoProvider),
     worldsDao: ref.watch(worldsDaoProvider),
     storage: ref.watch(secureStorageProvider),
   );

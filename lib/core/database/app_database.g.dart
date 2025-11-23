@@ -6,9 +6,15 @@ part of 'app_database.dart';
 mixin _$WorldsDaoMixin on DatabaseAccessor<AppDatabase> {
   $WorldsTable get worlds => attachedDatabase.worlds;
 }
+
 mixin _$CharactersDaoMixin on DatabaseAccessor<AppDatabase> {
   $WorldsTable get worlds => attachedDatabase.worlds;
   $CharactersTable get characters => attachedDatabase.characters;
+}
+
+mixin _$FactionsDaoMixIn on DatabaseAccessor<AppDatabase> {
+  $WorldsTable get worlds => attachedDatabase.worlds;
+  $FactionsTable get factions => attachedDatabase.factions;
 }
 
 class $UserProfileTable extends UserProfile
@@ -2946,14 +2952,1550 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
   }
 }
 
+class $FactionsTable extends Factions
+    with TableInfo<$FactionsTable, FactionEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FactionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _localIdMeta = const VerificationMeta(
+    'localId',
+  );
+  @override
+  late final GeneratedColumn<String> localId = GeneratedColumn<String>(
+    'local_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => const Uuid().v4(),
+  );
+  static const VerificationMeta _serverIdMeta = const VerificationMeta(
+    'serverId',
+  );
+  @override
+  late final GeneratedColumn<String> serverId = GeneratedColumn<String>(
+    'server_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<SyncStatus, String> syncStatus =
+      GeneratedColumn<String>(
+        'sync_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        clientDefault: () => 'created',
+      ).withConverter<SyncStatus>($FactionsTable.$convertersyncStatus);
+  static const VerificationMeta _worldLocalIdMeta = const VerificationMeta(
+    'worldLocalId',
+  );
+  @override
+  late final GeneratedColumn<String> worldLocalId = GeneratedColumn<String>(
+    'world_local_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES worlds (local_id)',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _symbolMeta = const VerificationMeta('symbol');
+  @override
+  late final GeneratedColumn<String> symbol = GeneratedColumn<String>(
+    'symbol',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _economicSystemMeta = const VerificationMeta(
+    'economicSystem',
+  );
+  @override
+  late final GeneratedColumn<String> economicSystem = GeneratedColumn<String>(
+    'economic_system',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _technologyMeta = const VerificationMeta(
+    'technology',
+  );
+  @override
+  late final GeneratedColumn<String> technology = GeneratedColumn<String>(
+    'technology',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> goals =
+      GeneratedColumn<String>(
+        'goals',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($FactionsTable.$convertergoals);
+  static const VerificationMeta _historyMeta = const VerificationMeta(
+    'history',
+  );
+  @override
+  late final GeneratedColumn<String> history = GeneratedColumn<String>(
+    'history',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _customNotesMeta = const VerificationMeta(
+    'customNotes',
+  );
+  @override
+  late final GeneratedColumn<String> customNotes = GeneratedColumn<String>(
+    'custom_notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _tagColorMeta = const VerificationMeta(
+    'tagColor',
+  );
+  @override
+  late final GeneratedColumn<String> tagColor = GeneratedColumn<String>(
+    'tag_color',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('neutral'),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> images =
+      GeneratedColumn<String>(
+        'images',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($FactionsTable.$converterimages);
+  static const VerificationMeta _alliesJsonMeta = const VerificationMeta(
+    'alliesJson',
+  );
+  @override
+  late final GeneratedColumn<String> alliesJson = GeneratedColumn<String>(
+    'allies_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _enemiesJsonMeta = const VerificationMeta(
+    'enemiesJson',
+  );
+  @override
+  late final GeneratedColumn<String> enemiesJson = GeneratedColumn<String>(
+    'enemies_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawCharacters = GeneratedColumn<String>(
+    'raw_characters',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($FactionsTable.$converterrawCharacters);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawLocations = GeneratedColumn<String>(
+    'raw_locations',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($FactionsTable.$converterrawLocations);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawHeadquarters = GeneratedColumn<String>(
+    'raw_headquarters',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($FactionsTable.$converterrawHeadquarters);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawTerritory = GeneratedColumn<String>(
+    'raw_territory',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($FactionsTable.$converterrawTerritory);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEvents =
+      GeneratedColumn<String>(
+        'raw_events',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($FactionsTable.$converterrawEvents);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawItems =
+      GeneratedColumn<String>(
+        'raw_items',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($FactionsTable.$converterrawItems);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
+      GeneratedColumn<String>(
+        'raw_stories',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($FactionsTable.$converterrawStories);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawReligions = GeneratedColumn<String>(
+    'raw_religions',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($FactionsTable.$converterrawReligions);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawTechnologies = GeneratedColumn<String>(
+    'raw_technologies',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($FactionsTable.$converterrawTechnologies);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawLanguages = GeneratedColumn<String>(
+    'raw_languages',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($FactionsTable.$converterrawLanguages);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  rawPowerSystems = GeneratedColumn<String>(
+    'raw_power_systems',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($FactionsTable.$converterrawPowerSystems);
+  @override
+  List<GeneratedColumn> get $columns => [
+    localId,
+    serverId,
+    syncStatus,
+    worldLocalId,
+    name,
+    description,
+    type,
+    symbol,
+    economicSystem,
+    technology,
+    goals,
+    history,
+    customNotes,
+    tagColor,
+    images,
+    alliesJson,
+    enemiesJson,
+    rawCharacters,
+    rawLocations,
+    rawHeadquarters,
+    rawTerritory,
+    rawEvents,
+    rawItems,
+    rawStories,
+    rawReligions,
+    rawTechnologies,
+    rawLanguages,
+    rawPowerSystems,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'factions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FactionEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('local_id')) {
+      context.handle(
+        _localIdMeta,
+        localId.isAcceptableOrUnknown(data['local_id']!, _localIdMeta),
+      );
+    }
+    if (data.containsKey('server_id')) {
+      context.handle(
+        _serverIdMeta,
+        serverId.isAcceptableOrUnknown(data['server_id']!, _serverIdMeta),
+      );
+    }
+    if (data.containsKey('world_local_id')) {
+      context.handle(
+        _worldLocalIdMeta,
+        worldLocalId.isAcceptableOrUnknown(
+          data['world_local_id']!,
+          _worldLocalIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_worldLocalIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(data['description']!, _descriptionMeta),
+      );
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    }
+    if (data.containsKey('symbol')) {
+      context.handle(
+        _symbolMeta,
+        symbol.isAcceptableOrUnknown(data['symbol']!, _symbolMeta),
+      );
+    }
+    if (data.containsKey('economic_system')) {
+      context.handle(
+        _economicSystemMeta,
+        economicSystem.isAcceptableOrUnknown(
+          data['economic_system']!,
+          _economicSystemMeta,
+        ),
+      );
+    }
+    if (data.containsKey('technology')) {
+      context.handle(
+        _technologyMeta,
+        technology.isAcceptableOrUnknown(data['technology']!, _technologyMeta),
+      );
+    }
+    if (data.containsKey('history')) {
+      context.handle(
+        _historyMeta,
+        history.isAcceptableOrUnknown(data['history']!, _historyMeta),
+      );
+    }
+    if (data.containsKey('custom_notes')) {
+      context.handle(
+        _customNotesMeta,
+        customNotes.isAcceptableOrUnknown(
+          data['custom_notes']!,
+          _customNotesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('tag_color')) {
+      context.handle(
+        _tagColorMeta,
+        tagColor.isAcceptableOrUnknown(data['tag_color']!, _tagColorMeta),
+      );
+    }
+    if (data.containsKey('allies_json')) {
+      context.handle(
+        _alliesJsonMeta,
+        alliesJson.isAcceptableOrUnknown(
+          data['allies_json']!,
+          _alliesJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('enemies_json')) {
+      context.handle(
+        _enemiesJsonMeta,
+        enemiesJson.isAcceptableOrUnknown(
+          data['enemies_json']!,
+          _enemiesJsonMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {localId};
+  @override
+  FactionEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FactionEntity(
+      localId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_id'],
+      )!,
+      serverId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}server_id'],
+      ),
+      syncStatus: $FactionsTable.$convertersyncStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}sync_status'],
+        )!,
+      ),
+      worldLocalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}world_local_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      ),
+      symbol: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}symbol'],
+      ),
+      economicSystem: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}economic_system'],
+      ),
+      technology: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}technology'],
+      ),
+      goals: $FactionsTable.$convertergoals.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}goals'],
+        )!,
+      ),
+      history: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}history'],
+      ),
+      customNotes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}custom_notes'],
+      ),
+      tagColor: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tag_color'],
+      )!,
+      images: $FactionsTable.$converterimages.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}images'],
+        )!,
+      ),
+      alliesJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}allies_json'],
+      ),
+      enemiesJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}enemies_json'],
+      ),
+      rawCharacters: $FactionsTable.$converterrawCharacters.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_characters'],
+        )!,
+      ),
+      rawLocations: $FactionsTable.$converterrawLocations.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_locations'],
+        )!,
+      ),
+      rawHeadquarters: $FactionsTable.$converterrawHeadquarters.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_headquarters'],
+        )!,
+      ),
+      rawTerritory: $FactionsTable.$converterrawTerritory.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_territory'],
+        )!,
+      ),
+      rawEvents: $FactionsTable.$converterrawEvents.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_events'],
+        )!,
+      ),
+      rawItems: $FactionsTable.$converterrawItems.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_items'],
+        )!,
+      ),
+      rawStories: $FactionsTable.$converterrawStories.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_stories'],
+        )!,
+      ),
+      rawReligions: $FactionsTable.$converterrawReligions.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_religions'],
+        )!,
+      ),
+      rawTechnologies: $FactionsTable.$converterrawTechnologies.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_technologies'],
+        )!,
+      ),
+      rawLanguages: $FactionsTable.$converterrawLanguages.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_languages'],
+        )!,
+      ),
+      rawPowerSystems: $FactionsTable.$converterrawPowerSystems.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_power_systems'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $FactionsTable createAlias(String alias) {
+    return $FactionsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<SyncStatus, String> $convertersyncStatus =
+      const SyncStatusConverter();
+  static TypeConverter<List<String>, String> $convertergoals =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterimages =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawCharacters =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawLocations =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawHeadquarters =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawTerritory =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawEvents =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawItems =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawStories =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawReligions =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawTechnologies =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawLanguages =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawPowerSystems =
+      const ListStringConverter();
+}
+
+class FactionEntity extends DataClass implements Insertable<FactionEntity> {
+  final String localId;
+  final String? serverId;
+  final SyncStatus syncStatus;
+  final String worldLocalId;
+  final String name;
+  final String? description;
+  final String? type;
+  final String? symbol;
+  final String? economicSystem;
+  final String? technology;
+  final List<String> goals;
+  final String? history;
+  final String? customNotes;
+  final String tagColor;
+  final List<String> images;
+  final String? alliesJson;
+  final String? enemiesJson;
+  final List<String> rawCharacters;
+  final List<String> rawLocations;
+  final List<String> rawHeadquarters;
+  final List<String> rawTerritory;
+  final List<String> rawEvents;
+  final List<String> rawItems;
+  final List<String> rawStories;
+  final List<String> rawReligions;
+  final List<String> rawTechnologies;
+  final List<String> rawLanguages;
+  final List<String> rawPowerSystems;
+  const FactionEntity({
+    required this.localId,
+    this.serverId,
+    required this.syncStatus,
+    required this.worldLocalId,
+    required this.name,
+    this.description,
+    this.type,
+    this.symbol,
+    this.economicSystem,
+    this.technology,
+    required this.goals,
+    this.history,
+    this.customNotes,
+    required this.tagColor,
+    required this.images,
+    this.alliesJson,
+    this.enemiesJson,
+    required this.rawCharacters,
+    required this.rawLocations,
+    required this.rawHeadquarters,
+    required this.rawTerritory,
+    required this.rawEvents,
+    required this.rawItems,
+    required this.rawStories,
+    required this.rawReligions,
+    required this.rawTechnologies,
+    required this.rawLanguages,
+    required this.rawPowerSystems,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['local_id'] = Variable<String>(localId);
+    if (!nullToAbsent || serverId != null) {
+      map['server_id'] = Variable<String>(serverId);
+    }
+    {
+      map['sync_status'] = Variable<String>(
+        $FactionsTable.$convertersyncStatus.toSql(syncStatus),
+      );
+    }
+    map['world_local_id'] = Variable<String>(worldLocalId);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
+    if (!nullToAbsent || symbol != null) {
+      map['symbol'] = Variable<String>(symbol);
+    }
+    if (!nullToAbsent || economicSystem != null) {
+      map['economic_system'] = Variable<String>(economicSystem);
+    }
+    if (!nullToAbsent || technology != null) {
+      map['technology'] = Variable<String>(technology);
+    }
+    {
+      map['goals'] = Variable<String>(
+        $FactionsTable.$convertergoals.toSql(goals),
+      );
+    }
+    if (!nullToAbsent || history != null) {
+      map['history'] = Variable<String>(history);
+    }
+    if (!nullToAbsent || customNotes != null) {
+      map['custom_notes'] = Variable<String>(customNotes);
+    }
+    map['tag_color'] = Variable<String>(tagColor);
+    {
+      map['images'] = Variable<String>(
+        $FactionsTable.$converterimages.toSql(images),
+      );
+    }
+    if (!nullToAbsent || alliesJson != null) {
+      map['allies_json'] = Variable<String>(alliesJson);
+    }
+    if (!nullToAbsent || enemiesJson != null) {
+      map['enemies_json'] = Variable<String>(enemiesJson);
+    }
+    {
+      map['raw_characters'] = Variable<String>(
+        $FactionsTable.$converterrawCharacters.toSql(rawCharacters),
+      );
+    }
+    {
+      map['raw_locations'] = Variable<String>(
+        $FactionsTable.$converterrawLocations.toSql(rawLocations),
+      );
+    }
+    {
+      map['raw_headquarters'] = Variable<String>(
+        $FactionsTable.$converterrawHeadquarters.toSql(rawHeadquarters),
+      );
+    }
+    {
+      map['raw_territory'] = Variable<String>(
+        $FactionsTable.$converterrawTerritory.toSql(rawTerritory),
+      );
+    }
+    {
+      map['raw_events'] = Variable<String>(
+        $FactionsTable.$converterrawEvents.toSql(rawEvents),
+      );
+    }
+    {
+      map['raw_items'] = Variable<String>(
+        $FactionsTable.$converterrawItems.toSql(rawItems),
+      );
+    }
+    {
+      map['raw_stories'] = Variable<String>(
+        $FactionsTable.$converterrawStories.toSql(rawStories),
+      );
+    }
+    {
+      map['raw_religions'] = Variable<String>(
+        $FactionsTable.$converterrawReligions.toSql(rawReligions),
+      );
+    }
+    {
+      map['raw_technologies'] = Variable<String>(
+        $FactionsTable.$converterrawTechnologies.toSql(rawTechnologies),
+      );
+    }
+    {
+      map['raw_languages'] = Variable<String>(
+        $FactionsTable.$converterrawLanguages.toSql(rawLanguages),
+      );
+    }
+    {
+      map['raw_power_systems'] = Variable<String>(
+        $FactionsTable.$converterrawPowerSystems.toSql(rawPowerSystems),
+      );
+    }
+    return map;
+  }
+
+  FactionsCompanion toCompanion(bool nullToAbsent) {
+    return FactionsCompanion(
+      localId: Value(localId),
+      serverId: serverId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverId),
+      syncStatus: Value(syncStatus),
+      worldLocalId: Value(worldLocalId),
+      name: Value(name),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      type: type == null && nullToAbsent
+          ? const Value.absent()
+          : Value(type),
+      symbol: symbol == null && nullToAbsent
+          ? const Value.absent()
+          : Value(symbol),
+      economicSystem: economicSystem == null && nullToAbsent
+          ? const Value.absent()
+          : Value(economicSystem),
+      technology: technology == null && nullToAbsent
+          ? const Value.absent()
+          : Value(technology),
+      goals: Value(goals),
+      history: history == null && nullToAbsent
+          ? const Value.absent()
+          : Value(history),
+      customNotes: customNotes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customNotes),
+      tagColor: Value(tagColor),
+      images: Value(images),
+      alliesJson: alliesJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(alliesJson),
+      enemiesJson: enemiesJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(enemiesJson),
+      rawCharacters: Value(rawCharacters),
+      rawLocations: Value(rawLocations),
+      rawHeadquarters: Value(rawHeadquarters),
+      rawTerritory: Value(rawTerritory),
+      rawEvents: Value(rawEvents),
+      rawItems: Value(rawItems),
+      rawStories: Value(rawStories),
+      rawReligions: Value(rawReligions),
+      rawTechnologies: Value(rawTechnologies),
+      rawLanguages: Value(rawLanguages),
+      rawPowerSystems: Value(rawPowerSystems),
+    );
+  }
+
+  factory FactionEntity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FactionEntity(
+      localId: serializer.fromJson<String>(json['localId']),
+      serverId: serializer.fromJson<String?>(json['serverId']),
+      syncStatus: serializer.fromJson<SyncStatus>(json['syncStatus']),
+      worldLocalId: serializer.fromJson<String>(json['worldLocalId']),
+      name: serializer.fromJson<String>(json['name']),
+      description: serializer.fromJson<String?>(json['description']),
+      type: serializer.fromJson<String?>(json['type']),
+      symbol: serializer.fromJson<String?>(json['symbol']),
+      economicSystem: serializer.fromJson<String?>(json['economicSystem']),
+      technology: serializer.fromJson<String?>(json['technology']),
+      goals: serializer.fromJson<List<String>>(json['goals']),
+      history: serializer.fromJson<String?>(json['history']),
+      customNotes: serializer.fromJson<String?>(json['customNotes']),
+      tagColor: serializer.fromJson<String>(json['tagColor']),
+      images: serializer.fromJson<List<String>>(json['images']),
+      alliesJson: serializer.fromJson<String?>(json['alliesJson']),
+      enemiesJson: serializer.fromJson<String?>(json['enemiesJson']),
+      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
+      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
+      rawHeadquarters: serializer.fromJson<List<String>>(json['rawHeadquarters']),
+      rawTerritory: serializer.fromJson<List<String>>(json['rawTerritory']),
+      rawEvents: serializer.fromJson<List<String>>(json['rawEvents']),
+      rawItems: serializer.fromJson<List<String>>(json['rawItems']),
+      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
+      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
+      rawTechnologies: serializer.fromJson<List<String>>(
+        json['rawTechnologies'],
+      ),
+      rawLanguages: serializer.fromJson<List<String>>(json['rawLanguages']),
+      rawPowerSystems: serializer.fromJson<List<String>>(
+        json['rawPowerSystems'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'localId': serializer.toJson<String>(localId),
+      'serverId': serializer.toJson<String?>(serverId),
+      'syncStatus': serializer.toJson<SyncStatus>(syncStatus),
+      'worldLocalId': serializer.toJson<String>(worldLocalId),
+      'name': serializer.toJson<String>(name),
+      'description': serializer.toJson<String?>(description),
+      'type': serializer.toJson<String?>(type),
+      'symbol': serializer.toJson<String?>(symbol),
+      'economicSystem': serializer.toJson<String?>(economicSystem),
+      'technology': serializer.toJson<String?>(technology),
+      'goals': serializer.toJson<List<String>>(goals),
+      'history': serializer.toJson<String?>(history),
+      'customNotes': serializer.toJson<String?>(customNotes),
+      'tagColor': serializer.toJson<String>(tagColor),
+      'images': serializer.toJson<List<String>>(images),
+      'alliesJson': serializer.toJson<String?>(alliesJson),
+      'enemiesJson': serializer.toJson<String?>(enemiesJson),
+      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
+      'rawLocations': serializer.toJson<List<String>>(rawLocations),
+      'rawHeadquarters': serializer.toJson<List<String>>(rawHeadquarters),
+      'rawTerritory': serializer.toJson<List<String>>(rawTerritory),
+      'rawEvents': serializer.toJson<List<String>>(rawEvents),
+      'rawItems': serializer.toJson<List<String>>(rawItems),
+      'rawStories': serializer.toJson<List<String>>(rawStories),
+      'rawReligions': serializer.toJson<List<String>>(rawReligions),
+      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+      'rawLanguages': serializer.toJson<List<String>>(rawLanguages),
+      'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
+    };
+  }
+
+  FactionEntity copyWith({
+    String? localId,
+    Value<String?> serverId = const Value.absent(),
+    SyncStatus? syncStatus,
+    String? worldLocalId,
+    String? name,
+    Value<String?> description = const Value.absent(),
+    Value<String?> type = const Value.absent(),
+    Value<String?> symbol = const Value.absent(),
+    Value<String?> economicSystem = const Value.absent(),
+    Value<String?> technology = const Value.absent(),
+    List<String>? goals,
+    Value<String?> history = const Value.absent(),
+    Value<String?> customNotes = const Value.absent(),
+    String? tagColor,
+    List<String>? images,
+    Value<String?> alliesJson = const Value.absent(),
+    Value<String?> enemiesJson = const Value.absent(),
+    List<String>? rawCharacters,
+    List<String>? rawLocations,
+    List<String>? rawHeadquarters,
+    List<String>? rawTerritory,
+    List<String>? rawEvents,
+    List<String>? rawItems,
+    List<String>? rawStories,
+    List<String>? rawReligions,
+    List<String>? rawTechnologies,
+    List<String>? rawLanguages,
+    List<String>? rawPowerSystems,
+  }) => FactionEntity(
+    localId: localId ?? this.localId,
+    serverId: serverId.present ? serverId.value : this.serverId,
+    syncStatus: syncStatus ?? this.syncStatus,
+    worldLocalId: worldLocalId ?? this.worldLocalId,
+    name: name ?? this.name,
+    description: description.present ? description.value : this.description,
+    type: type.present ? type.value : this.type,
+    symbol: symbol.present ? symbol.value : this.symbol,
+    economicSystem: economicSystem.present ? economicSystem.value : this.economicSystem,
+    technology: technology.present ? technology.value : this.technology,
+    goals: goals ?? this.goals,
+    history: history.present ? history.value : this.history,
+    customNotes: customNotes.present ? customNotes.value : this.customNotes,
+    tagColor: tagColor ?? this.tagColor,
+    images: images ?? this.images,
+    alliesJson: alliesJson.present ? alliesJson.value : this.alliesJson,
+    enemiesJson: enemiesJson.present ? enemiesJson.value : this.enemiesJson,
+    rawCharacters: rawCharacters ?? this.rawCharacters,
+    rawLocations: rawLocations ?? this.rawLocations,
+    rawHeadquarters: rawHeadquarters ?? this.rawHeadquarters,
+    rawTerritory: rawTerritory ?? this.rawTerritory,
+    rawEvents: rawEvents ?? this.rawEvents,
+    rawItems: rawItems ?? this.rawItems,
+    rawStories: rawStories ?? this.rawStories,
+    rawReligions: rawReligions ?? this.rawReligions,
+    rawTechnologies: rawTechnologies ?? this.rawTechnologies,
+    rawLanguages: rawLanguages ?? this.rawLanguages,
+    rawPowerSystems: rawPowerSystems ?? this.rawPowerSystems,
+  );
+  FactionEntity copyWithCompanion(FactionsCompanion data) {
+    return FactionEntity(
+      localId: data.localId.present ? data.localId.value : this.localId,
+      serverId: data.serverId.present ? data.serverId.value : this.serverId,
+      syncStatus: data.syncStatus.present
+          ? data.syncStatus.value
+          : this.syncStatus,
+      worldLocalId: data.worldLocalId.present
+          ? data.worldLocalId.value
+          : this.worldLocalId,
+      name: data.name.present ? data.name.value : this.name,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      type: data.type.present ? data.type.value : this.type,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      economicSystem: data.economicSystem.present
+          ? data.economicSystem.value
+          : this.economicSystem,
+      technology: data.technology.present
+          ? data.technology.value
+          : this.technology,
+      goals: data.goals.present ? data.goals.value : this.goals,
+      history: data.history.present ? data.history.value : this.history,
+      customNotes: data.customNotes.present
+          ? data.customNotes.value
+          : this.customNotes,
+      tagColor: data.tagColor.present ? data.tagColor.value : this.tagColor,
+      images: data.images.present ? data.images.value : this.images,
+      alliesJson: data.alliesJson.present
+          ? data.alliesJson.value
+          : this.alliesJson,
+      enemiesJson: data.enemiesJson.present
+          ? data.enemiesJson.value
+          : this.enemiesJson,
+      rawCharacters: data.rawCharacters.present
+          ? data.rawCharacters.value
+          : this.rawCharacters,
+      rawLocations: data.rawLocations.present
+          ? data.rawLocations.value
+          : this.rawLocations,
+      rawHeadquarters: data.rawHeadquarters.present
+          ? data.rawHeadquarters.value
+          : this.rawHeadquarters,
+      rawTerritory: data.rawTerritory.present
+          ? data.rawTerritory.value
+          : this.rawTerritory,
+      rawEvents: data.rawEvents.present
+          ? data.rawEvents.value
+          : this.rawEvents,
+      rawItems: data.rawItems.present ? data.rawItems.value : this.rawItems,
+      rawStories: data.rawStories.present
+          ? data.rawStories.value
+          : this.rawStories,
+      rawReligions: data.rawReligions.present
+          ? data.rawReligions.value
+          : this.rawReligions,
+      rawTechnologies: data.rawTechnologies.present
+          ? data.rawTechnologies.value
+          : this.rawTechnologies,
+      rawLanguages: data.rawLanguages.present
+          ? data.rawLanguages.value
+          : this.rawLanguages,
+      rawPowerSystems: data.rawPowerSystems.present
+          ? data.rawPowerSystems.value
+          : this.rawPowerSystems,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FactionEntity(')
+          ..write('localId: $localId, ')
+          ..write('serverId: $serverId, ')
+          ..write('syncStatus: $syncStatus, ')
+          ..write('worldLocalId: $worldLocalId, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('type: $type, ')
+          ..write('symbol: $symbol, ')
+          ..write('economicSystem: $economicSystem, ')
+          ..write('technology: $technology, ')
+          ..write('goals: $goals, ')
+          ..write('history: $history, ')
+          ..write('customNotes: $customNotes, ')
+          ..write('tagColor: $tagColor, ')
+          ..write('images: $images, ')
+          ..write('alliesJson: $alliesJson, ')
+          ..write('enemiesJson: $enemiesJson, ')
+          ..write('rawCharacters: $rawCharacters, ')
+          ..write('rawLocations: $rawLocations, ')
+          ..write('rawHeadquarters: $rawHeadquarters, ')
+          ..write('rawTerritory: $rawTerritory, ')
+          ..write('rawEvents: $rawEvents, ')
+          ..write('rawItems: $rawItems, ')
+          ..write('rawStories: $rawStories, ')
+          ..write('rawReligions: $rawReligions, ')
+          ..write('rawTechnologies: $rawTechnologies, ')
+          ..write('rawLanguages: $rawLanguages, ')
+          ..write('rawPowerSystems: $rawPowerSystems')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+    localId,
+    serverId,
+    syncStatus,
+    worldLocalId,
+    name,
+    description,
+    type,
+    symbol,
+    economicSystem,
+    technology,
+    goals,
+    history,
+    customNotes,
+    tagColor,
+    images,
+    alliesJson,
+    enemiesJson,
+    rawCharacters,
+    rawLocations,
+    rawHeadquarters,
+    rawTerritory,
+    rawEvents,
+    rawItems,
+    rawStories,
+    rawReligions,
+    rawTechnologies,
+    rawLanguages,
+    rawPowerSystems,
+  ]);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FactionEntity &&
+          other.localId == this.localId &&
+          other.serverId == this.serverId &&
+          other.syncStatus == this.syncStatus &&
+          other.worldLocalId == this.worldLocalId &&
+          other.name == this.name &&
+          other.description == this.description &&
+          other.type == this.type &&
+          other.symbol == this.symbol &&
+          other.economicSystem == this.economicSystem &&
+          other.technology == this.technology &&
+          other.goals == this.goals &&
+          other.history == this.history &&
+          other.customNotes == this.customNotes &&
+          other.tagColor == this.tagColor &&
+          other.images == this.images &&
+          other.alliesJson == this.alliesJson &&
+          other.enemiesJson == this.enemiesJson &&
+          other.rawCharacters == this.rawCharacters &&
+          other.rawLocations == this.rawLocations &&
+          other.rawHeadquarters == this.rawHeadquarters &&
+          other.rawTerritory == this.rawTerritory &&
+          other.rawEvents == this.rawEvents &&
+          other.rawItems == this.rawItems &&
+          other.rawStories == this.rawStories &&
+          other.rawReligions == this.rawReligions &&
+          other.rawTechnologies == this.rawTechnologies &&
+          other.rawLanguages == this.rawLanguages &&
+          other.rawPowerSystems == this.rawPowerSystems);
+}
+
+class FactionsCompanion extends UpdateCompanion<FactionEntity> {
+  final Value<String> localId;
+  final Value<String?> serverId;
+  final Value<SyncStatus> syncStatus;
+  final Value<String> worldLocalId;
+  final Value<String> name;
+  final Value<String?> description;
+  final Value<String?> type;
+  final Value<String?> symbol;
+  final Value<String?> economicSystem;
+  final Value<String?> technology;
+  final Value<List<String>> goals;
+  final Value<String?> history;
+  final Value<String?> customNotes;
+  final Value<String> tagColor;
+  final Value<List<String>> images;
+  final Value<String?> alliesJson;
+  final Value<String?> enemiesJson;
+  final Value<List<String>> rawCharacters;
+  final Value<List<String>> rawLocations;
+  final Value<List<String>> rawHeadquarters;
+  final Value<List<String>> rawTerritory;
+  final Value<List<String>> rawEvents;
+  final Value<List<String>> rawItems;
+  final Value<List<String>> rawStories;
+  final Value<List<String>> rawReligions;
+  final Value<List<String>> rawTechnologies;
+  final Value<List<String>> rawLanguages;
+  final Value<List<String>> rawPowerSystems;
+  final Value<int> rowid;
+  const FactionsCompanion({
+    this.localId = const Value.absent(),
+    this.serverId = const Value.absent(),
+    this.syncStatus = const Value.absent(),
+    this.worldLocalId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.description = const Value.absent(),
+    this.type = const Value.absent(),
+    this.symbol = const Value.absent(),
+    this.economicSystem = const Value.absent(),
+    this.technology = const Value.absent(),
+    this.goals = const Value.absent(),
+    this.history = const Value.absent(),
+    this.customNotes = const Value.absent(),
+    this.tagColor = const Value.absent(),
+    this.images = const Value.absent(),
+    this.alliesJson = const Value.absent(),
+    this.enemiesJson = const Value.absent(),
+    this.rawCharacters = const Value.absent(),
+    this.rawLocations = const Value.absent(),
+    this.rawHeadquarters = const Value.absent(),
+    this.rawTerritory = const Value.absent(),
+    this.rawEvents = const Value.absent(),
+    this.rawItems = const Value.absent(),
+    this.rawStories = const Value.absent(),
+    this.rawReligions = const Value.absent(),
+    this.rawTechnologies = const Value.absent(),
+    this.rawLanguages = const Value.absent(),
+    this.rawPowerSystems = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FactionsCompanion.insert({
+    this.localId = const Value.absent(),
+    this.serverId = const Value.absent(),
+    this.syncStatus = const Value.absent(),
+    required String worldLocalId,
+    required String name,
+    this.description = const Value.absent(),
+    this.type = const Value.absent(),
+    this.symbol = const Value.absent(),
+    this.economicSystem = const Value.absent(),
+    this.technology = const Value.absent(),
+    this.goals = const Value.absent(),
+    this.history = const Value.absent(),
+    this.customNotes = const Value.absent(),
+    this.tagColor = const Value.absent(),
+    this.images = const Value.absent(),
+    this.alliesJson = const Value.absent(),
+    this.enemiesJson = const Value.absent(),
+    this.rawCharacters = const Value.absent(),
+    this.rawLocations = const Value.absent(),
+    this.rawHeadquarters = const Value.absent(),
+    this.rawTerritory = const Value.absent(),
+    this.rawEvents = const Value.absent(),
+    this.rawItems = const Value.absent(),
+    this.rawStories = const Value.absent(),
+    this.rawReligions = const Value.absent(),
+    this.rawTechnologies = const Value.absent(),
+    this.rawLanguages = const Value.absent(),
+    this.rawPowerSystems = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : worldLocalId = Value(worldLocalId),
+       name = Value(name);
+  static Insertable<FactionEntity> custom({
+    Expression<String>? localId,
+    Expression<String>? serverId,
+    Expression<String>? syncStatus,
+    Expression<String>? worldLocalId,
+    Expression<String>? name,
+    Expression<String>? description,
+    Expression<String>? type,
+    Expression<String>? symbol,
+    Expression<String>? economicSystem,
+    Expression<String>? technology,
+    Expression<String>? goals,
+    Expression<String>? history,
+    Expression<String>? customNotes,
+    Expression<String>? tagColor,
+    Expression<String>? images,
+    Expression<String>? alliesJson,
+    Expression<String>? enemiesJson,
+    Expression<String>? rawCharacters,
+    Expression<String>? rawLocations,
+    Expression<String>? rawHeadquarters,
+    Expression<String>? rawTerritory,
+    Expression<String>? rawEvents,
+    Expression<String>? rawItems,
+    Expression<String>? rawStories,
+    Expression<String>? rawReligions,
+    Expression<String>? rawTechnologies,
+    Expression<String>? rawLanguages,
+    Expression<String>? rawPowerSystems,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (localId != null) 'local_id': localId,
+      if (serverId != null) 'server_id': serverId,
+      if (syncStatus != null) 'sync_status': syncStatus,
+      if (worldLocalId != null) 'world_local_id': worldLocalId,
+      if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (type != null) 'type': type,
+      if (symbol != null) 'symbol': symbol,
+      if (economicSystem != null) 'economic_system': economicSystem,
+      if (technology != null) 'technology': technology,
+      if (goals != null) 'goals': goals,
+      if (history != null) 'history': history,
+      if (customNotes != null) 'custom_notes': customNotes,
+      if (tagColor != null) 'tag_color': tagColor,
+      if (images != null) 'images': images,
+      if (alliesJson != null) 'allies_json': alliesJson,
+      if (enemiesJson != null) 'enemies_json': enemiesJson,
+      if (rawCharacters != null) 'raw_characters': rawCharacters,
+      if (rawLocations != null) 'raw_locations': rawLocations,
+      if (rawHeadquarters != null) 'raw_headquarters': rawHeadquarters,
+      if (rawTerritory != null) 'raw_territory': rawTerritory,
+      if (rawEvents != null) 'raw_events': rawEvents,
+      if (rawItems != null) 'raw_items': rawItems,
+      if (rawStories != null) 'raw_stories': rawStories,
+      if (rawReligions != null) 'raw_religions': rawReligions,
+      if (rawTechnologies != null) 'raw_technologies': rawTechnologies,
+      if (rawLanguages != null) 'raw_languages': rawLanguages,
+      if (rawPowerSystems != null) 'raw_power_systems': rawPowerSystems,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FactionsCompanion copyWith({
+    Value<String>? localId,
+    Value<String?>? serverId,
+    Value<SyncStatus>? syncStatus,
+    Value<String>? worldLocalId,
+    Value<String>? name,
+    Value<String?>? description,
+    Value<String?>? type,
+    Value<String?>? symbol,
+    Value<String?>? economicSystem,
+    Value<String?>? technology,
+    Value<List<String>>? goals,
+    Value<String?>? history,
+    Value<String?>? customNotes,
+    Value<String>? tagColor,
+    Value<List<String>>? images,
+    Value<String?>? alliesJson,
+    Value<String?>? enemiesJson,
+    Value<List<String>>? rawCharacters,
+    Value<List<String>>? rawLocations,
+    Value<List<String>>? rawHeadquarters,
+    Value<List<String>>? rawTerritory,
+    Value<List<String>>? rawEvents,
+    Value<List<String>>? rawItems,
+    Value<List<String>>? rawStories,
+    Value<List<String>>? rawReligions,
+    Value<List<String>>? rawTechnologies,
+    Value<List<String>>? rawLanguages,
+    Value<List<String>>? rawPowerSystems,
+    Value<int>? rowid,
+  }) {
+    return FactionsCompanion(
+      localId: localId ?? this.localId,
+      serverId: serverId ?? this.serverId,
+      syncStatus: syncStatus ?? this.syncStatus,
+      worldLocalId: worldLocalId ?? this.worldLocalId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      type: type ?? this.type,
+      symbol: symbol ?? this.symbol,
+      economicSystem: economicSystem ?? this.economicSystem,
+      technology: technology ?? this.technology,
+      goals: goals ?? this.goals,
+      history: history ?? this.history,
+      customNotes: customNotes ?? this.customNotes,
+      tagColor: tagColor ?? this.tagColor,
+      images: images ?? this.images,
+      alliesJson: alliesJson ?? this.alliesJson,
+      enemiesJson: enemiesJson ?? this.enemiesJson,
+      rawCharacters: rawCharacters ?? this.rawCharacters,
+      rawLocations: rawLocations ?? this.rawLocations,
+      rawHeadquarters: rawHeadquarters ?? this.rawHeadquarters,
+      rawTerritory: rawTerritory ?? this.rawTerritory,
+      rawEvents: rawEvents ?? this.rawEvents,
+      rawItems: rawItems ?? this.rawItems,
+      rawStories: rawStories ?? this.rawStories,
+      rawReligions: rawReligions ?? this.rawReligions,
+      rawTechnologies: rawTechnologies ?? this.rawTechnologies,
+      rawLanguages: rawLanguages ?? this.rawLanguages,
+      rawPowerSystems: rawPowerSystems ?? this.rawPowerSystems,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (localId.present) {
+      map['local_id'] = Variable<String>(localId.value);
+    }
+    if (serverId.present) {
+      map['server_id'] = Variable<String>(serverId.value);
+    }
+    if (syncStatus.present) {
+      map['sync_status'] = Variable<String>(
+        $FactionsTable.$convertersyncStatus.toSql(syncStatus.value),
+      );
+    }
+    if (worldLocalId.present) {
+      map['world_local_id'] = Variable<String>(worldLocalId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (symbol.present) {
+      map['symbol'] = Variable<String>(symbol.value);
+    }
+    if (economicSystem.present) {
+      map['economic_system'] = Variable<String>(economicSystem.value);
+    }
+    if (technology.present) {
+      map['technology'] = Variable<String>(technology.value);
+    }
+    if (goals.present) {
+      map['goals'] = Variable<String>(
+        $FactionsTable.$convertergoals.toSql(goals.value),
+      );
+    }
+    if (history.present) {
+      map['history'] = Variable<String>(history.value);
+    }
+    if (customNotes.present) {
+      map['custom_notes'] = Variable<String>(customNotes.value);
+    }
+    if (tagColor.present) {
+      map['tag_color'] = Variable<String>(tagColor.value);
+    }
+    if (images.present) {
+      map['images'] = Variable<String>(
+        $FactionsTable.$converterimages.toSql(images.value),
+      );
+    }
+    if (alliesJson.present) {
+      map['allies_json'] = Variable<String>(alliesJson.value);
+    }
+    if (enemiesJson.present) {
+      map['enemies_json'] = Variable<String>(enemiesJson.value);
+    }
+    if (rawCharacters.present) {
+      map['raw_characters'] = Variable<String>(
+        $FactionsTable.$converterrawCharacters.toSql(rawCharacters.value),
+      );
+    }
+    if (rawLocations.present) {
+      map['raw_locations'] = Variable<String>(
+        $FactionsTable.$converterrawLocations.toSql(rawLocations.value),
+      );
+    }
+    if (rawHeadquarters.present) {
+      map['raw_headquarters'] = Variable<String>(
+        $FactionsTable.$converterrawHeadquarters.toSql(rawHeadquarters.value),
+      );
+    }
+    if (rawTerritory.present) {
+      map['raw_territory'] = Variable<String>(
+        $FactionsTable.$converterrawTerritory.toSql(rawTerritory.value),
+      );
+    }
+    if (rawEvents.present) {
+      map['raw_events'] = Variable<String>(
+        $FactionsTable.$converterrawEvents.toSql(rawEvents.value),
+      );
+    }
+    if (rawItems.present) {
+      map['raw_items'] = Variable<String>(
+        $FactionsTable.$converterrawItems.toSql(rawItems.value),
+      );
+    }
+    if (rawStories.present) {
+      map['raw_stories'] = Variable<String>(
+        $FactionsTable.$converterrawStories.toSql(rawStories.value),
+      );
+    }
+    if (rawReligions.present) {
+      map['raw_religions'] = Variable<String>(
+        $FactionsTable.$converterrawReligions.toSql(rawReligions.value),
+      );
+    }
+    if (rawTechnologies.present) {
+      map['raw_technologies'] = Variable<String>(
+        $FactionsTable.$converterrawTechnologies.toSql(rawTechnologies.value),
+      );
+    }
+    if (rawLanguages.present) {
+      map['raw_languages'] = Variable<String>(
+        $FactionsTable.$converterrawLanguages.toSql(rawLanguages.value),
+      );
+    }
+    if (rawPowerSystems.present) {
+      map['raw_power_systems'] = Variable<String>(
+        $FactionsTable.$converterrawPowerSystems.toSql(rawPowerSystems.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FactionsCompanion(')
+          ..write('localId: $localId, ')
+          ..write('serverId: $serverId, ')
+          ..write('syncStatus: $syncStatus, ')
+          ..write('worldLocalId: $worldLocalId, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('type: $type, ')
+          ..write('symbol: $symbol, ')
+          ..write('economicSystem: $economicSystem, ')
+          ..write('technology: $technology, ')
+          ..write('goals: $goals, ')
+          ..write('history: $history, ')
+          ..write('customNotes: $customNotes, ')
+          ..write('tagColor: $tagColor, ')
+          ..write('images: $images, ')
+          ..write('alliesJson: $alliesJson, ')
+          ..write('enemiesJson: $enemiesJson, ')
+          ..write('rawCharacters: $rawCharacters, ')
+          ..write('rawLocations: $rawLocations, ')
+          ..write('rawHeadquarters: $rawHeadquarters, ')
+          ..write('rawTerritory: $rawTerritory, ')
+          ..write('rawEvents: $rawEvents, ')
+          ..write('rawItems: $rawItems, ')
+          ..write('rawStories: $rawStories, ')
+          ..write('rawReligions: $rawReligions, ')
+          ..write('rawTechnologies: $rawTechnologies, ')
+          ..write('rawLanguages: $rawLanguages, ')
+          ..write('rawPowerSystems: $rawPowerSystems, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $UserProfileTable userProfile = $UserProfileTable(this);
   late final $WorldsTable worlds = $WorldsTable(this);
   late final $CharactersTable characters = $CharactersTable(this);
+  late final $FactionsTable factions = $FactionsTable(this);
   late final WorldsDao worldsDao = WorldsDao(this as AppDatabase);
   late final CharactersDao charactersDao = CharactersDao(this as AppDatabase);
+  late final FactionsDao factionsDao = FactionsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2962,6 +4504,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     userProfile,
     worlds,
     characters,
+    factions,
   ];
 }
 
@@ -3277,6 +4820,15 @@ final class $$WorldsTableReferences
     ),
   );
 
+  static MultiTypedResultKey<$FactionsTable, List<FactionEntity>>
+  _factionsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.factions,
+    aliasName: $_aliasNameGenerator(
+      db.worlds.localId,
+      db.factions.worldLocalId,
+    ),
+  );
+
   $$CharactersTableProcessedTableManager get charactersRefs {
     final manager = $$CharactersTableTableManager($_db, $_db.characters).filter(
       (f) =>
@@ -3284,6 +4836,18 @@ final class $$WorldsTableReferences
     );
 
     final cache = $_typedResult.readTableOrNull(_charactersRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  $$FactionsTableProcessedTableManager get factionsRefs {
+    final manager = $$FactionsTableTableManager($_db, $_db.factions).filter(
+      (f) =>
+      f.worldLocalId.localId.sqlEquals($_itemColumn<String>('local_id')!),
+    );
+
+    final cache = $_typedResult.readTableOrNull(_factionsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -3356,6 +4920,31 @@ class $$WorldsTableFilterComposer
           }) => $$CharactersTableFilterComposer(
             $db: $db,
             $table: $db.characters,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> factionsRefs(
+    Expression<bool> Function($$FactionsTableFilterComposer f) f,
+  ) {
+    final $$FactionsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.localId,
+      referencedTable: $db.factions,
+      getReferencedColumn: (t) => t.worldLocalId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FactionsTableFilterComposer(
+            $db: $db,
+            $table: $db.factions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3560,10 +5149,10 @@ class $$WorldsTableTableManager
                     (e.readTable(table), $$WorldsTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({charactersRefs = false}) {
+          prefetchHooksCallback: ({charactersRefs = false, factionsRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (charactersRefs) db.characters],
+              explicitlyWatchedTables: [if (charactersRefs) db.characters, if (factionsRefs) db.factions],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
@@ -3582,6 +5171,23 @@ class $$WorldsTableTableManager
                           referencedItems.where(
                             (e) => e.worldLocalId == item.localId,
                           ),
+                      typedResults: items,
+                    ),
+                  if (factionsRefs)
+                    await $_getPrefetchedData<
+                      WorldEntity,
+                      $WorldsTable,
+                      FactionEntity
+                    >(
+                      currentTable: table,
+                      referencedTable: $$WorldsTableReferences
+                        ._factionsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                        $$WorldsTableReferences(db, table, p0).factionsRefs,
+                        referencedItemsForCurrentItem: (item, referencedItems) =>
+                        referencedItems.where(
+                          (e) => e.worldLocalId == item.localId,
+                        ),
                       typedResults: items,
                     ),
                 ];
@@ -4538,6 +6144,753 @@ class $$CharactersTableTableManager
       );
 }
 
+final class $$FactionsTableReferences
+    extends BaseReferences<_$AppDatabase, $FactionsTable, FactionEntity> {
+  $$FactionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+  static $WorldsTable _worldLocalIdTable(_$AppDatabase db) =>
+      db.worlds.createAlias(
+        $_aliasNameGenerator(db.factions.worldLocalId, db.worlds.localId),
+      );
+  $$WorldsTableProcessedTableManager get worldLocalId {
+    final $_column = $_itemColumn<String>('world_local_id')!;
+    final manager = $$WorldsTableTableManager(
+      $_db,
+      $_db.worlds,
+    ).filter((f) => f.localId.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_worldLocalIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$FactionsTableFilterComposer
+    extends Composer<_$AppDatabase, $FactionsTable> {
+  $$FactionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get localId => $composableBuilder(
+    column: $table.localId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get serverId => $composableBuilder(
+    column: $table.serverId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<SyncStatus, SyncStatus, String>
+  get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get economicSystem => $composableBuilder(
+    column: $table.economicSystem,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get technology => $composableBuilder(
+    column: $table.technology,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get goals => $composableBuilder(
+    column: $table.goals,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get history => $composableBuilder(
+    column: $table.history,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get customNotes => $composableBuilder(
+    column: $table.customNotes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get tagColor => $composableBuilder(
+    column: $table.tagColor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get images => $composableBuilder(
+    column: $table.images,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get alliesJson => $composableBuilder(
+    column: $table.alliesJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get enemiesJson => $composableBuilder(
+    column: $table.enemiesJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawLocations => $composableBuilder(
+    column: $table.rawLocations,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawHeadquarters => $composableBuilder(
+    column: $table.rawHeadquarters,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawTerritory => $composableBuilder(
+    column: $table.rawTerritory,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawEvents => $composableBuilder(
+    column: $table.rawEvents,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawItems => $composableBuilder(
+    column: $table.rawItems,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawStories => $composableBuilder(
+    column: $table.rawStories,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawReligions => $composableBuilder(
+    column: $table.rawReligions,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawLanguages => $composableBuilder(
+    column: $table.rawLanguages,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  $$WorldsTableFilterComposer get worldLocalId {
+    final $$WorldsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableFilterComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FactionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $FactionsTable> {
+  $$FactionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get localId => $composableBuilder(
+    column: $table.localId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get serverId => $composableBuilder(
+    column: $table.serverId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get economicSystem => $composableBuilder(
+    column: $table.economicSystem,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get technology => $composableBuilder(
+    column: $table.technology,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get goals => $composableBuilder(
+    column: $table.goals,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get history => $composableBuilder(
+    column: $table.history,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get customNotes => $composableBuilder(
+    column: $table.customNotes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get tagColor => $composableBuilder(
+    column: $table.tagColor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get images => $composableBuilder(
+    column: $table.images,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get alliesJson => $composableBuilder(
+    column: $table.alliesJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get enemiesJson => $composableBuilder(
+    column: $table.enemiesJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawLocations => $composableBuilder(
+    column: $table.rawLocations,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawHeadquarters => $composableBuilder(
+    column: $table.rawHeadquarters,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawTerritory => $composableBuilder(
+    column: $table.rawTerritory,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawEvents => $composableBuilder(
+    column: $table.rawEvents,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawItems => $composableBuilder(
+    column: $table.rawItems,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawStories => $composableBuilder(
+    column: $table.rawStories,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawReligions => $composableBuilder(
+    column: $table.rawReligions,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawLanguages => $composableBuilder(
+    column: $table.rawLanguages,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$WorldsTableOrderingComposer get worldLocalId {
+    final $$WorldsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableOrderingComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FactionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FactionsTable> {
+  $$FactionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get localId =>
+      $composableBuilder(column: $table.localId, builder: (column) => column);
+
+  GeneratedColumn<String> get serverId =>
+      $composableBuilder(column: $table.serverId, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SyncStatus, String> get syncStatus =>
+      $composableBuilder(
+        column: $table.syncStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get symbol =>
+      $composableBuilder(column: $table.symbol, builder: (column) => column);
+
+  GeneratedColumn<String> get economicSystem => $composableBuilder(
+    column: $table.economicSystem,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get technology => $composableBuilder(
+    column: $table.technology,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get goals =>
+      $composableBuilder(column: $table.goals, builder: (column) => column);
+
+  GeneratedColumn<String> get history =>
+      $composableBuilder(column: $table.history, builder: (column) => column);
+
+  GeneratedColumn<String> get customNotes => $composableBuilder(
+    column: $table.customNotes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get tagColor =>
+      $composableBuilder(column: $table.tagColor, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get images =>
+      $composableBuilder(column: $table.images, builder: (column) => column);
+
+  GeneratedColumn<String> get alliesJson => $composableBuilder(
+    column: $table.alliesJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get enemiesJson => $composableBuilder(
+    column: $table.enemiesJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
+      $composableBuilder(
+        column: $table.rawCharacters,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+      $composableBuilder(
+        column: $table.rawLocations,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawHeadquarters =>
+      $composableBuilder(
+        column: $table.rawHeadquarters,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawTerritory =>
+      $composableBuilder(
+        column: $table.rawTerritory,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawEvents =>
+      $composableBuilder(
+        column: $table.rawEvents,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawItems =>
+      $composableBuilder(column: $table.rawItems, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+      $composableBuilder(
+        column: $table.rawStories,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+      $composableBuilder(
+        column: $table.rawReligions,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
+      $composableBuilder(
+        column: $table.rawTechnologies,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawLanguages =>
+      $composableBuilder(
+        column: $table.rawLanguages,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawPowerSystems =>
+      $composableBuilder(
+        column: $table.rawPowerSystems,
+        builder: (column) => column,
+      );
+
+  $$WorldsTableAnnotationComposer get worldLocalId {
+    final $$WorldsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FactionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FactionsTable,
+    FactionEntity,
+    $$FactionsTableFilterComposer,
+    $$FactionsTableOrderingComposer,
+    $$FactionsTableAnnotationComposer,
+    $$FactionsTableCreateCompanionBuilder,
+    $$FactionsTableUpdateCompanionBuilder,
+    (FactionEntity, $$FactionsTableReferences),
+    FactionEntity,
+    PrefetchHooks Function({bool worldLocalId})> {
+  $$FactionsTableTableManager(_$AppDatabase db, $FactionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FactionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FactionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FactionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> localId = const Value.absent(),
+            Value<String?> serverId = const Value.absent(),
+            Value<SyncStatus> syncStatus = const Value.absent(),
+            Value<String> worldLocalId = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<String?> type = const Value.absent(),
+            Value<String?> symbol = const Value.absent(),
+            Value<String?> economicSystem = const Value.absent(),
+            Value<String?> technology = const Value.absent(),
+            Value<List<String>> goals = const Value.absent(),
+            Value<String?> history = const Value.absent(),
+            Value<String?> customNotes = const Value.absent(),
+            Value<String> tagColor = const Value.absent(),
+            Value<List<String>> images = const Value.absent(),
+            Value<String?> alliesJson = const Value.absent(),
+            Value<String?> enemiesJson = const Value.absent(),
+            Value<List<String>> rawCharacters = const Value.absent(),
+            Value<List<String>> rawLocations = const Value.absent(),
+            Value<List<String>> rawHeadquarters = const Value.absent(),
+            Value<List<String>> rawTerritory = const Value.absent(),
+            Value<List<String>> rawEvents = const Value.absent(),
+            Value<List<String>> rawItems = const Value.absent(),
+            Value<List<String>> rawStories = const Value.absent(),
+            Value<List<String>> rawReligions = const Value.absent(),
+            Value<List<String>> rawTechnologies = const Value.absent(),
+            Value<List<String>> rawLanguages = const Value.absent(),
+            Value<List<String>> rawPowerSystems = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FactionsCompanion(
+            localId: localId,
+            serverId: serverId,
+            syncStatus: syncStatus,
+            worldLocalId: worldLocalId,
+            name: name,
+            description: description,
+            type: type,
+            symbol: symbol,
+            economicSystem: economicSystem,
+            technology: technology,
+            goals: goals,
+            history: history,
+            customNotes: customNotes,
+            tagColor: tagColor,
+            images: images,
+            alliesJson: alliesJson,
+            enemiesJson: enemiesJson,
+            rawCharacters: rawCharacters,
+            rawLocations: rawLocations,
+            rawHeadquarters: rawHeadquarters,
+            rawTerritory: rawTerritory,
+            rawEvents: rawEvents,
+            rawItems: rawItems,
+            rawStories: rawStories,
+            rawReligions: rawReligions,
+            rawTechnologies: rawTechnologies,
+            rawLanguages: rawLanguages,
+            rawPowerSystems: rawPowerSystems,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> localId = const Value.absent(),
+            Value<String?> serverId = const Value.absent(),
+            Value<SyncStatus> syncStatus = const Value.absent(),
+            required String worldLocalId,
+            required String name,
+            Value<String?> description = const Value.absent(),
+            Value<String?> type = const Value.absent(),
+            Value<String?> symbol = const Value.absent(),
+            Value<String?> economicSystem = const Value.absent(),
+            Value<String?> technology = const Value.absent(),
+            Value<List<String>> goals = const Value.absent(),
+            Value<String?> history = const Value.absent(),
+            Value<String?> customNotes = const Value.absent(),
+            Value<String> tagColor = const Value.absent(),
+            Value<List<String>> images = const Value.absent(),
+            Value<String?> alliesJson = const Value.absent(),
+            Value<String?> enemiesJson = const Value.absent(),
+            Value<List<String>> rawCharacters = const Value.absent(),
+            Value<List<String>> rawLocations = const Value.absent(),
+            Value<List<String>> rawHeadquarters = const Value.absent(),
+            Value<List<String>> rawTerritory = const Value.absent(),
+            Value<List<String>> rawEvents = const Value.absent(),
+            Value<List<String>> rawItems = const Value.absent(),
+            Value<List<String>> rawStories = const Value.absent(),
+            Value<List<String>> rawReligions = const Value.absent(),
+            Value<List<String>> rawTechnologies = const Value.absent(),
+            Value<List<String>> rawLanguages = const Value.absent(),
+            Value<List<String>> rawPowerSystems = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FactionsCompanion.insert(
+            localId: localId,
+            serverId: serverId,
+            syncStatus: syncStatus,
+            worldLocalId: worldLocalId,
+            name: name,
+            description: description,
+            type: type,
+            symbol: symbol,
+            economicSystem: economicSystem,
+            technology: technology,
+            goals: goals,
+            history: history,
+            customNotes: customNotes,
+            tagColor: tagColor,
+            images: images,
+            alliesJson: alliesJson,
+            enemiesJson: enemiesJson,
+            rawCharacters: rawCharacters,
+            rawLocations: rawLocations,
+            rawHeadquarters: rawHeadquarters,
+            rawTerritory: rawTerritory,
+            rawEvents: rawEvents,
+            rawItems: rawItems,
+            rawStories: rawStories,
+            rawReligions: rawReligions,
+            rawTechnologies: rawTechnologies,
+            rawLanguages: rawLanguages,
+            rawPowerSystems: rawPowerSystems,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), $$FactionsTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$FactionsTableCreateCompanionBuilder = FactionsCompanion Function({
+  Value<String> localId,
+  Value<String?> serverId,
+  Value<SyncStatus> syncStatus,
+  required String worldLocalId,
+  required String name,
+  Value<String?> description,
+  Value<String?> type,
+  Value<String?> symbol,
+  Value<String?> economicSystem,
+  Value<String?> technology,
+  Value<List<String>> goals,
+  Value<String?> history,
+  Value<String?> customNotes,
+  Value<String> tagColor,
+  Value<List<String>> images,
+  Value<String?> alliesJson,
+  Value<String?> enemiesJson,
+  Value<List<String>> rawCharacters,
+  Value<List<String>> rawLocations,
+  Value<List<String>> rawHeadquarters,
+  Value<List<String>> rawTerritory,
+  Value<List<String>> rawEvents,
+  Value<List<String>> rawItems,
+  Value<List<String>> rawStories,
+  Value<List<String>> rawReligions,
+  Value<List<String>> rawTechnologies,
+  Value<List<String>> rawLanguages,
+  Value<List<String>> rawPowerSystems,
+  Value<int> rowid,
+});
+
+typedef $$FactionsTableUpdateCompanionBuilder = FactionsCompanion Function({
+  Value<String> localId,
+  Value<String?> serverId,
+  Value<SyncStatus> syncStatus,
+  Value<String> worldLocalId,
+  Value<String> name,
+  Value<String?> description,
+  Value<String?> type,
+  Value<String?> symbol,
+  Value<String?> economicSystem,
+  Value<String?> technology,
+  Value<List<String>> goals,
+  Value<String?> history,
+  Value<String?> customNotes,
+  Value<String> tagColor,
+  Value<List<String>> images,
+  Value<String?> alliesJson,
+  Value<String?> enemiesJson,
+  Value<List<String>> rawCharacters,
+  Value<List<String>> rawLocations,
+  Value<List<String>> rawHeadquarters,
+  Value<List<String>> rawTerritory,
+  Value<List<String>> rawEvents,
+  Value<List<String>> rawItems,
+  Value<List<String>> rawStories,
+  Value<List<String>> rawReligions,
+  Value<List<String>> rawTechnologies,
+  Value<List<String>> rawLanguages,
+  Value<List<String>> rawPowerSystems,
+  Value<int> rowid,
+});
+
 typedef $$CharactersTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
@@ -4553,6 +6906,21 @@ typedef $$CharactersTableProcessedTableManager =
       PrefetchHooks Function({bool worldLocalId})
     >;
 
+  typedef $$FactionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FactionsTable,
+      FactionEntity,
+      $$FactionsTableFilterComposer,
+      $$FactionsTableOrderingComposer,
+      $$FactionsTableAnnotationComposer,
+      $$FactionsTableCreateCompanionBuilder,
+      $$FactionsTableUpdateCompanionBuilder,
+      (FactionEntity, $$FactionsTableReferences),
+      FactionEntity,
+      PrefetchHooks Function({bool worldLocalId})
+    >;
+
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
@@ -4562,4 +6930,6 @@ class $AppDatabaseManager {
       $$WorldsTableTableManager(_db, _db.worlds);
   $$CharactersTableTableManager get characters =>
       $$CharactersTableTableManager(_db, _db.characters);
+  $$FactionsTableTableManager get factions =>
+      $$FactionsTableTableManager(_db, _db.factions);
 }
