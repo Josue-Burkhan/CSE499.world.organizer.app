@@ -1,8 +1,11 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'dart:io';
 import 'package:drift/drift.dart';
+import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/core/database/daos/worlds_dao.dart';
+import 'package:worldorganizer_app/core/database/tables/worlds.dart';
+import 'package:worldorganizer_app/core/services/api_service.dart';
+import 'package:worldorganizer_app/core/services/image_upload_service.dart';
 import 'package:worldorganizer_app/models/api_models/world_model.dart';
 import 'package:worldorganizer_app/models/api_models/world_stats_model.dart';
 import 'package:worldorganizer_app/models/api_models/world_timeline_model.dart';
@@ -10,35 +13,22 @@ import 'package:worldorganizer_app/models/api_models/search_result_model.dart';
 
 class WorldSyncService {
   final WorldsDao _worldsDao;
-  final FlutterSecureStorage _storage;
-  final String _baseUrl = 'https://login.wild-fantasy.com/api/worlds';
-  final String _searchBaseUrl = 'https://login.wild-fantasy.com/api/search';
+  final ApiService _apiService;
+  final ImageUploadService _imageUploadService;
+  final String _endpoint = '/api/worlds';
+  final String _searchEndpoint = '/api/search';
 
   WorldSyncService({
     required WorldsDao worldsDao,
-    required FlutterSecureStorage storage,
-  }) : _worldsDao = worldsDao,
-       _storage = storage;
-
-  Future<String?> _getToken() => _storage.read(key: 'token');
-
-  Future<Map<String, String>> _getHeaders() async {
-    final token = await _getToken();
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $token',
-    };
-  }
+    required ApiService apiService,
+    required ImageUploadService imageUploadService,
+  })  : _worldsDao = worldsDao,
+        _apiService = apiService,
+        _imageUploadService = imageUploadService;
 
   Future<void> fetchAndMergeWorlds() async {
-    final token = await _getToken();
-    if (token == null) return;
-
     try {
-      final response = await http.get(
-        Uri.parse(_baseUrl),
-        headers: await _getHeaders(),
-      );
+      final response = await _apiService.authenticatedRequest(_endpoint);
 
       if (response.statusCode == 200) {
         List<dynamic> body = jsonDecode(response.body);
@@ -46,7 +36,10 @@ class WorldSyncService {
             .map((dynamic item) => World.fromJson(item))
             .toList();
 
+        // 1. Update/Insert worlds from server
+        final serverIds = <String>{};
         for (final apiWorld in apiWorlds) {
+          serverIds.add(apiWorld.id);
           final existing = await _worldsDao.getWorldByServerId(apiWorld.id);
 
           final companion = WorldsCompanion(
@@ -64,8 +57,18 @@ class WorldSyncService {
 
           await _worldsDao.insertWorld(companion);
         }
-      } else {
-        throw Exception('Failed to fetch worlds: ${response.statusCode}');
+
+        // 2. Delete local worlds that are missing from server (and were previously synced)
+        final allLocalWorlds = await _worldsDao.getAllWorlds();
+        for (final localWorld in allLocalWorlds) {
+          // Only delete if it has a serverId (was synced) AND that serverId is NOT in the new list
+          if (localWorld.serverId != null && 
+              localWorld.syncStatus == SyncStatus.synced && 
+              !serverIds.contains(localWorld.serverId)) {
+            print('Deleting local world ${localWorld.name} because it is missing from server.');
+            await _worldsDao.deleteWorld(localWorld.localId);
+          }
+        }
       }
     } catch (e) {
       throw Exception('Failed to fetch worlds: $e');
@@ -73,20 +76,16 @@ class WorldSyncService {
   }
 
   Future<void> syncDirtyWorlds() async {
-    final token = await _getToken();
-    if (token == null) return;
-
     final dirtyWorlds = await _worldsDao.getDirtyWorlds();
-    final headers = await _getHeaders();
 
     for (final world in dirtyWorlds) {
       try {
         if (world.syncStatus == SyncStatus.created) {
-          await _syncCreatedWorld(world, headers);
+          await _syncCreatedWorld(world);
         } else if (world.syncStatus == SyncStatus.edited) {
-          await _syncEditedWorld(world, headers);
+          await _syncEditedWorld(world);
         } else if (world.syncStatus == SyncStatus.deleted) {
-          await _syncDeletedWorld(world, headers);
+          await _syncDeletedWorld(world);
         }
       } catch (e) {
         continue;
@@ -94,18 +93,38 @@ class WorldSyncService {
     }
   }
 
-  Future<void> _syncCreatedWorld(
-    WorldEntity world,
-    Map<String, String> headers,
-  ) async {
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: headers,
-      body: jsonEncode({
-        'name': world.name,
-        'description': world.description,
-        'modules': world.modules != null ? jsonDecode(world.modules!) : null,
-      }),
+  Future<void> _syncCreatedWorld(WorldEntity world) async {
+    String? coverImageUrl = world.coverImage;
+    final pendingUpload = await _worldsDao.getPendingUploadForWorld(world.localId);
+    
+    if (pendingUpload != null) {
+      try {
+        final file = File(pendingUpload.filePath);
+        if (await file.exists()) {
+          coverImageUrl = await _imageUploadService.uploadImage(file, pendingUpload.storagePath);
+          await _worldsDao.updateWorld(
+            world.toCompanion(true).copyWith(coverImage: Value(coverImageUrl))
+          );
+        }
+        await _worldsDao.deletePendingUpload(world.localId);
+      } catch (e) {
+        // Continue without image if upload fails
+      }
+    }
+
+    final body = {
+      'name': world.name,
+      'description': world.description,
+      'template': 'custom',
+      'modules': world.modules != null ? jsonDecode(world.modules!) : null,
+      'coverImage': coverImageUrl,
+      'image': coverImageUrl,
+    };
+
+    final response = await _apiService.authenticatedRequest(
+      _endpoint,
+      method: 'POST',
+      body: body,
     );
 
     if (response.statusCode == 201) {
@@ -120,22 +139,42 @@ class WorldSyncService {
           );
       await _worldsDao.updateWorld(companion);
     } else {
-      throw Exception('Failed to create world on API');
+      throw Exception('Failed to create world on API: ${response.statusCode}');
     }
   }
 
-  Future<void> _syncEditedWorld(
-    WorldEntity world,
-    Map<String, String> headers,
-  ) async {
-    final response = await http.put(
-      Uri.parse('$_baseUrl/${world.serverId}'),
-      headers: headers,
-      body: jsonEncode({
-        'name': world.name,
-        'description': world.description,
-        'modules': world.modules != null ? jsonDecode(world.modules!) : null,
-      }),
+  Future<void> _syncEditedWorld(WorldEntity world) async {
+    String? coverImageUrl = world.coverImage;
+    final pendingUpload = await _worldsDao.getPendingUploadForWorld(world.localId);
+    
+    if (pendingUpload != null) {
+      try {
+        final file = File(pendingUpload.filePath);
+        if (await file.exists()) {
+          coverImageUrl = await _imageUploadService.uploadImage(file, pendingUpload.storagePath);
+          await _worldsDao.updateWorld(
+            world.toCompanion(true).copyWith(coverImage: Value(coverImageUrl))
+          );
+        }
+        await _worldsDao.deletePendingUpload(world.localId);
+      } catch (e) {
+        // Continue without image update if upload fails
+      }
+    }
+
+    final body = {
+      'name': world.name,
+      'description': world.description,
+      'template': 'custom',
+      'modules': world.modules != null ? jsonDecode(world.modules!) : null,
+      'coverImage': coverImageUrl,
+      'image': coverImageUrl,
+    };
+    
+    final response = await _apiService.authenticatedRequest(
+      '$_endpoint/${world.serverId}',
+      method: 'PUT',
+      body: body,
     );
 
     if (response.statusCode == 200) {
@@ -148,13 +187,13 @@ class WorldSyncService {
     }
   }
 
-  Future<void> _syncDeletedWorld(
-    WorldEntity world,
-    Map<String, String> headers,
-  ) async {
-    final response = await http.delete(
-      Uri.parse('$_baseUrl/${world.serverId}'),
-      headers: headers,
+  Future<void> _syncDeletedWorld(WorldEntity world) async {
+    // Ensure pending upload is deleted if it exists (though cascade should handle DB)
+    await _worldsDao.deletePendingUpload(world.localId);
+
+    final response = await _apiService.authenticatedRequest(
+      '$_endpoint/${world.serverId}',
+      method: 'DELETE',
     );
 
     if (response.statusCode == 200 || response.statusCode == 204) {
@@ -165,9 +204,8 @@ class WorldSyncService {
   }
 
   Future<WorldStats> getStats(String serverId) async {
-    final response = await http.get(
-      Uri.parse('$_baseUrl/$serverId/stats'),
-      headers: await _getHeaders(),
+    final response = await _apiService.authenticatedRequest(
+      '$_endpoint/$serverId/stats',
     );
     if (response.statusCode == 200) {
       return WorldStats.fromJson(jsonDecode(response.body));
@@ -177,9 +215,8 @@ class WorldSyncService {
   }
 
   Future<List<Activity>> getTimeline(String serverId) async {
-    final response = await http.get(
-      Uri.parse('$_baseUrl/$serverId/timeline'),
-      headers: await _getHeaders(),
+    final response = await _apiService.authenticatedRequest(
+      '$_endpoint/$serverId/timeline',
     );
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
@@ -190,14 +227,10 @@ class WorldSyncService {
   }
 
   Future<void> fetchAndMergeSingleWorld(String serverId) async {
-    final token = await _getToken();
-    if (token == null) return;
-
-    final headers = await _getHeaders();
-    final uri = Uri.parse('$_baseUrl/$serverId');
-
     try {
-      final response = await http.get(uri, headers: headers);
+      final response = await _apiService.authenticatedRequest(
+        '$_endpoint/$serverId',
+      );
       if (response.statusCode != 200) {
         throw Exception(
           'Failed to fetch world $serverId: ${response.statusCode}',
@@ -231,14 +264,10 @@ class WorldSyncService {
       return [];
     }
 
-    final token = await _getToken();
-    if (token == null) throw Exception('Not authenticated');
-
-    final headers = await _getHeaders();
-    final uri = Uri.parse('$_searchBaseUrl?q=$query&worldId=$worldId');
-
     try {
-      final response = await http.get(uri, headers: headers);
+      final response = await _apiService.authenticatedRequest(
+        '$_searchEndpoint?q=$query&worldId=$worldId',
+      );
       if (response.statusCode != 200) {
         throw Exception('Search failed: ${response.statusCode}');
       }

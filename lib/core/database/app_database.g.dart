@@ -3,14 +3,6 @@
 part of 'app_database.dart';
 
 // ignore_for_file: type=lint
-mixin _$WorldsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $WorldsTable get worlds => attachedDatabase.worlds;
-}
-mixin _$CharactersDaoMixin on DatabaseAccessor<AppDatabase> {
-  $WorldsTable get worlds => attachedDatabase.worlds;
-  $CharactersTable get characters => attachedDatabase.characters;
-}
-
 class $UserProfileTable extends UserProfile
     with TableInfo<$UserProfileTable, UserProfileEntity> {
   @override
@@ -583,7 +575,7 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldEntity> {
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
-    clientDefault: () => const Uuid().v4(),
+    clientDefault: () => Uuid().v4(),
   );
   static const VerificationMeta _serverIdMeta = const VerificationMeta(
     'serverId',
@@ -1115,7 +1107,7 @@ class $CharactersTable extends Characters
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
-    clientDefault: () => const Uuid().v4(),
+    clientDefault: () => Uuid().v4(),
   );
   static const VerificationMeta _serverIdMeta = const VerificationMeta(
     'serverId',
@@ -2946,12 +2938,345 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
   }
 }
 
+class $PendingUploadsTable extends PendingUploads
+    with TableInfo<$PendingUploadsTable, PendingUploadEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PendingUploadsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _localIdMeta = const VerificationMeta(
+    'localId',
+  );
+  @override
+  late final GeneratedColumn<String> localId = GeneratedColumn<String>(
+    'local_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => Uuid().v4(),
+  );
+  static const VerificationMeta _worldLocalIdMeta = const VerificationMeta(
+    'worldLocalId',
+  );
+  @override
+  late final GeneratedColumn<String> worldLocalId = GeneratedColumn<String>(
+    'world_local_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES worlds (local_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _filePathMeta = const VerificationMeta(
+    'filePath',
+  );
+  @override
+  late final GeneratedColumn<String> filePath = GeneratedColumn<String>(
+    'file_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _storagePathMeta = const VerificationMeta(
+    'storagePath',
+  );
+  @override
+  late final GeneratedColumn<String> storagePath = GeneratedColumn<String>(
+    'storage_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    localId,
+    worldLocalId,
+    filePath,
+    storagePath,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pending_uploads';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PendingUploadEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('local_id')) {
+      context.handle(
+        _localIdMeta,
+        localId.isAcceptableOrUnknown(data['local_id']!, _localIdMeta),
+      );
+    }
+    if (data.containsKey('world_local_id')) {
+      context.handle(
+        _worldLocalIdMeta,
+        worldLocalId.isAcceptableOrUnknown(
+          data['world_local_id']!,
+          _worldLocalIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_worldLocalIdMeta);
+    }
+    if (data.containsKey('file_path')) {
+      context.handle(
+        _filePathMeta,
+        filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_filePathMeta);
+    }
+    if (data.containsKey('storage_path')) {
+      context.handle(
+        _storagePathMeta,
+        storagePath.isAcceptableOrUnknown(
+          data['storage_path']!,
+          _storagePathMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_storagePathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {localId};
+  @override
+  PendingUploadEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PendingUploadEntity(
+      localId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_id'],
+      )!,
+      worldLocalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}world_local_id'],
+      )!,
+      filePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_path'],
+      )!,
+      storagePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}storage_path'],
+      )!,
+    );
+  }
+
+  @override
+  $PendingUploadsTable createAlias(String alias) {
+    return $PendingUploadsTable(attachedDatabase, alias);
+  }
+}
+
+class PendingUploadEntity extends DataClass
+    implements Insertable<PendingUploadEntity> {
+  final String localId;
+  final String worldLocalId;
+  final String filePath;
+  final String storagePath;
+  const PendingUploadEntity({
+    required this.localId,
+    required this.worldLocalId,
+    required this.filePath,
+    required this.storagePath,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['local_id'] = Variable<String>(localId);
+    map['world_local_id'] = Variable<String>(worldLocalId);
+    map['file_path'] = Variable<String>(filePath);
+    map['storage_path'] = Variable<String>(storagePath);
+    return map;
+  }
+
+  PendingUploadsCompanion toCompanion(bool nullToAbsent) {
+    return PendingUploadsCompanion(
+      localId: Value(localId),
+      worldLocalId: Value(worldLocalId),
+      filePath: Value(filePath),
+      storagePath: Value(storagePath),
+    );
+  }
+
+  factory PendingUploadEntity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PendingUploadEntity(
+      localId: serializer.fromJson<String>(json['localId']),
+      worldLocalId: serializer.fromJson<String>(json['worldLocalId']),
+      filePath: serializer.fromJson<String>(json['filePath']),
+      storagePath: serializer.fromJson<String>(json['storagePath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'localId': serializer.toJson<String>(localId),
+      'worldLocalId': serializer.toJson<String>(worldLocalId),
+      'filePath': serializer.toJson<String>(filePath),
+      'storagePath': serializer.toJson<String>(storagePath),
+    };
+  }
+
+  PendingUploadEntity copyWith({
+    String? localId,
+    String? worldLocalId,
+    String? filePath,
+    String? storagePath,
+  }) => PendingUploadEntity(
+    localId: localId ?? this.localId,
+    worldLocalId: worldLocalId ?? this.worldLocalId,
+    filePath: filePath ?? this.filePath,
+    storagePath: storagePath ?? this.storagePath,
+  );
+  PendingUploadEntity copyWithCompanion(PendingUploadsCompanion data) {
+    return PendingUploadEntity(
+      localId: data.localId.present ? data.localId.value : this.localId,
+      worldLocalId: data.worldLocalId.present
+          ? data.worldLocalId.value
+          : this.worldLocalId,
+      filePath: data.filePath.present ? data.filePath.value : this.filePath,
+      storagePath: data.storagePath.present
+          ? data.storagePath.value
+          : this.storagePath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PendingUploadEntity(')
+          ..write('localId: $localId, ')
+          ..write('worldLocalId: $worldLocalId, ')
+          ..write('filePath: $filePath, ')
+          ..write('storagePath: $storagePath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(localId, worldLocalId, filePath, storagePath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PendingUploadEntity &&
+          other.localId == this.localId &&
+          other.worldLocalId == this.worldLocalId &&
+          other.filePath == this.filePath &&
+          other.storagePath == this.storagePath);
+}
+
+class PendingUploadsCompanion extends UpdateCompanion<PendingUploadEntity> {
+  final Value<String> localId;
+  final Value<String> worldLocalId;
+  final Value<String> filePath;
+  final Value<String> storagePath;
+  final Value<int> rowid;
+  const PendingUploadsCompanion({
+    this.localId = const Value.absent(),
+    this.worldLocalId = const Value.absent(),
+    this.filePath = const Value.absent(),
+    this.storagePath = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PendingUploadsCompanion.insert({
+    this.localId = const Value.absent(),
+    required String worldLocalId,
+    required String filePath,
+    required String storagePath,
+    this.rowid = const Value.absent(),
+  }) : worldLocalId = Value(worldLocalId),
+       filePath = Value(filePath),
+       storagePath = Value(storagePath);
+  static Insertable<PendingUploadEntity> custom({
+    Expression<String>? localId,
+    Expression<String>? worldLocalId,
+    Expression<String>? filePath,
+    Expression<String>? storagePath,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (localId != null) 'local_id': localId,
+      if (worldLocalId != null) 'world_local_id': worldLocalId,
+      if (filePath != null) 'file_path': filePath,
+      if (storagePath != null) 'storage_path': storagePath,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PendingUploadsCompanion copyWith({
+    Value<String>? localId,
+    Value<String>? worldLocalId,
+    Value<String>? filePath,
+    Value<String>? storagePath,
+    Value<int>? rowid,
+  }) {
+    return PendingUploadsCompanion(
+      localId: localId ?? this.localId,
+      worldLocalId: worldLocalId ?? this.worldLocalId,
+      filePath: filePath ?? this.filePath,
+      storagePath: storagePath ?? this.storagePath,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (localId.present) {
+      map['local_id'] = Variable<String>(localId.value);
+    }
+    if (worldLocalId.present) {
+      map['world_local_id'] = Variable<String>(worldLocalId.value);
+    }
+    if (filePath.present) {
+      map['file_path'] = Variable<String>(filePath.value);
+    }
+    if (storagePath.present) {
+      map['storage_path'] = Variable<String>(storagePath.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PendingUploadsCompanion(')
+          ..write('localId: $localId, ')
+          ..write('worldLocalId: $worldLocalId, ')
+          ..write('filePath: $filePath, ')
+          ..write('storagePath: $storagePath, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $UserProfileTable userProfile = $UserProfileTable(this);
   late final $WorldsTable worlds = $WorldsTable(this);
   late final $CharactersTable characters = $CharactersTable(this);
+  late final $PendingUploadsTable pendingUploads = $PendingUploadsTable(this);
   late final WorldsDao worldsDao = WorldsDao(this as AppDatabase);
   late final CharactersDao charactersDao = CharactersDao(this as AppDatabase);
   @override
@@ -2962,7 +3287,18 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     userProfile,
     worlds,
     characters,
+    pendingUploads,
   ];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'worlds',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('pending_uploads', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
 typedef $$UserProfileTableCreateCompanionBuilder =
@@ -3288,6 +3624,29 @@ final class $$WorldsTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$PendingUploadsTable, List<PendingUploadEntity>>
+  _pendingUploadsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.pendingUploads,
+    aliasName: $_aliasNameGenerator(
+      db.worlds.localId,
+      db.pendingUploads.worldLocalId,
+    ),
+  );
+
+  $$PendingUploadsTableProcessedTableManager get pendingUploadsRefs {
+    final manager = $$PendingUploadsTableTableManager($_db, $_db.pendingUploads)
+        .filter(
+          (f) => f.worldLocalId.localId.sqlEquals(
+            $_itemColumn<String>('local_id')!,
+          ),
+        );
+
+    final cache = $_typedResult.readTableOrNull(_pendingUploadsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$WorldsTableFilterComposer
@@ -3356,6 +3715,31 @@ class $$WorldsTableFilterComposer
           }) => $$CharactersTableFilterComposer(
             $db: $db,
             $table: $db.characters,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> pendingUploadsRefs(
+    Expression<bool> Function($$PendingUploadsTableFilterComposer f) f,
+  ) {
+    final $$PendingUploadsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.localId,
+      referencedTable: $db.pendingUploads,
+      getReferencedColumn: (t) => t.worldLocalId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PendingUploadsTableFilterComposer(
+            $db: $db,
+            $table: $db.pendingUploads,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3482,6 +3866,31 @@ class $$WorldsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> pendingUploadsRefs<T extends Object>(
+    Expression<T> Function($$PendingUploadsTableAnnotationComposer a) f,
+  ) {
+    final $$PendingUploadsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.localId,
+      referencedTable: $db.pendingUploads,
+      getReferencedColumn: (t) => t.worldLocalId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PendingUploadsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.pendingUploads,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$WorldsTableTableManager
@@ -3497,7 +3906,7 @@ class $$WorldsTableTableManager
           $$WorldsTableUpdateCompanionBuilder,
           (WorldEntity, $$WorldsTableReferences),
           WorldEntity,
-          PrefetchHooks Function({bool charactersRefs})
+          PrefetchHooks Function({bool charactersRefs, bool pendingUploadsRefs})
         > {
   $$WorldsTableTableManager(_$AppDatabase db, $WorldsTable table)
     : super(
@@ -3560,34 +3969,63 @@ class $$WorldsTableTableManager
                     (e.readTable(table), $$WorldsTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({charactersRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (charactersRefs) db.characters],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (charactersRefs)
-                    await $_getPrefetchedData<
-                      WorldEntity,
-                      $WorldsTable,
-                      CharacterEntity
-                    >(
-                      currentTable: table,
-                      referencedTable: $$WorldsTableReferences
-                          ._charactersRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$WorldsTableReferences(db, table, p0).charactersRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where(
-                            (e) => e.worldLocalId == item.localId,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({charactersRefs = false, pendingUploadsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (charactersRefs) db.characters,
+                    if (pendingUploadsRefs) db.pendingUploads,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (charactersRefs)
+                        await $_getPrefetchedData<
+                          WorldEntity,
+                          $WorldsTable,
+                          CharacterEntity
+                        >(
+                          currentTable: table,
+                          referencedTable: $$WorldsTableReferences
+                              ._charactersRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$WorldsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).charactersRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.worldLocalId == item.localId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (pendingUploadsRefs)
+                        await $_getPrefetchedData<
+                          WorldEntity,
+                          $WorldsTable,
+                          PendingUploadEntity
+                        >(
+                          currentTable: table,
+                          referencedTable: $$WorldsTableReferences
+                              ._pendingUploadsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$WorldsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).pendingUploadsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.worldLocalId == item.localId,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -3604,7 +4042,7 @@ typedef $$WorldsTableProcessedTableManager =
       $$WorldsTableUpdateCompanionBuilder,
       (WorldEntity, $$WorldsTableReferences),
       WorldEntity,
-      PrefetchHooks Function({bool charactersRefs})
+      PrefetchHooks Function({bool charactersRefs, bool pendingUploadsRefs})
     >;
 typedef $$CharactersTableCreateCompanionBuilder =
     CharactersCompanion Function({
@@ -4552,6 +4990,320 @@ typedef $$CharactersTableProcessedTableManager =
       CharacterEntity,
       PrefetchHooks Function({bool worldLocalId})
     >;
+typedef $$PendingUploadsTableCreateCompanionBuilder =
+    PendingUploadsCompanion Function({
+      Value<String> localId,
+      required String worldLocalId,
+      required String filePath,
+      required String storagePath,
+      Value<int> rowid,
+    });
+typedef $$PendingUploadsTableUpdateCompanionBuilder =
+    PendingUploadsCompanion Function({
+      Value<String> localId,
+      Value<String> worldLocalId,
+      Value<String> filePath,
+      Value<String> storagePath,
+      Value<int> rowid,
+    });
+
+final class $$PendingUploadsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $PendingUploadsTable,
+          PendingUploadEntity
+        > {
+  $$PendingUploadsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $WorldsTable _worldLocalIdTable(_$AppDatabase db) =>
+      db.worlds.createAlias(
+        $_aliasNameGenerator(db.pendingUploads.worldLocalId, db.worlds.localId),
+      );
+
+  $$WorldsTableProcessedTableManager get worldLocalId {
+    final $_column = $_itemColumn<String>('world_local_id')!;
+
+    final manager = $$WorldsTableTableManager(
+      $_db,
+      $_db.worlds,
+    ).filter((f) => f.localId.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_worldLocalIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$PendingUploadsTableFilterComposer
+    extends Composer<_$AppDatabase, $PendingUploadsTable> {
+  $$PendingUploadsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get localId => $composableBuilder(
+    column: $table.localId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get filePath => $composableBuilder(
+    column: $table.filePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get storagePath => $composableBuilder(
+    column: $table.storagePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$WorldsTableFilterComposer get worldLocalId {
+    final $$WorldsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableFilterComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$PendingUploadsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PendingUploadsTable> {
+  $$PendingUploadsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get localId => $composableBuilder(
+    column: $table.localId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get filePath => $composableBuilder(
+    column: $table.filePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get storagePath => $composableBuilder(
+    column: $table.storagePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$WorldsTableOrderingComposer get worldLocalId {
+    final $$WorldsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableOrderingComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$PendingUploadsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PendingUploadsTable> {
+  $$PendingUploadsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get localId =>
+      $composableBuilder(column: $table.localId, builder: (column) => column);
+
+  GeneratedColumn<String> get filePath =>
+      $composableBuilder(column: $table.filePath, builder: (column) => column);
+
+  GeneratedColumn<String> get storagePath => $composableBuilder(
+    column: $table.storagePath,
+    builder: (column) => column,
+  );
+
+  $$WorldsTableAnnotationComposer get worldLocalId {
+    final $$WorldsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.worldLocalId,
+      referencedTable: $db.worlds,
+      getReferencedColumn: (t) => t.localId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WorldsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.worlds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$PendingUploadsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PendingUploadsTable,
+          PendingUploadEntity,
+          $$PendingUploadsTableFilterComposer,
+          $$PendingUploadsTableOrderingComposer,
+          $$PendingUploadsTableAnnotationComposer,
+          $$PendingUploadsTableCreateCompanionBuilder,
+          $$PendingUploadsTableUpdateCompanionBuilder,
+          (PendingUploadEntity, $$PendingUploadsTableReferences),
+          PendingUploadEntity,
+          PrefetchHooks Function({bool worldLocalId})
+        > {
+  $$PendingUploadsTableTableManager(
+    _$AppDatabase db,
+    $PendingUploadsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PendingUploadsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PendingUploadsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PendingUploadsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> localId = const Value.absent(),
+                Value<String> worldLocalId = const Value.absent(),
+                Value<String> filePath = const Value.absent(),
+                Value<String> storagePath = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PendingUploadsCompanion(
+                localId: localId,
+                worldLocalId: worldLocalId,
+                filePath: filePath,
+                storagePath: storagePath,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> localId = const Value.absent(),
+                required String worldLocalId,
+                required String filePath,
+                required String storagePath,
+                Value<int> rowid = const Value.absent(),
+              }) => PendingUploadsCompanion.insert(
+                localId: localId,
+                worldLocalId: worldLocalId,
+                filePath: filePath,
+                storagePath: storagePath,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$PendingUploadsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({worldLocalId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (worldLocalId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.worldLocalId,
+                                referencedTable: $$PendingUploadsTableReferences
+                                    ._worldLocalIdTable(db),
+                                referencedColumn:
+                                    $$PendingUploadsTableReferences
+                                        ._worldLocalIdTable(db)
+                                        .localId,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$PendingUploadsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PendingUploadsTable,
+      PendingUploadEntity,
+      $$PendingUploadsTableFilterComposer,
+      $$PendingUploadsTableOrderingComposer,
+      $$PendingUploadsTableAnnotationComposer,
+      $$PendingUploadsTableCreateCompanionBuilder,
+      $$PendingUploadsTableUpdateCompanionBuilder,
+      (PendingUploadEntity, $$PendingUploadsTableReferences),
+      PendingUploadEntity,
+      PrefetchHooks Function({bool worldLocalId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4562,4 +5314,6 @@ class $AppDatabaseManager {
       $$WorldsTableTableManager(_db, _db.worlds);
   $$CharactersTableTableManager get characters =>
       $$CharactersTableTableManager(_db, _db.characters);
+  $$PendingUploadsTableTableManager get pendingUploads =>
+      $$PendingUploadsTableTableManager(_db, _db.pendingUploads);
 }

@@ -1,6 +1,10 @@
 import 'package:drift/drift.dart';
+import 'dart:io';
 import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/core/database/daos/worlds_dao.dart';
+import 'package:worldorganizer_app/core/database/tables/worlds.dart';
 import 'package:worldorganizer_app/models/api_models/world_model.dart' as api;
+import 'package:uuid/uuid.dart';
 
 class WorldRepository {
   final WorldsDao _worldsDao;
@@ -19,15 +23,29 @@ class WorldRepository {
     required String name,
     required String description,
     required api.Modules? modules,
+    File? coverImage,
   }) async {
+    final localId = const Uuid().v4();
+    
+    if (coverImage != null) {
+      // Save pending upload
+      final pendingUpload = PendingUploadsCompanion(
+        worldLocalId: Value(localId),
+        filePath: Value(coverImage.path),
+        storagePath: Value('worlds/covers/$localId'),
+      );
+      await _worldsDao.addPendingUpload(pendingUpload);
+    }
+
     final companion = WorldsCompanion(
+      localId: Value(localId),
       name: Value(name),
       description: Value(description),
       modules: Value(modules?.toJson()),
       syncStatus: const Value(SyncStatus.created),
     );
     await _worldsDao.insertWorld(companion);
-    return (await _worldsDao.getWorldByLocalId(companion.localId.value))!;
+    return (await _worldsDao.getWorldByLocalId(localId))!;
   }
 
   Future<void> updateWorld({

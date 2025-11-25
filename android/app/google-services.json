@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "23514983718",
+    "project_id": "api-authentication-new-world",
+    "storage_bucket": "api-authentication-new-world.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23514983718:android:36e34a174ddeea0081e5e7",
+        "android_client_info": {
+          "package_name": "com.example.worldorganizer_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23514983718-j2up767vacptp67j0o6apb5nuiv0i784.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ5fuRzgDK-O6z5u6fsKTGVi_4YFrGVBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23514983718-j2up767vacptp67j0o6apb5nuiv0i784.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

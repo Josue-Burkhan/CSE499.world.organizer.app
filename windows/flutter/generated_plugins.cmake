@@ -4,6 +4,9 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_webview_window
+  file_selector_windows
+  firebase_core
+  firebase_storage
   flutter_secure_storage_windows
   sqlite3_flutter_libs
   url_launcher_windows

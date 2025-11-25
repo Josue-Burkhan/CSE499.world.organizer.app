@@ -1,11 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/core/database/daos/worlds_dao.dart';
+import 'package:worldorganizer_app/core/database/daos/characters_dao.dart';
 import 'package:worldorganizer_app/repositories/profile_repository.dart';
 import 'package:worldorganizer_app/repositories/world_repository.dart';
 import 'package:worldorganizer_app/core/services/world_sync_service.dart';
 import 'package:worldorganizer_app/repositories/modules/character_repository.dart';
 import 'package:worldorganizer_app/core/services/modules/character_sync_service.dart';
+import 'package:worldorganizer_app/core/services/api_service.dart';
+import 'package:worldorganizer_app/core/services/image_upload_service.dart';
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   return AppDatabase();
@@ -13,6 +17,14 @@ final appDatabaseProvider = Provider<AppDatabase>((ref) {
 
 final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
   return const FlutterSecureStorage();
+});
+
+final apiServiceProvider = Provider<ApiService>((ref) {
+  return ApiService();
+});
+
+final imageUploadServiceProvider = Provider<ImageUploadService>((ref) {
+  return ImageUploadService();
 });
 
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
@@ -35,7 +47,8 @@ final worldRepositoryProvider = Provider<WorldRepository>((ref) {
 final worldSyncServiceProvider = Provider<WorldSyncService>((ref) {
   return WorldSyncService(
     worldsDao: ref.watch(worldsDaoProvider),
-    storage: ref.watch(secureStorageProvider),
+    apiService: ref.watch(apiServiceProvider),
+    imageUploadService: ref.watch(imageUploadServiceProvider),
   );
 });
 

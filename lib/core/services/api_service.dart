@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,6 +25,10 @@ class ApiService {
     try {
       if (method == 'POST') {
         response = await http.post(url, headers: headers, body: jsonEncode(body));
+      } else if (method == 'PUT') {
+        response = await http.put(url, headers: headers, body: jsonEncode(body));
+      } else if (method == 'DELETE') {
+        response = await http.delete(url, headers: headers);
       } else {
         response = await http.get(url, headers: headers);
       }
@@ -37,12 +42,65 @@ class ApiService {
 
           if (method == 'POST') {
             response = await http.post(url, headers: headers, body: jsonEncode(body));
+          } else if (method == 'PUT') {
+            response = await http.put(url, headers: headers, body: jsonEncode(body));
+          } else if (method == 'DELETE') {
+            response = await http.delete(url, headers: headers);
           } else {
             response = await http.get(url, headers: headers);
           }
         }
       }
 
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<http.StreamedResponse> multipartRequest(
+    String endpoint, {
+    String method = 'POST',
+    Map<String, String>? fields,
+    File? file,
+    String? fileField,
+  }) async {
+    String? token = await _storage.read(key: 'token');
+    final url = Uri.parse('$_baseUrl$endpoint');
+
+    var request = http.MultipartRequest(method, url);
+    request.headers['Authorization'] = 'Bearer $token';
+
+    if (fields != null) {
+      request.fields.addAll(fields);
+    }
+
+    if (file != null && fileField != null) {
+      request.files.add(await http.MultipartFile.fromPath(fileField, file.path));
+    }
+
+    try {
+      var response = await request.send();
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        final bool refreshed = await _refreshToken();
+        if (refreshed) {
+          final newToken = await _storage.read(key: 'token');
+          
+          // Create a new request since the old one has been sent
+          request = http.MultipartRequest(method, url);
+          request.headers['Authorization'] = 'Bearer $newToken';
+          
+          if (fields != null) {
+            request.fields.addAll(fields);
+          }
+          if (file != null && fileField != null) {
+            request.files.add(await http.MultipartFile.fromPath(fileField, file.path));
+          }
+          
+          response = await request.send();
+        }
+      }
       return response;
     } catch (e) {
       rethrow;
