@@ -70,3 +70,22 @@ final characterSyncServiceProvider = Provider<CharacterSyncService>((ref) {
     storage: ref.watch(secureStorageProvider),
   );
 });
+
+// factions
+final factionsDaoProvider = Provider<FactionsDao>((ref) {
+  return ref.watch(appDatabaseProvider).factionsDao;
+});
+
+final factionRepositoryProvider = Provider<FactionRepository>((ref) {
+  return FactionRepository(
+    dao: ref.watch(factionsDaoProvider),
+  );
+});
+
+final factionSyncServiceProvider = Provider<FactionSyncService>((ref) {
+  return FactionSyncService(
+    dao: ref.watch(factionsDaoProvider),
+    worldsDao: ref.watch(worldsDaoProvider),
+    storage: ref.watch(secureStorageProvider),
+  );
+});
