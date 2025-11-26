@@ -6,7 +6,6 @@ import 'package:worldorganizer_app/models/api_models/world_model.dart';
 import 'package:worldorganizer_app/models/api_models/world_stats_model.dart';
 import 'package:worldorganizer_app/models/api_models/world_timeline_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
-import 'package:worldorganizer_app/core/services/world_sync_service.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/character_list_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/world_stats_widget.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/world_timeline_widget.dart';

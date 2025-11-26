@@ -1,0 +1,146 @@
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/core/database/daos/worlds_dao.dart';
+import 'package:worldorganizer_app/core/database/daos/powersystems_dao.dart';
+import 'package:drift/drift.dart' as d;
+import 'package:worldorganizer_app/models/api_models/modules/powersystem_model.dart';
+
+class PowerSystemSyncService {
+  final PowerSystemsDao _dao;
+  final WorldsDao _worldsDao;
+  final FlutterSecureStorage _storage;
+  final String _baseUrl = 'https://login.wild-fantasy.com/api/newworld/powersystems';
+
+  PowerSystemSyncService({
+    required PowerSystemsDao dao,
+    required WorldsDao worldsDao,
+    required FlutterSecureStorage storage,
+  })  : _dao = dao,
+        _worldsDao = worldsDao,
+        _storage = storage;
+
+  Future<String?> _getToken() => _storage.read(key: 'token');
+
+  Future<Map<String, String>> _getHeaders() async {
+    final token = await _getToken();
+    return {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    };
+  }
+
+  Future<void> fetchAndMergePowerSystems(String worldLocalId, String worldServerId) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final uri = Uri.parse('$_baseUrl?Id=$worldServerId');
+
+    try {
+      final response = await http.get(uri, headers: headers);
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch power systems: ${response.statusCode}');
+      }
+
+      final body = jsonDecode(response.body);
+      final List<dynamic> psList = body['powerSystems'];
+      final apiPowerSystems = psList.map((j) => PowerSystem.fromJson(j)).toList();
+
+      for (final apiPS in apiPowerSystems) {
+        final existing = await _dao.getPowerSystemByServerId(apiPS.id);
+        
+        final companion = PowerSystemsCompanion(
+          localId: existing != null ? d.Value(existing.localId) : const d.Value.absent(),
+          serverId: d.Value(apiPS.id),
+          worldLocalId: d.Value(worldLocalId),
+          name: d.Value(apiPS.name),
+          description: d.Value(apiPS.description),
+          sourceOfPower: d.Value(apiPS.sourceOfPower),
+          rules: d.Value(apiPS.rules),
+          limitations: d.Value(apiPS.limitations),
+          classificationTypes: d.Value(apiPS.classificationTypes),
+          symbolsOrMarks: d.Value(apiPS.symbolsOrMarks),
+          customNotes: d.Value(apiPS.customNotes),
+          tagColor: d.Value(apiPS.tagColor),
+          images: d.Value(apiPS.images),
+          rawCharacters: d.Value(apiPS.rawCharacters),
+          rawAbilities: d.Value(apiPS.rawAbilities),
+          rawFactions: d.Value(apiPS.rawFactions),
+          rawEvents: d.Value(apiPS.rawEvents),
+          rawStories: d.Value(apiPS.rawStories),
+          rawCreatures: d.Value(apiPS.rawCreatures),
+          rawReligions: d.Value(apiPS.rawReligions),
+          rawTechnologies: d.Value(apiPS.rawTechnologies),
+          syncStatus: const d.Value(SyncStatus.synced),
+        );
+        await _dao.insertPowerSystem(companion);
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch/merge power systems: $e');
+    }
+  }
+
+  Future<void> fetchAndMergeSinglePowerSystem(String serverId) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final uri = Uri.parse('$_baseUrl/$serverId');
+
+    try {
+      final response = await http.get(uri, headers: headers);
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch power system $serverId: ${response.statusCode}');
+      }
+
+      final apiPS = PowerSystem.fromJson(jsonDecode(response.body));
+      if (apiPS.worldId == null) {
+        throw Exception('PowerSystem from API is missing worldId');
+      }
+      
+      final world = await _worldsDao.getWorldByServerId(apiPS.worldId!);
+      if (world == null) {
+        throw Exception('PowerSystem\'s world is not synced locally');
+      }
+
+      final existing = await _dao.getPowerSystemByServerId(apiPS.id);
+      
+      final companion = PowerSystemsCompanion(
+        localId: existing != null ? d.Value(existing.localId) : const d.Value.absent(),
+        serverId: d.Value(apiPS.id),
+        worldLocalId: d.Value(world.localId),
+        name: d.Value(apiPS.name),
+        description: d.Value(apiPS.description),
+        sourceOfPower: d.Value(apiPS.sourceOfPower),
+        rules: d.Value(apiPS.rules),
+        limitations: d.Value(apiPS.limitations),
+        classificationTypes: d.Value(apiPS.classificationTypes),
+        symbolsOrMarks: d.Value(apiPS.symbolsOrMarks),
+        customNotes: d.Value(apiPS.customNotes),
+        tagColor: d.Value(apiPS.tagColor),
+        images: d.Value(apiPS.images),
+        rawCharacters: d.Value(apiPS.rawCharacters),
+        rawAbilities: d.Value(apiPS.rawAbilities),
+        rawFactions: d.Value(apiPS.rawFactions),
+        rawEvents: d.Value(apiPS.rawEvents),
+        rawStories: d.Value(apiPS.rawStories),
+        rawCreatures: d.Value(apiPS.rawCreatures),
+        rawReligions: d.Value(apiPS.rawReligions),
+        rawTechnologies: d.Value(apiPS.rawTechnologies),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.insertPowerSystem(companion);
+
+    } catch (e) {
+      throw Exception('Failed to fetch/merge single power system: $e');
+    }
+  }
+
+  Future<void> syncDirtyPowerSystems() async {
+    final dirtyPowerSystems = await _dao.getDirtyPowerSystems();
+    if (dirtyPowerSystems.isEmpty) return;
+    
+  }
+}

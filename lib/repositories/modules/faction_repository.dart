@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/core/database/daos/factions_dao.dart';
 
 class FactionRepository {
   final FactionsDao _dao;

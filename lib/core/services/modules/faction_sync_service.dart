@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:drift/drift.dart' as d;
 import 'package:worldorganizer_app/models/api_models/modules/faction_model.dart';
+import 'package:worldorganizer_app/core/database/daos/worlds_dao.dart';
+import 'package:worldorganizer_app/core/database/daos/factions_dao.dart';
 
 class FactionSyncService {
   final FactionsDao _dao;

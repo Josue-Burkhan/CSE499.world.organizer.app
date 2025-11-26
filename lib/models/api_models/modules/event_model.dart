@@ -20,6 +20,7 @@ class EventRelation {
 class Event {
     final String id;
     final String? worldId;
+    final String name;
     final String? date;
     final String? description;
     final String? customNotes;
@@ -40,6 +41,7 @@ class Event {
     Event({
         required this.id,
         this.worldId,
+        required this.name,
         this.date,
         this.description,
         this.customNotes,
@@ -64,10 +66,11 @@ class Event {
         return [];
     }
 
-    factory Event.fromjson(Map<String, dynamic> json) {
+    factory Event.fromJson(Map<String, dynamic> json) {
         return Event(
             id: json['_id'],
             worldId: json['world'],
+            name: json['name'],
             description: json['description'],
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),

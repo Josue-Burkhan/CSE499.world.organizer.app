@@ -348,23 +348,6 @@ class FactionDetailScreen extends ConsumerWidget {
       ),
     );
   }
-
-  Widget _buildChipSection(String title, List<String> items) {
-    if (items.isEmpty) return const SizedBox.shrink();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 8.0),
-        Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        const SizedBox(height: 4.0),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
-          children: items.map((item) => Chip(label: Text(item))).toList(),
-        ),
-      ],
-    );
-  }
 }
 
 class FullScreenImageViewer extends StatelessWidget {

@@ -1,11 +1,11 @@
-class FactionRelation {
+class PowerSystemRelation {
   final String id;
   final String name;
 
-  FactionRelation({required this.id, required this.name});
+  PowerSystemRelation({required this.id, required this.name});
 
-  factory FactionRelation.fromJson(Map<String, dynamic> json) {
-    return FactionRelation(
+  factory PowerSystemRelation.fromJson(Map<String, dynamic> json) {
+    return PowerSystemRelation(
       id: json['_id'],
       name: json['name'] ?? 'Unknown',
     );

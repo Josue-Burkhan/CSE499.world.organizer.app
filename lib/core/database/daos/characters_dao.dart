@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 import '../app_database.dart';
 import '../tables/characters.dart';
-import '../tables/worlds.dart';
 
 part 'characters_dao.g.dart';
 

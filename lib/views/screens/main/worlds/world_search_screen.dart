@@ -62,7 +62,7 @@ class _WorldSearchScreenState extends ConsumerState<WorldSearchScreen> {
       case 'language': return Icons.language;
       case 'ability': return Icons.star;
       case 'technology': return Icons.memory;
-      case 'powersystem': return Icons.flash_on;
+      case 'powerSystem': return Icons.flash_on;
       case 'creature': return Icons.adb;
       case 'religion': return Icons.book;
       case 'story': return Icons.auto_stories;

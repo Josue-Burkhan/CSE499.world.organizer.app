@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/core/database/daos/worlds_dao.dart';
-import 'package:worldorganizer_app/core/database/tables/worlds.dart';
 import 'package:worldorganizer_app/core/services/api_service.dart';
 import 'package:worldorganizer_app/core/services/image_upload_service.dart';
 import 'package:worldorganizer_app/models/api_models/world_model.dart';
