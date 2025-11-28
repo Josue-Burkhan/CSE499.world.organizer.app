@@ -8,6 +8,19 @@ import 'package:worldorganizer_app/models/api_models/world_timeline_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/character_list_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/world_stats_widget.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/ability_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/creature_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/economy_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/event_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/faction_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/item_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/language_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/location_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/powersystem_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/race_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/religion_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/story_list_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_list/technology_list_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/world_timeline_widget.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/world_search_screen.dart';
 
@@ -239,6 +252,136 @@ class WorldDetailScreen extends ConsumerWidget {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => CharacterListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'abilities') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => AbilityListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'locations') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => LocationListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'factions') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => FactionListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'items') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ItemListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'events') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => EventListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'languages') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => LanguageListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'technology') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => TechnologyListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'powerSystem') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PowerSystemListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'creatures') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => CreatureListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'religion') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ReligionListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'story') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => StoryListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'races') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => RaceListScreen(
+            worldLocalId: world.localId,
+            worldServerId: world.serverId,
+            worldName: world.name,
+          ),
+        ),
+      );
+    } else if (moduleName == 'economy') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => EconomyListScreen(
             worldLocalId: world.localId,
             worldServerId: world.serverId,
             worldName: world.name,

@@ -258,15 +258,18 @@ class WorldSyncService {
     }
   }
 
-  Future<List<SearchResult>> searchInWorld(String worldId, String query) async {
+  Future<List<SearchResult>> searchInWorld(String worldId, String query, {String? type}) async {
     if (query.isEmpty) {
       return [];
     }
 
     try {
-      final response = await _apiService.authenticatedRequest(
-        '$_searchEndpoint?q=$query&worldId=$worldId',
-      );
+      String url = '$_searchEndpoint?q=$query&worldId=$worldId';
+      if (type != null && type.isNotEmpty) {
+        url += '&type=$type';
+      }
+
+      final response = await _apiService.authenticatedRequest(url);
       if (response.statusCode != 200) {
         throw Exception('Search failed: ${response.statusCode}');
       }

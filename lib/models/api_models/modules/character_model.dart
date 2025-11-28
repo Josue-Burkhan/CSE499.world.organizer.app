@@ -94,8 +94,31 @@ class Character {
         if (item is Map<String, dynamic>) {
           return CharacterRelation.fromJson(item);
         }
+        if (item is String) {
+          return CharacterRelation(id: item, name: item);
+        }
         return null; 
       }).whereType<CharacterRelation>().toList();
+    }
+    return [];
+  }
+
+  static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+    // Try raw first
+    if (raw is List && raw.isNotEmpty) {
+      return List<String>.from(raw.map((item) => item.toString()));
+    }
+    // Fallback to populated if it contains objects with names
+    if (populated is List) {
+      return populated.map((item) {
+        if (item is Map<String, dynamic> && item['name'] != null) {
+          return item['name'].toString();
+        }
+        if (item is String) {
+          return item;
+        }
+        return null;
+      }).whereType<String>().toList();
     }
     return [];
   }
@@ -125,18 +148,18 @@ class Character {
       friends: _relationsFromRaw(relationships['friends']),
       enemies: _relationsFromRaw(relationships['enemies']),
       romance: _relationsFromRaw(relationships['romance']),
-      rawAbilities: _listFromRaw(json['rawAbilities']),
-      rawItems: _listFromRaw(json['rawItems']),
-      rawLanguages: _listFromRaw(json['rawLanguages']),
-      rawRaces: _listFromRaw(json['rawRaces']),
-      rawFactions: _listFromRaw(json['rawFactions']),
-      rawLocations: _listFromRaw(json['rawLocations']),
-      rawPowerSystems: _listFromRaw(json['rawPowerSystems']),
-      rawReligions: _listFromRaw(json['rawReligions']),
-      rawCreatures: _listFromRaw(json['rawCreatures']),
-      rawEconomies: _listFromRaw(json['rawEconomies']),
-      rawStories: _listFromRaw(json['rawStories']),
-      rawTechnologies: _listFromRaw(json['rawTechnologies']),
+      rawAbilities: _listFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
+      rawItems: _listFromPopulatedOrRaw(json['items'], json['rawItems']),
+      rawLanguages: _listFromPopulatedOrRaw(json['languages'], json['rawLanguages']),
+      rawRaces: _listFromPopulatedOrRaw(json['races'], json['rawRaces']),
+      rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+      rawLocations: _listFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+      rawPowerSystems: _listFromPopulatedOrRaw(json['powerSystems'], json['rawPowerSystems']),
+      rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+      rawCreatures: _listFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
+      rawEconomies: _listFromPopulatedOrRaw(json['economies'], json['rawEconomies']),
+      rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
+      rawTechnologies: _listFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
     );
   }
 }
