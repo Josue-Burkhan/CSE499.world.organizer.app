@@ -217,9 +217,13 @@ class _WorldsScreenState extends ConsumerState<WorldsScreen> {
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                   // Navigate to edit screen (placeholder for now as requested functionality focused on delete)
-                   // You can implement navigation to CreateWorldScreen with arguments for editing later
-                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Edit feature coming soon')));
+                   final worldId = _selectedWorldIds.first;
+                   Navigator.of(context).push(
+                     MaterialPageRoute(
+                       builder: (context) => CreateWorldScreen(worldLocalId: worldId),
+                     ),
+                   );
+                   _clearSelection();
                 },
               ),
             IconButton(

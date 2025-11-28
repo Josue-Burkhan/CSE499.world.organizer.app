@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/models/api_models/world_model.dart';
@@ -6,7 +7,9 @@ import 'package:worldorganizer_app/providers/worlds_provider.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 
 class CreateWorldScreen extends ConsumerStatefulWidget {
-  const CreateWorldScreen({super.key});
+  final String? worldLocalId;
+
+  const CreateWorldScreen({super.key, this.worldLocalId});
 
   @override
   ConsumerState<CreateWorldScreen> createState() => _CreateWorldScreenState();
@@ -17,6 +20,7 @@ class _CreateWorldScreenState extends ConsumerState<CreateWorldScreen> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   File? _coverImage;
+  String? _oldImageUrl;
 
   bool _characters = true;
   bool _locations = false;
@@ -32,6 +36,43 @@ class _CreateWorldScreenState extends ConsumerState<CreateWorldScreen> {
   bool _story = false;
   bool _races = false;
   bool _economy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.worldLocalId != null) {
+      _loadWorld();
+    }
+  }
+
+  Future<void> _loadWorld() async {
+    final world = await ref.read(worldRepositoryProvider).watchWorld(widget.worldLocalId!).first;
+    if (world != null) {
+      _nameController.text = world.name;
+      _descriptionController.text = world.description;
+      _oldImageUrl = world.coverImage;
+
+      if (world.modules != null) {
+        final modules = Modules.fromJson(jsonDecode(world.modules!));
+        setState(() {
+          _characters = modules.characters;
+          _locations = modules.locations;
+          _factions = modules.factions;
+          _items = modules.items;
+          _events = modules.events;
+          _languages = modules.languages;
+          _abilities = modules.abilities;
+          _technology = modules.technology;
+          _powerSystem = modules.powerSystem;
+          _creatures = modules.creatures;
+          _religion = modules.religion;
+          _story = modules.story;
+          _races = modules.races;
+          _economy = modules.economy;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -69,12 +110,23 @@ class _CreateWorldScreenState extends ConsumerState<CreateWorldScreen> {
       );
 
       try {
-        await ref.read(worldsControllerProvider).createWorld(
-              name: _nameController.text,
-              description: _descriptionController.text,
-              modules: modules,
-              coverImage: _coverImage,
-            );
+        if (widget.worldLocalId != null) {
+          await ref.read(worldsControllerProvider).updateWorld(
+                localId: widget.worldLocalId!,
+                name: _nameController.text,
+                description: _descriptionController.text,
+                modules: modules,
+                coverImage: _coverImage,
+                oldImageUrl: _oldImageUrl,
+              );
+        } else {
+          await ref.read(worldsControllerProvider).createWorld(
+                name: _nameController.text,
+                description: _descriptionController.text,
+                modules: modules,
+                coverImage: _coverImage,
+              );
+        }
 
         if (mounted) {
           Navigator.pop(context);
@@ -82,7 +134,7 @@ class _CreateWorldScreenState extends ConsumerState<CreateWorldScreen> {
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error creating world: $e')),
+            SnackBar(content: Text('Error saving world: $e')),
           );
         }
       }
@@ -93,7 +145,7 @@ class _CreateWorldScreenState extends ConsumerState<CreateWorldScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create New World'),
+        title: Text(widget.worldLocalId != null ? 'Edit World' : 'Create New World'),
         actions: [
           IconButton(
             onPressed: _save,
@@ -119,9 +171,17 @@ class _CreateWorldScreenState extends ConsumerState<CreateWorldScreen> {
                           image: FileImage(_coverImage!),
                           fit: BoxFit.cover,
                         )
-                      : null,
+                      : (_oldImageUrl != null && _coverImage == null)
+                          ? DecorationImage(
+                              image: NetworkImage(_oldImageUrl!.startsWith('http') 
+                                  ? _oldImageUrl! 
+                                  : 'https://writers.wild-fantasy.com$_oldImageUrl'), // Handle relative paths if needed, though usually full URL or local path
+                              fit: BoxFit.cover,
+                              onError: (e, s) {}, // Fallback handled by child
+                            )
+                          : null,
                 ),
-                child: _coverImage == null
+                child: (_coverImage == null && _oldImageUrl == null)
                     ? const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

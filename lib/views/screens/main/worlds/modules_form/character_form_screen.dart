@@ -49,7 +49,6 @@ class _CharacterFormScreenState extends ConsumerState<CharacterFormScreen> {
 
   // History
   final _birthplaceController = TextEditingController();
-  // TODO: Implement History Events list if needed, for now just birthplace
 
   // Relationships (Raw)
   List<String> _rawFamily = [];
@@ -128,7 +127,6 @@ class _CharacterFormScreenState extends ConsumerState<CharacterFormScreen> {
           _birthplaceController.text = history.birthplace ?? '';
         }
 
-        // Populate raw lists from structured data if raw is empty
         if (character.rawFamily.isNotEmpty) {
           _rawFamily = character.rawFamily;
         } else if (character.familyJson != null) {
@@ -195,7 +193,7 @@ class _CharacterFormScreenState extends ConsumerState<CharacterFormScreen> {
 
     final history = History(
       birthplace: _birthplaceController.text.isEmpty ? null : _birthplaceController.text,
-      events: [], // TODO: Implement events
+      events: [],
     );
 
     final companion = CharactersCompanion(
@@ -233,8 +231,18 @@ class _CharacterFormScreenState extends ConsumerState<CharacterFormScreen> {
     try {
       if (widget.characterLocalId != null) {
         await ref.read(characterRepositoryProvider).updateCharacter(companion);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Character updated successfully')),
+          );
+        }
       } else {
         await ref.read(characterRepositoryProvider).createCharacter(companion);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Character created successfully')),
+          );
+        }
       }
       if (mounted) {
         Navigator.of(context).pop();
@@ -414,7 +422,7 @@ class _CharacterFormScreenState extends ConsumerState<CharacterFormScreen> {
             label: 'Traits',
             initialValues: _traits,
             onChanged: (values) => _traits = values,
-            searchFunction: (q) => Future.value([]), // No search for traits usually
+            searchFunction: (q) => Future.value([]),
             hintText: 'Add a trait...',
           ),
           const SizedBox(height: 16),

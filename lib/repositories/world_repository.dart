@@ -52,10 +52,21 @@ class WorldRepository {
     required String name,
     required String description,
     required api.Modules? modules,
+    File? coverImage,
   }) async {
     final localWorld = await _worldsDao.getWorldByLocalId(localId);
     if (localWorld == null) {
       throw Exception('World not found locally');
+    }
+
+    if (coverImage != null) {
+      // Save pending upload
+      final pendingUpload = PendingUploadsCompanion(
+        worldLocalId: Value(localId),
+        filePath: Value(coverImage.path),
+        storagePath: Value('worlds/covers/$localId'),
+      );
+      await _worldsDao.addPendingUpload(pendingUpload);
     }
 
     SyncStatus newStatus = SyncStatus.edited;
@@ -70,6 +81,7 @@ class WorldRepository {
       description: Value(description),
       modules: Value(modules?.toJson()),
       syncStatus: Value(newStatus),
+      coverImage: coverImage != null ? Value(coverImage.path) : const Value.absent(),
     );
     
     await _worldsDao.updateWorld(companion);

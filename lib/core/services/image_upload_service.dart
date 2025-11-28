@@ -24,4 +24,14 @@ class ImageUploadService {
       throw Exception('Failed to upload image: $e');
     }
   }
+
+  Future<void> deleteImage(String imageUrl) async {
+    try {
+      final ref = _storage.refFromURL(imageUrl);
+      await ref.delete();
+    } catch (e) {
+      // Ignore if image not found or other error, as we just want to try to clean up
+      print('Failed to delete image: $e');
+    }
+  }
 }
