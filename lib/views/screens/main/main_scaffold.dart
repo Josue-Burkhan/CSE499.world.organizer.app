@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:worldorganizer_app/views/screens/main/add/general_add_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/home/home_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/profile/profile_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/settings/settings_screen.dart';
@@ -17,18 +18,16 @@ class _MainScaffoldState extends State<MainScaffold> {
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
     const WorldsScreen(),
-    Container(), 
+    const GeneralAddScreen(), 
     const ProfileScreen(),
     const SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
     if (index == 2) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Add New Item Action Triggered!'),
-          duration: Duration(seconds: 1),
-        ),
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const GeneralAddScreen()),
       );
     } else {
       setState(() {
@@ -60,7 +59,7 @@ class _MainScaffoldState extends State<MainScaffold> {
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_outline, size: 35),
             activeIcon: Icon(Icons.add_circle, size: 35),
-            label: '',
+            label: 'Add',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
