@@ -366,6 +366,7 @@ final technologySyncServiceProvider = Provider<TechnologySyncService>((ref) {
 
 final homeServiceProvider = Provider<HomeService>((ref) {
   return HomeService(
+    worldsDao: ref.watch(worldsDaoProvider),
     charactersDao: ref.watch(charactersDaoProvider),
     itemsDao: ref.watch(itemsDaoProvider),
     locationsDao: ref.watch(locationsDaoProvider),

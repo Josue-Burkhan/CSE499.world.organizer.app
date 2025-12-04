@@ -137,7 +137,7 @@ class ApiService {
   }
   Future<Map<String, int>> getUserCounts() async {
     try {
-      final response = await authenticatedRequest('/stats/user-counts');
+      final response = await authenticatedRequest('/api/stats/user-counts');
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return {
@@ -153,7 +153,7 @@ class ApiService {
 
   Future<List<dynamic>> search(String query) async {
     try {
-      final response = await authenticatedRequest('/search?q=$query');
+      final response = await authenticatedRequest('/api/search?q=$query');
       if (response.statusCode == 200) {
         return jsonDecode(response.body) as List<dynamic>;
       }

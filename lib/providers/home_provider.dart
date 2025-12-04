@@ -8,18 +8,18 @@ final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
 
 class HomeState {
   final List<RecentActivityItem> recentActivity;
-  final Map<String, int> stats;
+  final Map<String, dynamic> stats;
   final bool isLoading;
 
   HomeState({
     this.recentActivity = const [],
-    this.stats = const {'characterCount': 0, 'itemCount': 0},
+    this.stats = const {'characterCount': 0, 'itemCount': 0, 'worldCount': 0},
     this.isLoading = false,
   });
 
   HomeState copyWith({
     List<RecentActivityItem>? recentActivity,
-    Map<String, int>? stats,
+    Map<String, dynamic>? stats,
     bool? isLoading,
   }) {
     return HomeState(

@@ -53,26 +53,33 @@ class HomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Search Bar
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search worlds, characters, items...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Theme.of(context).cardColor,
-                ),
-                onSubmitted: (query) {
-                  if (query.isNotEmpty) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SearchScreen(initialQuery: query),
-                      ),
-                    );
-                  }
+              // Search Bar
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SearchScreen(initialQuery: ''),
+                    ),
+                  );
                 },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search, color: Colors.grey),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Search worlds, characters, items...',
+                        style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 24),
 
@@ -86,15 +93,23 @@ class HomeScreen extends ConsumerWidget {
                   _buildStatCard(
                     context,
                     'Characters',
-                    homeState.stats['characterCount']?.toString() ?? '0',
+                    homeState.stats['characterCount'] ?? 0,
                     Icons.person,
                     Colors.blue,
                   ),
                   const SizedBox(width: 16),
                   _buildStatCard(
                     context,
+                    'Worlds',
+                    homeState.stats['worldCount'] ?? 0,
+                    Icons.public,
+                    Colors.green,
+                  ),
+                  const SizedBox(width: 16),
+                  _buildStatCard(
+                    context,
                     'Items',
-                    homeState.stats['itemCount']?.toString() ?? '0',
+                    homeState.stats['itemCount'] ?? 0,
                     Icons.backpack,
                     Colors.amber,
                   ),
@@ -178,10 +193,10 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatCard(BuildContext context, String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(BuildContext context, String title, int value, IconData icon, Color color) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12),
@@ -196,12 +211,12 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 28),
-            const SizedBox(height: 12),
+            Icon(icon, color: color, size: 24),
+            const SizedBox(height: 8),
             Text(
-              value,
+              '$value',
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -209,12 +224,22 @@ class HomeScreen extends ConsumerWidget {
               title,
               style: TextStyle(
                 color: Colors.grey[600],
-                fontSize: 14,
+                fontSize: 12,
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  double _getLimit(String type, String plan) {
+    final limits = {
+      'Free': {'characters': 80.0, 'worlds': 1.0, 'items': 50.0},
+      'Premium': {'characters': 505.0, 'worlds': 3.0, 'items': 300.0},
+      'Creator of Worlds': {'characters': double.infinity, 'worlds': double.infinity, 'items': double.infinity}
+    };
+    
+    return limits[plan]?[type] ?? limits['Free']![type]!;
   }
 }
