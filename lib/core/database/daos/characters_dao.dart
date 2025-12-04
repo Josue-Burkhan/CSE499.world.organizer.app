@@ -52,4 +52,7 @@ class CharactersDao extends DatabaseAccessor<AppDatabase> with _$CharactersDaoMi
           ..where((t) => t.localId.equals(localId)))
           .getSingleOrNull();
   }
+  Future<List<CharacterEntity>> getAllCharacters() {
+    return select(characters).get();
+  }
 }

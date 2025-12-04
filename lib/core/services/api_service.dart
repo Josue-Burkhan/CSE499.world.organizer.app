@@ -135,4 +135,31 @@ class ApiService {
       return false;
     }
   }
+  Future<Map<String, int>> getUserCounts() async {
+    try {
+      final response = await authenticatedRequest('/stats/user-counts');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return {
+          'characterCount': data['characterCount'] as int,
+          'itemCount': data['itemCount'] as int,
+        };
+      }
+      return {'characterCount': 0, 'itemCount': 0};
+    } catch (e) {
+      return {'characterCount': 0, 'itemCount': 0};
+    }
+  }
+
+  Future<List<dynamic>> search(String query) async {
+    try {
+      final response = await authenticatedRequest('/search?q=$query');
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body) as List<dynamic>;
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
 }

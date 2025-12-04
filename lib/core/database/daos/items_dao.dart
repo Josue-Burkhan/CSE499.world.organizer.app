@@ -52,4 +52,7 @@ class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
           ..where((t) => t.localId.equals(localId)))
           .getSingleOrNull();
   }
+  Future<List<ItemEntity>> getAllItems() {
+    return select(items).get();
+  }
 }

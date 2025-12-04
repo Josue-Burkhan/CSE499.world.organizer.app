@@ -2,9 +2,14 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/models/api_models/world_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:worldorganizer_app/core/database/app_database.dart';
 
 final worldsControllerProvider = Provider<WorldsController>((ref) {
   return WorldsController(ref);
+});
+
+final worldsProvider = StreamProvider<List<WorldEntity>>((ref) {
+  return ref.watch(worldsDaoProvider).watchAllWorlds();
 });
 
 class WorldsController {

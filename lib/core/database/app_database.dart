@@ -69,7 +69,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -80,6 +80,12 @@ class AppDatabase extends _$AppDatabase {
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {
           await m.createTable(pendingUploads);
+        }
+        if (from < 3) {
+          await m.addColumn(worlds, worlds.updatedAt);
+          await m.addColumn(characters, characters.updatedAt);
+          await m.addColumn(items, items.updatedAt);
+          await m.addColumn(locations, locations.updatedAt);
         }
       },
     );

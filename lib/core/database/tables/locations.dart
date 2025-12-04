@@ -32,6 +32,8 @@ class Locations extends Table {
   TextColumn get rawLanguages => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawReligions => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawTechnologies => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  
+  DateTimeColumn get updatedAt => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {localId};

@@ -49,6 +49,12 @@ import 'package:worldorganizer_app/repositories/modules/technology_repository.da
 import 'package:worldorganizer_app/core/services/modules/technology_sync_service.dart';
 import 'package:worldorganizer_app/core/services/api_service.dart';
 import 'package:worldorganizer_app/core/services/image_upload_service.dart';
+import 'package:worldorganizer_app/core/services/home_service.dart';
+
+export 'package:worldorganizer_app/providers/settings_provider.dart';
+export 'package:worldorganizer_app/core/services/settings_service.dart';
+export 'package:worldorganizer_app/providers/home_provider.dart';
+export 'package:worldorganizer_app/core/services/home_service.dart';
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   return AppDatabase();
@@ -355,5 +361,14 @@ final technologySyncServiceProvider = Provider<TechnologySyncService>((ref) {
     dao: ref.watch(technologiesDaoProvider),
     worldsDao: ref.watch(worldsDaoProvider),
     storage: ref.watch(secureStorageProvider),
+  );
+});
+
+final homeServiceProvider = Provider<HomeService>((ref) {
+  return HomeService(
+    charactersDao: ref.watch(charactersDaoProvider),
+    itemsDao: ref.watch(itemsDaoProvider),
+    locationsDao: ref.watch(locationsDaoProvider),
+    apiService: ref.watch(apiServiceProvider),
   );
 });

@@ -651,6 +651,17 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -661,6 +672,7 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldEntity> {
     modules,
     coverImage,
     customImage,
+    updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -726,6 +738,12 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldEntity> {
         ),
       );
     }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
     return context;
   }
 
@@ -769,6 +787,10 @@ class $WorldsTable extends Worlds with TableInfo<$WorldsTable, WorldEntity> {
         DriftSqlType.string,
         data['${effectivePrefix}custom_image'],
       ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
     );
   }
 
@@ -790,6 +812,7 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
   final String? modules;
   final String? coverImage;
   final String? customImage;
+  final DateTime? updatedAt;
   const WorldEntity({
     required this.localId,
     this.serverId,
@@ -799,6 +822,7 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
     this.modules,
     this.coverImage,
     this.customImage,
+    this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -823,6 +847,9 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
     if (!nullToAbsent || customImage != null) {
       map['custom_image'] = Variable<String>(customImage);
     }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
     return map;
   }
 
@@ -844,6 +871,9 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
       customImage: customImage == null && nullToAbsent
           ? const Value.absent()
           : Value(customImage),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -861,6 +891,7 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
       modules: serializer.fromJson<String?>(json['modules']),
       coverImage: serializer.fromJson<String?>(json['coverImage']),
       customImage: serializer.fromJson<String?>(json['customImage']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
   @override
@@ -875,6 +906,7 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
       'modules': serializer.toJson<String?>(modules),
       'coverImage': serializer.toJson<String?>(coverImage),
       'customImage': serializer.toJson<String?>(customImage),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
 
@@ -887,6 +919,7 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
     Value<String?> modules = const Value.absent(),
     Value<String?> coverImage = const Value.absent(),
     Value<String?> customImage = const Value.absent(),
+    Value<DateTime?> updatedAt = const Value.absent(),
   }) => WorldEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -896,6 +929,7 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
     modules: modules.present ? modules.value : this.modules,
     coverImage: coverImage.present ? coverImage.value : this.coverImage,
     customImage: customImage.present ? customImage.value : this.customImage,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
   );
   WorldEntity copyWithCompanion(WorldsCompanion data) {
     return WorldEntity(
@@ -915,6 +949,7 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
       customImage: data.customImage.present
           ? data.customImage.value
           : this.customImage,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
@@ -928,7 +963,8 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
           ..write('description: $description, ')
           ..write('modules: $modules, ')
           ..write('coverImage: $coverImage, ')
-          ..write('customImage: $customImage')
+          ..write('customImage: $customImage, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -943,6 +979,7 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
     modules,
     coverImage,
     customImage,
+    updatedAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -955,7 +992,8 @@ class WorldEntity extends DataClass implements Insertable<WorldEntity> {
           other.description == this.description &&
           other.modules == this.modules &&
           other.coverImage == this.coverImage &&
-          other.customImage == this.customImage);
+          other.customImage == this.customImage &&
+          other.updatedAt == this.updatedAt);
 }
 
 class WorldsCompanion extends UpdateCompanion<WorldEntity> {
@@ -967,6 +1005,7 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
   final Value<String?> modules;
   final Value<String?> coverImage;
   final Value<String?> customImage;
+  final Value<DateTime?> updatedAt;
   final Value<int> rowid;
   const WorldsCompanion({
     this.localId = const Value.absent(),
@@ -977,6 +1016,7 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
     this.modules = const Value.absent(),
     this.coverImage = const Value.absent(),
     this.customImage = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WorldsCompanion.insert({
@@ -988,6 +1028,7 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
     this.modules = const Value.absent(),
     this.coverImage = const Value.absent(),
     this.customImage = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : name = Value(name),
        description = Value(description);
@@ -1000,6 +1041,7 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
     Expression<String>? modules,
     Expression<String>? coverImage,
     Expression<String>? customImage,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1011,6 +1053,7 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
       if (modules != null) 'modules': modules,
       if (coverImage != null) 'cover_image': coverImage,
       if (customImage != null) 'custom_image': customImage,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1024,6 +1067,7 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
     Value<String?>? modules,
     Value<String?>? coverImage,
     Value<String?>? customImage,
+    Value<DateTime?>? updatedAt,
     Value<int>? rowid,
   }) {
     return WorldsCompanion(
@@ -1035,6 +1079,7 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
       modules: modules ?? this.modules,
       coverImage: coverImage ?? this.coverImage,
       customImage: customImage ?? this.customImage,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1068,6 +1113,9 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
     if (customImage.present) {
       map['custom_image'] = Variable<String>(customImage.value);
     }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1085,6 +1133,7 @@ class WorldsCompanion extends UpdateCompanion<WorldEntity> {
           ..write('modules: $modules, ')
           ..write('coverImage: $coverImage, ')
           ..write('customImage: $customImage, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2819,6 +2868,17 @@ class $CharactersTable extends Characters
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
   ).withConverter<List<String>>($CharactersTable.$converterrawTechnologies);
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -2855,6 +2915,7 @@ class $CharactersTable extends Characters
     rawEconomies,
     rawStories,
     rawTechnologies,
+    updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2990,6 +3051,12 @@ class $CharactersTable extends Characters
           data['romance_json']!,
           _romanceJsonMeta,
         ),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
       );
     }
     return context;
@@ -3173,6 +3240,10 @@ class $CharactersTable extends Characters
           data['${effectivePrefix}raw_technologies'],
         )!,
       ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
     );
   }
 
@@ -3254,6 +3325,7 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
   final List<String> rawEconomies;
   final List<String> rawStories;
   final List<String> rawTechnologies;
+  final DateTime? updatedAt;
   const CharacterEntity({
     required this.localId,
     this.serverId,
@@ -3289,6 +3361,7 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
     required this.rawEconomies,
     required this.rawStories,
     required this.rawTechnologies,
+    this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3423,6 +3496,9 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
         $CharactersTable.$converterrawTechnologies.toSql(rawTechnologies),
       );
     }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
     return map;
   }
 
@@ -3484,6 +3560,9 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
       rawEconomies: Value(rawEconomies),
       rawStories: Value(rawStories),
       rawTechnologies: Value(rawTechnologies),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -3531,6 +3610,7 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
       rawTechnologies: serializer.fromJson<List<String>>(
         json['rawTechnologies'],
       ),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
   @override
@@ -3571,6 +3651,7 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
       'rawEconomies': serializer.toJson<List<String>>(rawEconomies),
       'rawStories': serializer.toJson<List<String>>(rawStories),
       'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
 
@@ -3609,6 +3690,7 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
     List<String>? rawEconomies,
     List<String>? rawStories,
     List<String>? rawTechnologies,
+    Value<DateTime?> updatedAt = const Value.absent(),
   }) => CharacterEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -3648,6 +3730,7 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
     rawEconomies: rawEconomies ?? this.rawEconomies,
     rawStories: rawStories ?? this.rawStories,
     rawTechnologies: rawTechnologies ?? this.rawTechnologies,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
   );
   CharacterEntity copyWithCompanion(CharactersCompanion data) {
     return CharacterEntity(
@@ -3731,6 +3814,7 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
       rawTechnologies: data.rawTechnologies.present
           ? data.rawTechnologies.value
           : this.rawTechnologies,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
@@ -3770,7 +3854,8 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
           ..write('rawCreatures: $rawCreatures, ')
           ..write('rawEconomies: $rawEconomies, ')
           ..write('rawStories: $rawStories, ')
-          ..write('rawTechnologies: $rawTechnologies')
+          ..write('rawTechnologies: $rawTechnologies, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -3811,6 +3896,7 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
     rawEconomies,
     rawStories,
     rawTechnologies,
+    updatedAt,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -3849,7 +3935,8 @@ class CharacterEntity extends DataClass implements Insertable<CharacterEntity> {
           other.rawCreatures == this.rawCreatures &&
           other.rawEconomies == this.rawEconomies &&
           other.rawStories == this.rawStories &&
-          other.rawTechnologies == this.rawTechnologies);
+          other.rawTechnologies == this.rawTechnologies &&
+          other.updatedAt == this.updatedAt);
 }
 
 class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
@@ -3887,6 +3974,7 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
   final Value<List<String>> rawEconomies;
   final Value<List<String>> rawStories;
   final Value<List<String>> rawTechnologies;
+  final Value<DateTime?> updatedAt;
   final Value<int> rowid;
   const CharactersCompanion({
     this.localId = const Value.absent(),
@@ -3923,6 +4011,7 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     this.rawEconomies = const Value.absent(),
     this.rawStories = const Value.absent(),
     this.rawTechnologies = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CharactersCompanion.insert({
@@ -3960,6 +4049,7 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     this.rawEconomies = const Value.absent(),
     this.rawStories = const Value.absent(),
     this.rawTechnologies = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : worldLocalId = Value(worldLocalId),
        name = Value(name);
@@ -3998,6 +4088,7 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     Expression<String>? rawEconomies,
     Expression<String>? rawStories,
     Expression<String>? rawTechnologies,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -4035,6 +4126,7 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
       if (rawEconomies != null) 'raw_economies': rawEconomies,
       if (rawStories != null) 'raw_stories': rawStories,
       if (rawTechnologies != null) 'raw_technologies': rawTechnologies,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4074,6 +4166,7 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
     Value<List<String>>? rawEconomies,
     Value<List<String>>? rawStories,
     Value<List<String>>? rawTechnologies,
+    Value<DateTime?>? updatedAt,
     Value<int>? rowid,
   }) {
     return CharactersCompanion(
@@ -4111,6 +4204,7 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
       rawEconomies: rawEconomies ?? this.rawEconomies,
       rawStories: rawStories ?? this.rawStories,
       rawTechnologies: rawTechnologies ?? this.rawTechnologies,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4256,6 +4350,9 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
         $CharactersTable.$converterrawTechnologies.toSql(rawTechnologies.value),
       );
     }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -4299,6 +4396,7 @@ class CharactersCompanion extends UpdateCompanion<CharacterEntity> {
           ..write('rawEconomies: $rawEconomies, ')
           ..write('rawStories: $rawStories, ')
           ..write('rawTechnologies: $rawTechnologies, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -9534,6 +9632,17 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
   ).withConverter<List<String>>($ItemsTable.$converterrawAbilities);
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -9568,6 +9677,7 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     rawPowerSystems,
     rawLanguages,
     rawAbilities,
+    updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -9685,6 +9795,12 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
       context.handle(
         _tagColorMeta,
         tagColor.isAcceptableOrUnknown(data['tag_color']!, _tagColorMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
       );
     }
     return context;
@@ -9860,6 +9976,10 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
           data['${effectivePrefix}raw_abilities'],
         )!,
       ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
     );
   }
 
@@ -9937,6 +10057,7 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
   final List<String> rawPowerSystems;
   final List<String> rawLanguages;
   final List<String> rawAbilities;
+  final DateTime? updatedAt;
   const ItemEntity({
     required this.localId,
     this.serverId,
@@ -9970,6 +10091,7 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
     required this.rawPowerSystems,
     required this.rawLanguages,
     required this.rawAbilities,
+    this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -10096,6 +10218,9 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
         $ItemsTable.$converterrawAbilities.toSql(rawAbilities),
       );
     }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
     return map;
   }
 
@@ -10149,6 +10274,9 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
       rawPowerSystems: Value(rawPowerSystems),
       rawLanguages: Value(rawLanguages),
       rawAbilities: Value(rawAbilities),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -10200,6 +10328,7 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
       ),
       rawLanguages: serializer.fromJson<List<String>>(json['rawLanguages']),
       rawAbilities: serializer.fromJson<List<String>>(json['rawAbilities']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
   @override
@@ -10242,6 +10371,7 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
       'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
       'rawLanguages': serializer.toJson<List<String>>(rawLanguages),
       'rawAbilities': serializer.toJson<List<String>>(rawAbilities),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
 
@@ -10278,6 +10408,7 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
     List<String>? rawPowerSystems,
     List<String>? rawLanguages,
     List<String>? rawAbilities,
+    Value<DateTime?> updatedAt = const Value.absent(),
   }) => ItemEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -10312,6 +10443,7 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
     rawPowerSystems: rawPowerSystems ?? this.rawPowerSystems,
     rawLanguages: rawLanguages ?? this.rawLanguages,
     rawAbilities: rawAbilities ?? this.rawAbilities,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
   );
   ItemEntity copyWithCompanion(ItemsCompanion data) {
     return ItemEntity(
@@ -10383,6 +10515,7 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
       rawAbilities: data.rawAbilities.present
           ? data.rawAbilities.value
           : this.rawAbilities,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
@@ -10420,7 +10553,8 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
           ..write('rawTechnologies: $rawTechnologies, ')
           ..write('rawPowerSystems: $rawPowerSystems, ')
           ..write('rawLanguages: $rawLanguages, ')
-          ..write('rawAbilities: $rawAbilities')
+          ..write('rawAbilities: $rawAbilities, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -10459,6 +10593,7 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
     rawPowerSystems,
     rawLanguages,
     rawAbilities,
+    updatedAt,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -10495,7 +10630,8 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
           other.rawTechnologies == this.rawTechnologies &&
           other.rawPowerSystems == this.rawPowerSystems &&
           other.rawLanguages == this.rawLanguages &&
-          other.rawAbilities == this.rawAbilities);
+          other.rawAbilities == this.rawAbilities &&
+          other.updatedAt == this.updatedAt);
 }
 
 class ItemsCompanion extends UpdateCompanion<ItemEntity> {
@@ -10531,6 +10667,7 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
   final Value<List<String>> rawPowerSystems;
   final Value<List<String>> rawLanguages;
   final Value<List<String>> rawAbilities;
+  final Value<DateTime?> updatedAt;
   final Value<int> rowid;
   const ItemsCompanion({
     this.localId = const Value.absent(),
@@ -10565,6 +10702,7 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
     this.rawPowerSystems = const Value.absent(),
     this.rawLanguages = const Value.absent(),
     this.rawAbilities = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ItemsCompanion.insert({
@@ -10600,6 +10738,7 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
     this.rawPowerSystems = const Value.absent(),
     this.rawLanguages = const Value.absent(),
     this.rawAbilities = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : worldLocalId = Value(worldLocalId),
        name = Value(name);
@@ -10636,6 +10775,7 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
     Expression<String>? rawPowerSystems,
     Expression<String>? rawLanguages,
     Expression<String>? rawAbilities,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -10673,6 +10813,7 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
       if (rawPowerSystems != null) 'raw_power_systems': rawPowerSystems,
       if (rawLanguages != null) 'raw_languages': rawLanguages,
       if (rawAbilities != null) 'raw_abilities': rawAbilities,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -10710,6 +10851,7 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
     Value<List<String>>? rawPowerSystems,
     Value<List<String>>? rawLanguages,
     Value<List<String>>? rawAbilities,
+    Value<DateTime?>? updatedAt,
     Value<int>? rowid,
   }) {
     return ItemsCompanion(
@@ -10747,6 +10889,7 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
       rawPowerSystems: rawPowerSystems ?? this.rawPowerSystems,
       rawLanguages: rawLanguages ?? this.rawLanguages,
       rawAbilities: rawAbilities ?? this.rawAbilities,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -10888,6 +11031,9 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
         $ItemsTable.$converterrawAbilities.toSql(rawAbilities.value),
       );
     }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -10929,6 +11075,7 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
           ..write('rawPowerSystems: $rawPowerSystems, ')
           ..write('rawLanguages: $rawLanguages, ')
           ..write('rawAbilities: $rawAbilities, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -12271,6 +12418,17 @@ class $LocationsTable extends Locations
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
   ).withConverter<List<String>>($LocationsTable.$converterrawTechnologies);
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -12296,6 +12454,7 @@ class $LocationsTable extends Locations
     rawLanguages,
     rawReligions,
     rawTechnologies,
+    updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -12386,6 +12545,12 @@ class $LocationsTable extends Locations
       context.handle(
         _tagColorMeta,
         tagColor.isAcceptableOrUnknown(data['tag_color']!, _tagColorMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
       );
     }
     return context;
@@ -12513,6 +12678,10 @@ class $LocationsTable extends Locations
           data['${effectivePrefix}raw_technologies'],
         )!,
       ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
     );
   }
 
@@ -12571,6 +12740,7 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
   final List<String> rawLanguages;
   final List<String> rawReligions;
   final List<String> rawTechnologies;
+  final DateTime? updatedAt;
   const LocationEntity({
     required this.localId,
     this.serverId,
@@ -12595,6 +12765,7 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
     required this.rawLanguages,
     required this.rawReligions,
     required this.rawTechnologies,
+    this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -12684,6 +12855,9 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
         $LocationsTable.$converterrawTechnologies.toSql(rawTechnologies),
       );
     }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
     return map;
   }
 
@@ -12726,6 +12900,9 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
       rawLanguages: Value(rawLanguages),
       rawReligions: Value(rawReligions),
       rawTechnologies: Value(rawTechnologies),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -12760,6 +12937,7 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
       rawTechnologies: serializer.fromJson<List<String>>(
         json['rawTechnologies'],
       ),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
   @override
@@ -12789,6 +12967,7 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
       'rawLanguages': serializer.toJson<List<String>>(rawLanguages),
       'rawReligions': serializer.toJson<List<String>>(rawReligions),
       'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
 
@@ -12816,6 +12995,7 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
     List<String>? rawLanguages,
     List<String>? rawReligions,
     List<String>? rawTechnologies,
+    Value<DateTime?> updatedAt = const Value.absent(),
   }) => LocationEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -12840,6 +13020,7 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
     rawLanguages: rawLanguages ?? this.rawLanguages,
     rawReligions: rawReligions ?? this.rawReligions,
     rawTechnologies: rawTechnologies ?? this.rawTechnologies,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
   );
   LocationEntity copyWithCompanion(LocationsCompanion data) {
     return LocationEntity(
@@ -12892,6 +13073,7 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
       rawTechnologies: data.rawTechnologies.present
           ? data.rawTechnologies.value
           : this.rawTechnologies,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
@@ -12920,7 +13102,8 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
           ..write('rawStories: $rawStories, ')
           ..write('rawLanguages: $rawLanguages, ')
           ..write('rawReligions: $rawReligions, ')
-          ..write('rawTechnologies: $rawTechnologies')
+          ..write('rawTechnologies: $rawTechnologies, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -12950,6 +13133,7 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
     rawLanguages,
     rawReligions,
     rawTechnologies,
+    updatedAt,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -12977,7 +13161,8 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
           other.rawStories == this.rawStories &&
           other.rawLanguages == this.rawLanguages &&
           other.rawReligions == this.rawReligions &&
-          other.rawTechnologies == this.rawTechnologies);
+          other.rawTechnologies == this.rawTechnologies &&
+          other.updatedAt == this.updatedAt);
 }
 
 class LocationsCompanion extends UpdateCompanion<LocationEntity> {
@@ -13004,6 +13189,7 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
   final Value<List<String>> rawLanguages;
   final Value<List<String>> rawReligions;
   final Value<List<String>> rawTechnologies;
+  final Value<DateTime?> updatedAt;
   final Value<int> rowid;
   const LocationsCompanion({
     this.localId = const Value.absent(),
@@ -13029,6 +13215,7 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
     this.rawLanguages = const Value.absent(),
     this.rawReligions = const Value.absent(),
     this.rawTechnologies = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   LocationsCompanion.insert({
@@ -13055,6 +13242,7 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
     this.rawLanguages = const Value.absent(),
     this.rawReligions = const Value.absent(),
     this.rawTechnologies = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : worldLocalId = Value(worldLocalId),
        name = Value(name);
@@ -13082,6 +13270,7 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
     Expression<String>? rawLanguages,
     Expression<String>? rawReligions,
     Expression<String>? rawTechnologies,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -13108,6 +13297,7 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
       if (rawLanguages != null) 'raw_languages': rawLanguages,
       if (rawReligions != null) 'raw_religions': rawReligions,
       if (rawTechnologies != null) 'raw_technologies': rawTechnologies,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -13136,6 +13326,7 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
     Value<List<String>>? rawLanguages,
     Value<List<String>>? rawReligions,
     Value<List<String>>? rawTechnologies,
+    Value<DateTime?>? updatedAt,
     Value<int>? rowid,
   }) {
     return LocationsCompanion(
@@ -13162,6 +13353,7 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
       rawLanguages: rawLanguages ?? this.rawLanguages,
       rawReligions: rawReligions ?? this.rawReligions,
       rawTechnologies: rawTechnologies ?? this.rawTechnologies,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -13262,6 +13454,9 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
         $LocationsTable.$converterrawTechnologies.toSql(rawTechnologies.value),
       );
     }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -13294,6 +13489,7 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
           ..write('rawLanguages: $rawLanguages, ')
           ..write('rawReligions: $rawReligions, ')
           ..write('rawTechnologies: $rawTechnologies, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -19642,6 +19838,7 @@ typedef $$WorldsTableCreateCompanionBuilder =
       Value<String?> modules,
       Value<String?> coverImage,
       Value<String?> customImage,
+      Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
 typedef $$WorldsTableUpdateCompanionBuilder =
@@ -19654,6 +19851,7 @@ typedef $$WorldsTableUpdateCompanionBuilder =
       Value<String?> modules,
       Value<String?> coverImage,
       Value<String?> customImage,
+      Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
 
@@ -20021,6 +20219,11 @@ class $$WorldsTableFilterComposer
 
   ColumnFilters<String> get customImage => $composableBuilder(
     column: $table.customImage,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -20448,6 +20651,11 @@ class $$WorldsTableOrderingComposer
     column: $table.customImage,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$WorldsTableAnnotationComposer
@@ -20491,6 +20699,9 @@ class $$WorldsTableAnnotationComposer
     column: $table.customImage,
     builder: (column) => column,
   );
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 
   Expression<T> abilitiesRefs<T extends Object>(
     Expression<T> Function($$AbilitiesTableAnnotationComposer a) f,
@@ -20920,6 +21131,7 @@ class $$WorldsTableTableManager
                 Value<String?> modules = const Value.absent(),
                 Value<String?> coverImage = const Value.absent(),
                 Value<String?> customImage = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => WorldsCompanion(
                 localId: localId,
@@ -20930,6 +21142,7 @@ class $$WorldsTableTableManager
                 modules: modules,
                 coverImage: coverImage,
                 customImage: customImage,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -20942,6 +21155,7 @@ class $$WorldsTableTableManager
                 Value<String?> modules = const Value.absent(),
                 Value<String?> coverImage = const Value.absent(),
                 Value<String?> customImage = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => WorldsCompanion.insert(
                 localId: localId,
@@ -20952,6 +21166,7 @@ class $$WorldsTableTableManager
                 modules: modules,
                 coverImage: coverImage,
                 customImage: customImage,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -22114,6 +22329,7 @@ typedef $$CharactersTableCreateCompanionBuilder =
       Value<List<String>> rawEconomies,
       Value<List<String>> rawStories,
       Value<List<String>> rawTechnologies,
+      Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
 typedef $$CharactersTableUpdateCompanionBuilder =
@@ -22152,6 +22368,7 @@ typedef $$CharactersTableUpdateCompanionBuilder =
       Value<List<String>> rawEconomies,
       Value<List<String>> rawStories,
       Value<List<String>> rawTechnologies,
+      Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
 
@@ -22371,6 +22588,11 @@ class $$CharactersTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$WorldsTableFilterComposer get worldLocalId {
     final $$WorldsTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -22569,6 +22791,11 @@ class $$CharactersTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$WorldsTableOrderingComposer get worldLocalId {
     final $$WorldsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -22759,6 +22986,9 @@ class $$CharactersTableAnnotationComposer
         builder: (column) => column,
       );
 
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -22845,6 +23075,7 @@ class $$CharactersTableTableManager
                 Value<List<String>> rawEconomies = const Value.absent(),
                 Value<List<String>> rawStories = const Value.absent(),
                 Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CharactersCompanion(
                 localId: localId,
@@ -22881,6 +23112,7 @@ class $$CharactersTableTableManager
                 rawEconomies: rawEconomies,
                 rawStories: rawStories,
                 rawTechnologies: rawTechnologies,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -22919,6 +23151,7 @@ class $$CharactersTableTableManager
                 Value<List<String>> rawEconomies = const Value.absent(),
                 Value<List<String>> rawStories = const Value.absent(),
                 Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CharactersCompanion.insert(
                 localId: localId,
@@ -22955,6 +23188,7 @@ class $$CharactersTableTableManager
                 rawEconomies: rawEconomies,
                 rawStories: rawStories,
                 rawTechnologies: rawTechnologies,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -25790,6 +26024,7 @@ typedef $$ItemsTableCreateCompanionBuilder =
       Value<List<String>> rawPowerSystems,
       Value<List<String>> rawLanguages,
       Value<List<String>> rawAbilities,
+      Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
 typedef $$ItemsTableUpdateCompanionBuilder =
@@ -25826,6 +26061,7 @@ typedef $$ItemsTableUpdateCompanionBuilder =
       Value<List<String>> rawPowerSystems,
       Value<List<String>> rawLanguages,
       Value<List<String>> rawAbilities,
+      Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
 
@@ -26033,6 +26269,11 @@ class $$ItemsTableFilterComposer extends Composer<_$AppDatabase, $ItemsTable> {
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$WorldsTableFilterComposer get worldLocalId {
     final $$WorldsTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -26221,6 +26462,11 @@ class $$ItemsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$WorldsTableOrderingComposer get worldLocalId {
     final $$WorldsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -26395,6 +26641,9 @@ class $$ItemsTableAnnotationComposer
         builder: (column) => column,
       );
 
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -26481,6 +26730,7 @@ class $$ItemsTableTableManager
                 Value<List<String>> rawPowerSystems = const Value.absent(),
                 Value<List<String>> rawLanguages = const Value.absent(),
                 Value<List<String>> rawAbilities = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ItemsCompanion(
                 localId: localId,
@@ -26515,6 +26765,7 @@ class $$ItemsTableTableManager
                 rawPowerSystems: rawPowerSystems,
                 rawLanguages: rawLanguages,
                 rawAbilities: rawAbilities,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -26553,6 +26804,7 @@ class $$ItemsTableTableManager
                 Value<List<String>> rawPowerSystems = const Value.absent(),
                 Value<List<String>> rawLanguages = const Value.absent(),
                 Value<List<String>> rawAbilities = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ItemsCompanion.insert(
                 localId: localId,
@@ -26587,6 +26839,7 @@ class $$ItemsTableTableManager
                 rawPowerSystems: rawPowerSystems,
                 rawLanguages: rawLanguages,
                 rawAbilities: rawAbilities,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -27296,6 +27549,7 @@ typedef $$LocationsTableCreateCompanionBuilder =
       Value<List<String>> rawLanguages,
       Value<List<String>> rawReligions,
       Value<List<String>> rawTechnologies,
+      Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
 typedef $$LocationsTableUpdateCompanionBuilder =
@@ -27323,6 +27577,7 @@ typedef $$LocationsTableUpdateCompanionBuilder =
       Value<List<String>> rawLanguages,
       Value<List<String>> rawReligions,
       Value<List<String>> rawTechnologies,
+      Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
 
@@ -27481,6 +27736,11 @@ class $$LocationsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$WorldsTableFilterComposer get worldLocalId {
     final $$WorldsTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -27624,6 +27884,11 @@ class $$LocationsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$WorldsTableOrderingComposer get worldLocalId {
     final $$WorldsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -27756,6 +28021,9 @@ class $$LocationsTableAnnotationComposer
         builder: (column) => column,
       );
 
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -27831,6 +28099,7 @@ class $$LocationsTableTableManager
                 Value<List<String>> rawLanguages = const Value.absent(),
                 Value<List<String>> rawReligions = const Value.absent(),
                 Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LocationsCompanion(
                 localId: localId,
@@ -27856,6 +28125,7 @@ class $$LocationsTableTableManager
                 rawLanguages: rawLanguages,
                 rawReligions: rawReligions,
                 rawTechnologies: rawTechnologies,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -27883,6 +28153,7 @@ class $$LocationsTableTableManager
                 Value<List<String>> rawLanguages = const Value.absent(),
                 Value<List<String>> rawReligions = const Value.absent(),
                 Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LocationsCompanion.insert(
                 localId: localId,
@@ -27908,6 +28179,7 @@ class $$LocationsTableTableManager
                 rawLanguages: rawLanguages,
                 rawReligions: rawReligions,
                 rawTechnologies: rawTechnologies,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

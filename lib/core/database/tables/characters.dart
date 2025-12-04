@@ -43,6 +43,8 @@ class Characters extends Table {
   TextColumn get rawEconomies => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawStories => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawTechnologies => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  
+  DateTimeColumn get updatedAt => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {localId};

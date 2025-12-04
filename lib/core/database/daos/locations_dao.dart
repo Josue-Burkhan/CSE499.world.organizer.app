@@ -52,4 +52,7 @@ class LocationsDao extends DatabaseAccessor<AppDatabase> with _$LocationsDaoMixi
           ..where((t) => t.localId.equals(localId)))
         .getSingleOrNull();
   }
+  Future<List<LocationEntity>> getAllLocations() {
+    return select(locations).get();
+  }
 }

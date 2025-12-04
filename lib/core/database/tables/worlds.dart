@@ -19,6 +19,8 @@ class Worlds extends Table {
   TextColumn get modules => text().nullable()();
   TextColumn get coverImage => text().named('cover_image').nullable()();
   TextColumn get customImage => text().named('custom_image').nullable()();
+  
+  DateTimeColumn get updatedAt => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {localId};
