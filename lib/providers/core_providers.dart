@@ -105,6 +105,7 @@ final abilitiesDaoProvider = Provider<AbilitiesDao>((ref) {
 final abilityRepositoryProvider = Provider<AbilityRepository>((ref) {
   return AbilityRepository(
     dao: ref.watch(abilitiesDaoProvider),
+    syncService: ref.watch(abilitySyncServiceProvider),
   );
 });
 
@@ -144,6 +145,7 @@ final creaturesDaoProvider = Provider<CreaturesDao>((ref) {
 final creatureRepositoryProvider = Provider<CreatureRepository>((ref) {
   return CreatureRepository(
     dao: ref.watch(creaturesDaoProvider),
+    syncService: ref.watch(creatureSyncServiceProvider),
   );
 });
 
@@ -163,6 +165,7 @@ final economiesDaoProvider = Provider<EconomiesDao>((ref) {
 final economyRepositoryProvider = Provider<EconomyRepository>((ref) {
   return EconomyRepository(
     dao: ref.watch(economiesDaoProvider),
+    syncService: ref.watch(economySyncServiceProvider),
   );
 });
 
@@ -182,6 +185,7 @@ final eventsDaoProvider = Provider<EventsDao>((ref) {
 final eventRepositoryProvider = Provider<EventRepository>((ref) {
   return EventRepository(
     dao: ref.watch(eventsDaoProvider),
+    syncService: ref.watch(eventSyncServiceProvider),
   );
 });
 
@@ -201,6 +205,7 @@ final factionsDaoProvider = Provider<FactionsDao>((ref) {
 final factionRepositoryProvider = Provider<FactionRepository>((ref) {
   return FactionRepository(
     dao: ref.watch(factionsDaoProvider),
+    syncService: ref.watch(factionSyncServiceProvider),
   );
 });
 
@@ -220,6 +225,7 @@ final itemsDaoProvider = Provider<ItemsDao>((ref) {
 final itemRepositoryProvider = Provider<ItemRepository>((ref) {
   return ItemRepository(
     dao: ref.watch(itemsDaoProvider),
+    syncService: ref.watch(itemSyncServiceProvider),
   );
 });
 
@@ -239,6 +245,7 @@ final languagesDaoProvider = Provider<LanguagesDao>((ref) {
 final languageRepositoryProvider = Provider<LanguageRepository>((ref) {
   return LanguageRepository(
     dao: ref.watch(languagesDaoProvider),
+    syncService: ref.watch(languageSyncServiceProvider),
   );
 });
 
@@ -258,6 +265,7 @@ final locationsDaoProvider = Provider<LocationsDao>((ref) {
 final locationRepositoryProvider = Provider<LocationRepository>((ref) {
   return LocationRepository(
     dao: ref.watch(locationsDaoProvider),
+    syncService: ref.watch(locationSyncServiceProvider),
   );
 });
 
@@ -277,6 +285,7 @@ final powerSystemsDaoProvider = Provider<PowerSystemsDao>((ref) {
 final powerSystemRepositoryProvider = Provider<PowerSystemRepository>((ref) {
   return PowerSystemRepository(
     dao: ref.watch(powerSystemsDaoProvider),
+    syncService: ref.watch(powerSystemSyncServiceProvider),
   );
 });
 
@@ -296,6 +305,7 @@ final racesDaoProvider = Provider<RacesDao>((ref) {
 final raceRepositoryProvider = Provider<RaceRepository>((ref) {
   return RaceRepository(
     dao: ref.watch(racesDaoProvider),
+    syncService: ref.watch(raceSyncServiceProvider),
   );
 });
 
@@ -315,6 +325,7 @@ final religionsDaoProvider = Provider<ReligionsDao>((ref) {
 final religionRepositoryProvider = Provider<ReligionRepository>((ref) {
   return ReligionRepository(
     dao: ref.watch(religionsDaoProvider),
+    syncService: ref.watch(religionSyncServiceProvider),
   );
 });
 
@@ -334,6 +345,7 @@ final storiesDaoProvider = Provider<StoriesDao>((ref) {
 final storyRepositoryProvider = Provider<StoryRepository>((ref) {
   return StoryRepository(
     dao: ref.watch(storiesDaoProvider),
+    syncService: ref.watch(storySyncServiceProvider),
   );
 });
 
@@ -353,6 +365,7 @@ final technologiesDaoProvider = Provider<TechnologiesDao>((ref) {
 final technologyRepositoryProvider = Provider<TechnologyRepository>((ref) {
   return TechnologyRepository(
     dao: ref.watch(technologiesDaoProvider),
+    syncService: ref.watch(technologySyncServiceProvider),
   );
 });
 

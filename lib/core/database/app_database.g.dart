@@ -7945,6 +7945,26 @@ class $FactionsTable extends Factions
     requiredDuringInsert: false,
   );
   @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawAllies =
+      GeneratedColumn<String>(
+        'raw_allies',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($FactionsTable.$converterrawAllies);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEnemies =
+      GeneratedColumn<String>(
+        'raw_enemies',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($FactionsTable.$converterrawEnemies);
+  @override
   late final GeneratedColumnWithTypeConverter<List<String>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
@@ -8073,6 +8093,8 @@ class $FactionsTable extends Factions
     images,
     alliesJson,
     enemiesJson,
+    rawAllies,
+    rawEnemies,
     rawCharacters,
     rawLocations,
     rawHeadquarters,
@@ -8283,6 +8305,18 @@ class $FactionsTable extends Factions
         DriftSqlType.string,
         data['${effectivePrefix}enemies_json'],
       ),
+      rawAllies: $FactionsTable.$converterrawAllies.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_allies'],
+        )!,
+      ),
+      rawEnemies: $FactionsTable.$converterrawEnemies.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}raw_enemies'],
+        )!,
+      ),
       rawCharacters: $FactionsTable.$converterrawCharacters.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -8363,6 +8397,10 @@ class $FactionsTable extends Factions
       const ListStringConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawAllies =
+      const ListStringConverter();
+  static TypeConverter<List<String>, String> $converterrawEnemies =
+      const ListStringConverter();
   static TypeConverter<List<String>, String> $converterrawCharacters =
       const ListStringConverter();
   static TypeConverter<List<String>, String> $converterrawLocations =
@@ -8405,6 +8443,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
   final List<String> images;
   final String? alliesJson;
   final String? enemiesJson;
+  final List<String> rawAllies;
+  final List<String> rawEnemies;
   final List<String> rawCharacters;
   final List<String> rawLocations;
   final List<String> rawHeadquarters;
@@ -8434,6 +8474,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
     required this.images,
     this.alliesJson,
     this.enemiesJson,
+    required this.rawAllies,
+    required this.rawEnemies,
     required this.rawCharacters,
     required this.rawLocations,
     required this.rawHeadquarters,
@@ -8497,6 +8539,16 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
     }
     if (!nullToAbsent || enemiesJson != null) {
       map['enemies_json'] = Variable<String>(enemiesJson);
+    }
+    {
+      map['raw_allies'] = Variable<String>(
+        $FactionsTable.$converterrawAllies.toSql(rawAllies),
+      );
+    }
+    {
+      map['raw_enemies'] = Variable<String>(
+        $FactionsTable.$converterrawEnemies.toSql(rawEnemies),
+      );
     }
     {
       map['raw_characters'] = Variable<String>(
@@ -8593,6 +8645,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
       enemiesJson: enemiesJson == null && nullToAbsent
           ? const Value.absent()
           : Value(enemiesJson),
+      rawAllies: Value(rawAllies),
+      rawEnemies: Value(rawEnemies),
       rawCharacters: Value(rawCharacters),
       rawLocations: Value(rawLocations),
       rawHeadquarters: Value(rawHeadquarters),
@@ -8630,6 +8684,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
       images: serializer.fromJson<List<String>>(json['images']),
       alliesJson: serializer.fromJson<String?>(json['alliesJson']),
       enemiesJson: serializer.fromJson<String?>(json['enemiesJson']),
+      rawAllies: serializer.fromJson<List<String>>(json['rawAllies']),
+      rawEnemies: serializer.fromJson<List<String>>(json['rawEnemies']),
       rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
       rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
       rawHeadquarters: serializer.fromJson<List<String>>(
@@ -8670,6 +8726,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
       'images': serializer.toJson<List<String>>(images),
       'alliesJson': serializer.toJson<String?>(alliesJson),
       'enemiesJson': serializer.toJson<String?>(enemiesJson),
+      'rawAllies': serializer.toJson<List<String>>(rawAllies),
+      'rawEnemies': serializer.toJson<List<String>>(rawEnemies),
       'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
       'rawLocations': serializer.toJson<List<String>>(rawLocations),
       'rawHeadquarters': serializer.toJson<List<String>>(rawHeadquarters),
@@ -8702,6 +8760,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
     List<String>? images,
     Value<String?> alliesJson = const Value.absent(),
     Value<String?> enemiesJson = const Value.absent(),
+    List<String>? rawAllies,
+    List<String>? rawEnemies,
     List<String>? rawCharacters,
     List<String>? rawLocations,
     List<String>? rawHeadquarters,
@@ -8733,6 +8793,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
     images: images ?? this.images,
     alliesJson: alliesJson.present ? alliesJson.value : this.alliesJson,
     enemiesJson: enemiesJson.present ? enemiesJson.value : this.enemiesJson,
+    rawAllies: rawAllies ?? this.rawAllies,
+    rawEnemies: rawEnemies ?? this.rawEnemies,
     rawCharacters: rawCharacters ?? this.rawCharacters,
     rawLocations: rawLocations ?? this.rawLocations,
     rawHeadquarters: rawHeadquarters ?? this.rawHeadquarters,
@@ -8780,6 +8842,10 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
       enemiesJson: data.enemiesJson.present
           ? data.enemiesJson.value
           : this.enemiesJson,
+      rawAllies: data.rawAllies.present ? data.rawAllies.value : this.rawAllies,
+      rawEnemies: data.rawEnemies.present
+          ? data.rawEnemies.value
+          : this.rawEnemies,
       rawCharacters: data.rawCharacters.present
           ? data.rawCharacters.value
           : this.rawCharacters,
@@ -8832,6 +8898,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
           ..write('images: $images, ')
           ..write('alliesJson: $alliesJson, ')
           ..write('enemiesJson: $enemiesJson, ')
+          ..write('rawAllies: $rawAllies, ')
+          ..write('rawEnemies: $rawEnemies, ')
           ..write('rawCharacters: $rawCharacters, ')
           ..write('rawLocations: $rawLocations, ')
           ..write('rawHeadquarters: $rawHeadquarters, ')
@@ -8866,6 +8934,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
     images,
     alliesJson,
     enemiesJson,
+    rawAllies,
+    rawEnemies,
     rawCharacters,
     rawLocations,
     rawHeadquarters,
@@ -8899,6 +8969,8 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
           other.images == this.images &&
           other.alliesJson == this.alliesJson &&
           other.enemiesJson == this.enemiesJson &&
+          other.rawAllies == this.rawAllies &&
+          other.rawEnemies == this.rawEnemies &&
           other.rawCharacters == this.rawCharacters &&
           other.rawLocations == this.rawLocations &&
           other.rawHeadquarters == this.rawHeadquarters &&
@@ -8930,6 +9002,8 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
   final Value<List<String>> images;
   final Value<String?> alliesJson;
   final Value<String?> enemiesJson;
+  final Value<List<String>> rawAllies;
+  final Value<List<String>> rawEnemies;
   final Value<List<String>> rawCharacters;
   final Value<List<String>> rawLocations;
   final Value<List<String>> rawHeadquarters;
@@ -8960,6 +9034,8 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
     this.images = const Value.absent(),
     this.alliesJson = const Value.absent(),
     this.enemiesJson = const Value.absent(),
+    this.rawAllies = const Value.absent(),
+    this.rawEnemies = const Value.absent(),
     this.rawCharacters = const Value.absent(),
     this.rawLocations = const Value.absent(),
     this.rawHeadquarters = const Value.absent(),
@@ -8991,6 +9067,8 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
     this.images = const Value.absent(),
     this.alliesJson = const Value.absent(),
     this.enemiesJson = const Value.absent(),
+    this.rawAllies = const Value.absent(),
+    this.rawEnemies = const Value.absent(),
     this.rawCharacters = const Value.absent(),
     this.rawLocations = const Value.absent(),
     this.rawHeadquarters = const Value.absent(),
@@ -9023,6 +9101,8 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
     Expression<String>? images,
     Expression<String>? alliesJson,
     Expression<String>? enemiesJson,
+    Expression<String>? rawAllies,
+    Expression<String>? rawEnemies,
     Expression<String>? rawCharacters,
     Expression<String>? rawLocations,
     Expression<String>? rawHeadquarters,
@@ -9054,6 +9134,8 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
       if (images != null) 'images': images,
       if (alliesJson != null) 'allies_json': alliesJson,
       if (enemiesJson != null) 'enemies_json': enemiesJson,
+      if (rawAllies != null) 'raw_allies': rawAllies,
+      if (rawEnemies != null) 'raw_enemies': rawEnemies,
       if (rawCharacters != null) 'raw_characters': rawCharacters,
       if (rawLocations != null) 'raw_locations': rawLocations,
       if (rawHeadquarters != null) 'raw_headquarters': rawHeadquarters,
@@ -9087,6 +9169,8 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
     Value<List<String>>? images,
     Value<String?>? alliesJson,
     Value<String?>? enemiesJson,
+    Value<List<String>>? rawAllies,
+    Value<List<String>>? rawEnemies,
     Value<List<String>>? rawCharacters,
     Value<List<String>>? rawLocations,
     Value<List<String>>? rawHeadquarters,
@@ -9118,6 +9202,8 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
       images: images ?? this.images,
       alliesJson: alliesJson ?? this.alliesJson,
       enemiesJson: enemiesJson ?? this.enemiesJson,
+      rawAllies: rawAllies ?? this.rawAllies,
+      rawEnemies: rawEnemies ?? this.rawEnemies,
       rawCharacters: rawCharacters ?? this.rawCharacters,
       rawLocations: rawLocations ?? this.rawLocations,
       rawHeadquarters: rawHeadquarters ?? this.rawHeadquarters,
@@ -9192,6 +9278,16 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
     }
     if (enemiesJson.present) {
       map['enemies_json'] = Variable<String>(enemiesJson.value);
+    }
+    if (rawAllies.present) {
+      map['raw_allies'] = Variable<String>(
+        $FactionsTable.$converterrawAllies.toSql(rawAllies.value),
+      );
+    }
+    if (rawEnemies.present) {
+      map['raw_enemies'] = Variable<String>(
+        $FactionsTable.$converterrawEnemies.toSql(rawEnemies.value),
+      );
     }
     if (rawCharacters.present) {
       map['raw_characters'] = Variable<String>(
@@ -9274,6 +9370,8 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
           ..write('images: $images, ')
           ..write('alliesJson: $alliesJson, ')
           ..write('enemiesJson: $enemiesJson, ')
+          ..write('rawAllies: $rawAllies, ')
+          ..write('rawEnemies: $rawEnemies, ')
           ..write('rawCharacters: $rawCharacters, ')
           ..write('rawLocations: $rawLocations, ')
           ..write('rawHeadquarters: $rawHeadquarters, ')
@@ -25197,6 +25295,8 @@ typedef $$FactionsTableCreateCompanionBuilder =
       Value<List<String>> images,
       Value<String?> alliesJson,
       Value<String?> enemiesJson,
+      Value<List<String>> rawAllies,
+      Value<List<String>> rawEnemies,
       Value<List<String>> rawCharacters,
       Value<List<String>> rawLocations,
       Value<List<String>> rawHeadquarters,
@@ -25229,6 +25329,8 @@ typedef $$FactionsTableUpdateCompanionBuilder =
       Value<List<String>> images,
       Value<String?> alliesJson,
       Value<String?> enemiesJson,
+      Value<List<String>> rawAllies,
+      Value<List<String>> rawEnemies,
       Value<List<String>> rawCharacters,
       Value<List<String>> rawLocations,
       Value<List<String>> rawHeadquarters,
@@ -25357,6 +25459,18 @@ class $$FactionsTableFilterComposer
   ColumnFilters<String> get enemiesJson => $composableBuilder(
     column: $table.enemiesJson,
     builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawAllies => $composableBuilder(
+    column: $table.rawAllies,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get rawEnemies => $composableBuilder(
+    column: $table.rawEnemies,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   ColumnWithTypeConverterFilters<List<String>, List<String>, String>
@@ -25538,6 +25652,16 @@ class $$FactionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get rawAllies => $composableBuilder(
+    column: $table.rawAllies,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawEnemies => $composableBuilder(
+    column: $table.rawEnemies,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnOrderings(column),
@@ -25689,6 +25813,15 @@ class $$FactionsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawAllies =>
+      $composableBuilder(column: $table.rawAllies, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get rawEnemies =>
+      $composableBuilder(
+        column: $table.rawEnemies,
+        builder: (column) => column,
+      );
+
   GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
       $composableBuilder(
         column: $table.rawCharacters,
@@ -25818,6 +25951,8 @@ class $$FactionsTableTableManager
                 Value<List<String>> images = const Value.absent(),
                 Value<String?> alliesJson = const Value.absent(),
                 Value<String?> enemiesJson = const Value.absent(),
+                Value<List<String>> rawAllies = const Value.absent(),
+                Value<List<String>> rawEnemies = const Value.absent(),
                 Value<List<String>> rawCharacters = const Value.absent(),
                 Value<List<String>> rawLocations = const Value.absent(),
                 Value<List<String>> rawHeadquarters = const Value.absent(),
@@ -25848,6 +25983,8 @@ class $$FactionsTableTableManager
                 images: images,
                 alliesJson: alliesJson,
                 enemiesJson: enemiesJson,
+                rawAllies: rawAllies,
+                rawEnemies: rawEnemies,
                 rawCharacters: rawCharacters,
                 rawLocations: rawLocations,
                 rawHeadquarters: rawHeadquarters,
@@ -25880,6 +26017,8 @@ class $$FactionsTableTableManager
                 Value<List<String>> images = const Value.absent(),
                 Value<String?> alliesJson = const Value.absent(),
                 Value<String?> enemiesJson = const Value.absent(),
+                Value<List<String>> rawAllies = const Value.absent(),
+                Value<List<String>> rawEnemies = const Value.absent(),
                 Value<List<String>> rawCharacters = const Value.absent(),
                 Value<List<String>> rawLocations = const Value.absent(),
                 Value<List<String>> rawHeadquarters = const Value.absent(),
@@ -25910,6 +26049,8 @@ class $$FactionsTableTableManager
                 images: images,
                 alliesJson: alliesJson,
                 enemiesJson: enemiesJson,
+                rawAllies: rawAllies,
+                rawEnemies: rawEnemies,
                 rawCharacters: rawCharacters,
                 rawLocations: rawLocations,
                 rawHeadquarters: rawHeadquarters,

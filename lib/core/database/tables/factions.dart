@@ -25,6 +25,9 @@ class Factions extends Table {
 
   TextColumn get alliesJson => text().named('allies_json').nullable()();
   TextColumn get enemiesJson => text().named('enemies_json').nullable()();
+
+  TextColumn get rawAllies => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawEnemies => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawCharacters => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawLocations => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   TextColumn get rawHeadquarters => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();

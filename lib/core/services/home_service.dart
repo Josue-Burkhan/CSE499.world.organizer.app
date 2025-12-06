@@ -1,4 +1,3 @@
-import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/core/database/daos/characters_dao.dart';
 import 'package:worldorganizer_app/core/database/daos/items_dao.dart';
 import 'package:worldorganizer_app/core/database/daos/locations_dao.dart';
