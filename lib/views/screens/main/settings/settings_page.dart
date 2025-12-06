@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../../../services/settings_services.dart';
+import '../../../../core/database/app_database.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  final AppDatabase db;
+  const SettingsPage({Key? key, required this.db}) : super(key: key);
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final SettingsService _service = SettingsService();
-
   final _usernameController = TextEditingController();
   bool _enableNotifications = false;
   String _defaultLanguage = 'en';
-
   bool _loading = true;
 
   @override
@@ -24,22 +22,22 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _loadSettings() async {
-    final username = await _service.getUsername();
-    final enableNotifications = await _service.getEnableNotifications();
-    final defaultLanguage = await _service.getDefaultLanguage();
+    final username = await widget.db.getSetting('username');
+    final enableNotif = await widget.db.getSetting('enableNotifications');
+    final language = await widget.db.getSetting('defaultLanguage');
 
     setState(() {
       _usernameController.text = username ?? '';
-      _enableNotifications = enableNotifications;
-      _defaultLanguage = defaultLanguage ?? 'en';
+      _enableNotifications = enableNotif == 'true';
+      _defaultLanguage = language ?? 'en';
       _loading = false;
     });
   }
 
   Future<void> _saveSettings() async {
-    await _service.setUsername(_usernameController.text);
-    await _service.setEnableNotifications(_enableNotifications);
-    await _service.setDefaultLanguage(_defaultLanguage);
+    await widget.db.setSetting('username', _usernameController.text);
+    await widget.db.setSetting('enableNotifications', _enableNotifications.toString());
+    await widget.db.setSetting('defaultLanguage', _defaultLanguage);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Settings saved')),
@@ -48,11 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
+    if (_loading) return const Scaffold(body: Center(child: CircularProgressIndicator()));
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -71,11 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
             SwitchListTile(
               title: const Text('Enable Notifications'),
               value: _enableNotifications,
-              onChanged: (value) {
-                setState(() {
-                  _enableNotifications = value;
-                });
-              },
+              onChanged: (val) => setState(() => _enableNotifications = val),
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
@@ -89,12 +79,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 DropdownMenuItem(value: 'fr', child: Text('Français')),
                 DropdownMenuItem(value: 'mg', child: Text('Malagasy')),
               ],
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _defaultLanguage = value;
-                  });
-                }
+              onChanged: (val) {
+                if (val != null) setState(() => _defaultLanguage = val);
               },
             ),
             const SizedBox(height: 32),
