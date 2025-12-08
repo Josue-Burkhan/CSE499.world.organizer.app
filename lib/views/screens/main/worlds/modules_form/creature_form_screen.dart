@@ -216,18 +216,17 @@ class _CreatureFormScreenState extends ConsumerState<CreatureFormScreen> {
             decoration: const InputDecoration(labelText: 'Species Type', border: OutlineInputBorder()),
           ),
           const SizedBox(height: 16),
+          const SizedBox(height: 16),
           TextFormField(
             controller: _descriptionController,
             decoration: const InputDecoration(labelText: 'Description', border: OutlineInputBorder()),
             maxLines: 4,
-            validator: (value) => value == null || value.isEmpty ? 'Description is required' : null,
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _habitatController,
             decoration: const InputDecoration(labelText: 'Habitat', border: OutlineInputBorder()),
             maxLines: 2,
-            validator: (value) => value == null || value.isEmpty ? 'Habitat is required' : null,
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(

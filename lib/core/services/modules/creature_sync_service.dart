@@ -46,7 +46,14 @@ class CreatureSyncService {
 
       final body = jsonDecode(response.body);
       final List<dynamic> creatureList = body['creatures'];
-      final apiCreatures = creatureList.map((j) => Creature.fromJson(j)).toList();
+      final List<Creature> apiCreatures = [];
+      for (final j in creatureList) {
+        try {
+          apiCreatures.add(Creature.fromJson(j));
+        } catch (e) {
+          print('Skipping invalid creature: $e');
+        }
+      }
 
       for (final apiCreature in apiCreatures) {
         final existing = await _dao.getCreatureByServerId(apiCreature.id);

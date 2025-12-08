@@ -53,3 +53,4 @@ class FactionsDao extends DatabaseAccessor<AppDatabase> with _$FactionsDaoMixin 
           .getSingleOrNull();
   }
 }
+

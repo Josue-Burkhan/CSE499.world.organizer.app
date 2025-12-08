@@ -107,14 +107,16 @@ class FactionDetailScreen extends ConsumerWidget {
     final tagColor = _getTagColor(faction.tagColor);
 
     List<FactionRelation> allies = [];
-    if (faction.alliesJson != null) {
-      allies = (jsonDecode(faction.alliesJson!) as List)
+    final alliesJson = faction.alliesJson;
+    if (alliesJson != null) {
+      allies = (jsonDecode(alliesJson) as List)
           .map((i) => FactionRelation.fromJson(i))
           .toList();
     }
     List<FactionRelation> enemies = [];
-    if (faction.enemiesJson != null) {
-      enemies = (jsonDecode(faction.enemiesJson!) as List)
+    final enemiesJson = faction.enemiesJson;
+    if (enemiesJson != null) {
+      enemies = (jsonDecode(enemiesJson) as List)
           .map((i) => FactionRelation.fromJson(i))
           .toList();
     }
@@ -210,8 +212,9 @@ class FactionDetailScreen extends ConsumerWidget {
     List<FactionRelation> allies,
     List<FactionRelation> enemies,
   ) {
-    // FORCE VISIBILITY: Check if empty and show "No known relationships" fallback inside subsections if needed
-    // if (allies.isEmpty && enemies.isEmpty) { ... }
+    if (allies.isEmpty && enemies.isEmpty) {
+      return const SizedBox.shrink();
+    }
     
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -260,8 +263,7 @@ class FactionDetailScreen extends ConsumerWidget {
   }
 
     Widget _buildGoals(FactionEntity faction) {
-    // FORCE VISIBILITY: Check if empty and show "None"
-    // if (faction.goals.isEmpty) return const SizedBox.shrink();
+    if (faction.goals.isEmpty) return const SizedBox.shrink();
 
     if (faction.goals.isEmpty) {
         return Card(
@@ -341,8 +343,7 @@ class FactionDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildRawList(String title, List<String> rawList) {
-    // FORCE VISIBILITY: Check if empty and show "No links"
-    // if (rawList.isEmpty) return const SizedBox.shrink();
+    if (rawList.isEmpty) return const SizedBox.shrink();
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),

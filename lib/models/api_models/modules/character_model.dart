@@ -6,7 +6,7 @@ class CharacterRelation {
 
   factory CharacterRelation.fromJson(Map<String, dynamic> json) {
     return CharacterRelation(
-      id: json['_id'],
+      id: json['_id'] ?? '',
       name: json['name'] ?? 'Unknown',
     );
   }
@@ -92,9 +92,12 @@ class Character {
     if (raw is List) {
       return raw.map((item) {
         if (item is Map<String, dynamic>) {
-          return CharacterRelation.fromJson(item);
+          final rel = CharacterRelation.fromJson(item);
+          if (rel.id.isEmpty) return null;
+          return rel;
         }
         if (item is String) {
+          if (item.isEmpty) return null;
           return CharacterRelation(id: item, name: item);
         }
         return null; 
