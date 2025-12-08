@@ -2,6 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../app_database.dart';
 import 'worlds.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import '../converters/module_link_list_converter.dart';
 import '../converters/list_string_converter.dart';
 
 @DataClassName('ItemEntity')
@@ -28,18 +30,18 @@ class Items extends Table {
   TextColumn get tagColor => text().withDefault(const Constant('neutral'))();
   
   TextColumn get images => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawCreatedBy => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawUsedBy => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawCurrentOwnerCharacter => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawFactions => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawEvents => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawStories => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawLocations => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawReligions => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawTechnologies => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawPowerSystems => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawLanguages => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawAbilities => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawCreatedBy => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawUsedBy => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawCurrentOwnerCharacter => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawFactions => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawEvents => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawStories => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawLocations => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawReligions => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawTechnologies => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawPowerSystems => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawLanguages => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawAbilities => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
   
   DateTimeColumn get updatedAt => dateTime().nullable()();
 

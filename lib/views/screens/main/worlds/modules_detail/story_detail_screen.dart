@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/models/api_models/modules/story_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/event_detail_screen.dart';
 
 final storyDetailStreamProvider =
     StreamProvider.family.autoDispose<StoryEntity?, String>((ref, serverId) {
@@ -102,7 +104,7 @@ class StoryDetailScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSummary(story.summary),
-            _buildTimeline(timeline),
+            _buildTimeline(context, timeline),
           ],
         ),
       ),
@@ -132,7 +134,7 @@ class StoryDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTimeline(Timeline? timeline) {
+  Widget _buildTimeline(BuildContext context, Timeline? timeline) {
     if (timeline == null || timeline.timelineEvents == null || timeline.timelineEvents!.isEmpty) {
       return _buildEmptyStateCard('Timeline', Icons.timeline);
     }
@@ -150,14 +152,14 @@ class StoryDetailScreen extends ConsumerWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            ...events.map((event) => _buildTimelineEvent(event)),
+            ...events.map((event) => _buildTimelineEvent(context, event)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTimelineEvent(TimelineEvent event) {
+  Widget _buildTimelineEvent(BuildContext context, TimelineEvent event) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
@@ -195,10 +197,11 @@ class StoryDetailScreen extends ConsumerWidget {
                           spacing: 6.0,
                           runSpacing: 4.0,
                           children: event.rawEvents
-                              .map((e) => Chip(
-                                    label: Text(e, style: const TextStyle(fontSize: 11)),
+                              .map((link) => ActionChip(
+                                    label: Text(link.name, style: const TextStyle(fontSize: 11)),
                                     padding: const EdgeInsets.all(4),
                                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    onPressed: () => _navigateToEvent(context, link),
                                   ))
                               .toList(),
                         )
@@ -213,6 +216,14 @@ class StoryDetailScreen extends ConsumerWidget {
       ),
     );
   }
+
+  void _navigateToEvent(BuildContext context, ModuleLink link) {
+    if (link.id.isEmpty) return;
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => EventDetailScreen(eventServerId: link.id),
+    ));
+  }
+
   Widget _buildEmptyStateCard(String title, IconData icon) {
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),

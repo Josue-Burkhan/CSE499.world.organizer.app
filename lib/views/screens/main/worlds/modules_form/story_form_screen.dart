@@ -6,6 +6,7 @@ import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/models/api_models/modules/story_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/autocomplete_chips.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
 
 class StoryFormScreen extends ConsumerStatefulWidget {
   final String? storyLocalId;
@@ -279,7 +280,7 @@ class _TimelineEventCard extends StatefulWidget {
 class _TimelineEventCardState extends State<_TimelineEventCard> {
   late TextEditingController _yearController;
   late TextEditingController _descriptionController;
-  late List<String> _rawEvents;
+  late List<ModuleLink> _rawEvents;
   bool _isExpanded = false;
 
   @override
@@ -295,6 +296,19 @@ class _TimelineEventCardState extends State<_TimelineEventCard> {
     _yearController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  List<ModuleLink> _updateLinksList(List<ModuleLink> currentList, List<String> newNames) {
+    final Map<String, ModuleLink> existingMap = {
+      for (var item in currentList) item.name: item,
+    };
+    
+    return newNames.map((name) {
+      if (existingMap.containsKey(name)) {
+        return existingMap[name]!;
+      }
+      return ModuleLink(id: '', name: name);
+    }).toList();
   }
 
   void _notifyUpdate() {
@@ -364,9 +378,9 @@ class _TimelineEventCardState extends State<_TimelineEventCard> {
                   const SizedBox(height: 16),
                   AutocompleteChips(
                     label: 'Related Events',
-                    initialValues: _rawEvents,
+                    initialValues: _rawEvents.map((e) => e.name).toList(),
                     onChanged: (values) {
-                      _rawEvents = values;
+                      _rawEvents = _updateLinksList(_rawEvents, values);
                       _notifyUpdate();
                     },
                     searchFunction: (q) => widget.searchFunction(q, 'event'),

@@ -244,12 +244,12 @@ class EconomySyncService {
       'tagColor': economy.tagColor,
       'images': economy.images,
       
-      'rawCharacters': economy.rawCharacters,
-      'rawFactions': economy.rawFactions,
-      'rawLocations': economy.rawLocations,
-      'rawItems': economy.rawItems,
-      'rawRaces': economy.rawRaces,
-      'rawStories': economy.rawStories,
+      'rawCharacters': economy.rawCharacters.map((e) => e.name).toList(),
+      'rawFactions': economy.rawFactions.map((e) => e.name).toList(),
+      'rawLocations': economy.rawLocations.map((e) => e.name).toList(),
+      'rawItems': economy.rawItems.map((e) => e.name).toList(),
+      'rawRaces': economy.rawRaces.map((e) => e.name).toList(),
+      'rawStories': economy.rawStories.map((e) => e.name).toList(),
     };
   }
 }

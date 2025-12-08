@@ -1,3 +1,5 @@
+import '../module_link.dart';
+
 class LanguageRelation {
   final String id;
   final String name;
@@ -30,12 +32,12 @@ class Language {
     final List<String> images;
     final String tagColor;
 
-    final List<String> rawRaces;
-    final List<String> rawFactions;
-    final List<String> rawCharacters;
-    final List<String> rawLocations;
-    final List<String> rawStories;
-    final List<String> rawReligions;
+    final List<ModuleLink> rawRaces;
+    final List<ModuleLink> rawFactions;
+    final List<ModuleLink> rawCharacters;
+    final List<ModuleLink> rawLocations;
+    final List<ModuleLink> rawStories;
+    final List<ModuleLink> rawReligions;
 
     Language({
         required this.id,
@@ -64,22 +66,21 @@ class Language {
         return [];
     }
 
-    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
-        // Try raw first
-        if (raw is List && raw.isNotEmpty) {
-            return List<String>.from(raw.map((item) => item.toString()));
-        }
-        // Fallback to populated if it contains objects with names
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
         if (populated is List) {
-            return populated.map((item) {
-                if (item is Map<String, dynamic> && item['name'] != null) {
-                    return item['name'].toString();
-                }
-                if (item is String) {
-                    return item;
-                }
-                return null;
-            }).whereType<String>().toList();
+          final links = <ModuleLink>[];
+          for (var item in populated) {
+            if (item is Map<String, dynamic> && item['name'] != null) {
+              links.add(ModuleLink(id: item['_id'] ?? item['id'] ?? '', name: item['name']));
+            } else if (item is String) {
+               links.add(ModuleLink(id: '', name: item));
+            }
+          }
+          if (links.isNotEmpty) return links;
+        }
+
+        if (raw is List) {
+          return raw.map((item) => ModuleLink(id: '', name: item.toString())).toList();
         }
         return [];
     }
@@ -97,12 +98,12 @@ class Language {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawRaces: _listFromPopulatedOrRaw(json['races'], json['rawRaces']),
-            rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
-            rawCharacters: _listFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
-            rawLocations: _listFromPopulatedOrRaw(json['locations'], json['rawLocations']),
-            rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
-            rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawRaces: _linksFromPopulatedOrRaw(json['races'], json['rawRaces']),
+            rawFactions: _linksFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawCharacters: _linksFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawLocations: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawReligions: _linksFromPopulatedOrRaw(json['religions'], json['rawReligions']),
         );
     }
 }

@@ -255,14 +255,14 @@ class ReligionSyncService {
       'tagColor': religion.tagColor,
       'images': religion.images,
       
-      'rawCharacters': religion.rawCharacters,
-      'rawFactions': religion.rawFactions,
-      'rawLocations': religion.rawLocations,
-      'rawCreatures': religion.rawCreatures,
-      'rawEvents': religion.rawEvents,
-      'rawPowerSystems': religion.rawPowerSystems,
-      'rawStories': religion.rawStories,
-      'rawTechnologies': religion.rawTechnologies,
+      'rawCharacters': religion.rawCharacters.map((e) => e.name).toList(),
+      'rawFactions': religion.rawFactions.map((e) => e.name).toList(),
+      'rawLocations': religion.rawLocations.map((e) => e.name).toList(),
+      'rawCreatures': religion.rawCreatures.map((e) => e.name).toList(),
+      'rawEvents': religion.rawEvents.map((e) => e.name).toList(),
+      'rawPowerSystems': religion.rawPowerSystems.map((e) => e.name).toList(),
+      'rawStories': religion.rawStories.map((e) => e.name).toList(),
+      'rawTechnologies': religion.rawTechnologies.map((e) => e.name).toList(),
     };
   }
 }

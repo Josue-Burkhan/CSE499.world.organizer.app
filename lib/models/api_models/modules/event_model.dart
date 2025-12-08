@@ -1,3 +1,5 @@
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+
 class EventRelation {
   final String id;
   final String name;
@@ -27,16 +29,16 @@ class Event {
     final List<String> images;
     final String tagColor;
 
-    final List<String> rawCharacters;
-    final List<String> rawFactions;
-    final List<String> rawLocations;
-    final List<String> rawItems;
-    final List<String> rawAbilities;
-    final List<String> rawStories;
-    final List<String> rawPowerSystems;
-    final List<String> rawCreatures;
-    final List<String> rawReligions;
-    final List<String> rawTechnologies;
+    final List<ModuleLink> rawCharacters;
+    final List<ModuleLink> rawFactions;
+    final List<ModuleLink> rawLocations;
+    final List<ModuleLink> rawItems;
+    final List<ModuleLink> rawAbilities;
+    final List<ModuleLink> rawStories;
+    final List<ModuleLink> rawPowerSystems;
+    final List<ModuleLink> rawCreatures;
+    final List<ModuleLink> rawReligions;
+    final List<ModuleLink> rawTechnologies;
 
     Event({
         required this.id,
@@ -66,22 +68,19 @@ class Event {
         return [];
     }
 
-    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
         // Try raw first
         if (raw is List && raw.isNotEmpty) {
-            return List<String>.from(raw.map((item) => item.toString()));
+             return raw.map((item) => ModuleLink(id: '', name: item.toString())).toList();
         }
         // Fallback to populated if it contains objects with names
         if (populated is List) {
             return populated.map((item) {
-                if (item is Map<String, dynamic> && item['name'] != null) {
-                    return item['name'].toString();
-                }
-                if (item is String) {
-                    return item;
+                if (item is Map<String, dynamic>) {
+                    return ModuleLink.fromJson(item);
                 }
                 return null;
-            }).whereType<String>().toList();
+            }).whereType<ModuleLink>().toList();
         }
         return [];
     }
@@ -96,16 +95,16 @@ class Event {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawCharacters: _listFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
-            rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
-            rawLocations: _listFromPopulatedOrRaw(json['locations'], json['rawLocations']),
-            rawItems: _listFromPopulatedOrRaw(json['items'], json['rawItems']),
-            rawAbilities: _listFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
-            rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
-            rawPowerSystems: _listFromPopulatedOrRaw(json['powerSystems'], json['rawPowerSystems']),
-            rawCreatures: _listFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
-            rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
-            rawTechnologies: _listFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
+            rawCharacters: _linksFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawFactions: _linksFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawLocations: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawItems: _linksFromPopulatedOrRaw(json['items'], json['rawItems']),
+            rawAbilities: _linksFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
+            rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawPowerSystems: _linksFromPopulatedOrRaw(json['powerSystems'], json['rawPowerSystems']),
+            rawCreatures: _linksFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
+            rawReligions: _linksFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawTechnologies: _linksFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
         );
     }
 }

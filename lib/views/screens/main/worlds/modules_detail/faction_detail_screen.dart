@@ -4,6 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/models/api_models/modules/faction_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/location_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/event_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/item_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/language_detail_screen.dart';
 
 final factionDetailStreamProvider =
     StreamProvider.family.autoDispose<FactionEntity?, String>((ref, serverId) {
@@ -136,11 +146,12 @@ class FactionDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
+                        errorWidget: (context, error, stackTrace) => 
                           Container(color: tagColor.withOpacity(0.5)),
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
               ),
@@ -153,17 +164,17 @@ class FactionDetailScreen extends ConsumerWidget {
               _buildGoals(faction),
               _buildHistory(faction.history),
               _buildCustomNotes(faction.customNotes),
-              _buildRawList('Characters', faction.rawCharacters),
-              _buildRawList('Locations', faction.rawLocations),
-              _buildRawList('Headquarters', faction.rawHeadquarters),
-              _buildRawList('Territory', faction.rawTerritory),
-              _buildRawList('Events', faction.rawEvents),
-              _buildRawList('Items', faction.rawItems),
-              _buildRawList('Stories', faction.rawStories),
-              _buildRawList('Religions', faction.rawReligions),
-              _buildRawList('Technologies', faction.rawTechnologies),
-              _buildRawList('Languages', faction.rawLanguages),
-              _buildRawList('Power Systems', faction.rawPowerSystems),
+              _buildLinkList(context, 'Characters', faction.rawCharacters),
+              _buildLinkList(context, 'Locations', faction.rawLocations),
+              _buildLinkList(context, 'Headquarters', faction.rawHeadquarters),
+              _buildLinkList(context, 'Territory', faction.rawTerritory),
+              _buildLinkList(context, 'Events', faction.rawEvents),
+              _buildLinkList(context, 'Items', faction.rawItems),
+              _buildLinkList(context, 'Stories', faction.rawStories),
+              _buildLinkList(context, 'Religions', faction.rawReligions),
+              _buildLinkList(context, 'Technologies', faction.rawTechnologies),
+              _buildLinkList(context, 'Languages', faction.rawLanguages),
+              _buildLinkList(context, 'Power Systems', faction.rawPowerSystems),
             ]),
           ),
         ],
@@ -342,8 +353,8 @@ class FactionDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links) {
+    if (links.isEmpty) return const SizedBox.shrink();
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -354,17 +365,57 @@ class FactionDetailScreen extends ConsumerWidget {
           children: [
             Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            rawList.isEmpty 
-              ? const Text('No links')
-              : Wrap(
-                spacing: 8.0,
-                runSpacing: 4.0,
-                children: rawList.map((item) => Chip(label: Text(item))).toList(),
-              ),
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: link.id.isEmpty ? null : () => _navigateToModule(context, link, title),
+              )).toList(),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _navigateToModule(BuildContext context, ModuleLink link, String type) {
+    if (link.id.isEmpty) return;
+
+    Widget? screen;
+    switch (type) {
+      case 'Characters':
+        screen = CharacterDetailScreen(characterServerId: link.id);
+        break;
+      case 'Locations':
+      case 'Headquarters':
+      case 'Territory':
+        screen = LocationDetailScreen(locationServerId: link.id);
+        break;
+      case 'Events':
+        screen = EventDetailScreen(eventServerId: link.id);
+        break;
+      case 'Items':
+        screen = ItemDetailScreen(itemServerId: link.id);
+        break;
+      case 'Stories':
+        screen = StoryDetailScreen(storyServerId: link.id);
+        break;
+      case 'Religions':
+        screen = ReligionDetailScreen(religionServerId: link.id);
+        break;
+      case 'Technologies':
+        screen = TechnologyDetailScreen(technologyServerId: link.id);
+        break;
+      case 'Languages':
+        screen = LanguageDetailScreen(languageServerId: link.id);
+        break;
+        // Power Systems?
+    }
+
+    if (screen != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => screen!));
+    }
   }
 }
 
@@ -386,7 +437,7 @@ class FullScreenImageViewer extends StatelessWidget {
           panEnabled: true,
           minScale: 1.0,
           maxScale: 4.0,
-          child: Image.network(imageUrl),
+          child: CachedNetworkImage(imageUrl: imageUrl, placeholder: (c, u) => const CircularProgressIndicator(),),
         ),
       ),
     );

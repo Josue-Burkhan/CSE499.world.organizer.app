@@ -252,14 +252,14 @@ class TechnologySyncService {
       'tagColor': tech.tagColor,
       'images': tech.images,
       
-      'rawCreators': tech.rawCreators,
-      'rawCharacters': tech.rawCharacters,
-      'rawFactions': tech.rawFactions,
-      'rawItems': tech.rawItems,
-      'rawEvents': tech.rawEvents,
-      'rawStories': tech.rawStories,
-      'rawLocations': tech.rawLocations,
-      'rawPowerSystems': tech.rawPowerSystems,
+      'rawCreators': tech.rawCreators.map((e) => e.name).toList(),
+      'rawCharacters': tech.rawCharacters.map((e) => e.name).toList(),
+      'rawFactions': tech.rawFactions.map((e) => e.name).toList(),
+      'rawItems': tech.rawItems.map((e) => e.name).toList(),
+      'rawEvents': tech.rawEvents.map((e) => e.name).toList(),
+      'rawStories': tech.rawStories.map((e) => e.name).toList(),
+      'rawLocations': tech.rawLocations.map((e) => e.name).toList(),
+      'rawPowerSystems': tech.rawPowerSystems.map((e) => e.name).toList(),
     };
   }
 }

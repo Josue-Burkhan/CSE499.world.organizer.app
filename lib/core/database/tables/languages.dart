@@ -2,6 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../app_database.dart';
 import 'worlds.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import '../converters/module_link_list_converter.dart';
 import '../converters/list_string_converter.dart';
 
 @DataClassName('LanguageEntity')
@@ -22,12 +24,12 @@ class Languages extends Table {
   
   TextColumn get images => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   
-  TextColumn get rawRaces => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawFactions => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawCharacters => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawLocations => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawStories => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawReligions => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawRaces => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawFactions => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawCharacters => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawLocations => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawStories => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawReligions => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
 
   @override
   Set<Column> get primaryKey => {localId};

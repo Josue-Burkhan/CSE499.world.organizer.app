@@ -1,3 +1,5 @@
+import '../module_link.dart';
+
 class PowerSystemRelation {
   final String id;
   final String name;
@@ -31,14 +33,14 @@ class PowerSystem {
     final List<String> images;
     final String tagColor;
 
-    final List<String> rawCharacters;
-    final List<String> rawAbilities;
-    final List<String> rawFactions;
-    final List<String> rawEvents;
-    final List<String> rawStories;
-    final List<String> rawCreatures;
-    final List<String> rawReligions;
-    final List<String> rawTechnologies;
+    final List<ModuleLink> rawCharacters;
+    final List<ModuleLink> rawAbilities;
+    final List<ModuleLink> rawFactions;
+    final List<ModuleLink> rawEvents;
+    final List<ModuleLink> rawStories;
+    final List<ModuleLink> rawCreatures;
+    final List<ModuleLink> rawReligions;
+    final List<ModuleLink> rawTechnologies;
 
     PowerSystem({
         required this.id,
@@ -70,22 +72,21 @@ class PowerSystem {
         return [];
     }
 
-    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
-        // Try raw first
-        if (raw is List && raw.isNotEmpty) {
-            return List<String>.from(raw.map((item) => item.toString()));
-        }
-        // Fallback to populated if it contains objects with names
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
         if (populated is List) {
-            return populated.map((item) {
-                if (item is Map<String, dynamic> && item['name'] != null) {
-                    return item['name'].toString();
-                }
-                if (item is String) {
-                    return item;
-                }
-                return null;
-            }).whereType<String>().toList();
+          final links = <ModuleLink>[];
+          for (var item in populated) {
+            if (item is Map<String, dynamic> && item['name'] != null) {
+              links.add(ModuleLink(id: item['_id'] ?? item['id'] ?? '', name: item['name']));
+            } else if (item is String) {
+               links.add(ModuleLink(id: '', name: item));
+            }
+          }
+          if (links.isNotEmpty) return links;
+        }
+
+        if (raw is List) {
+          return raw.map((item) => ModuleLink(id: '', name: item.toString())).toList();
         }
         return [];
     }
@@ -104,14 +105,14 @@ class PowerSystem {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawCharacters: _listFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
-            rawAbilities: _listFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
-            rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
-            rawEvents: _listFromPopulatedOrRaw(json['events'], json['rawEvents']),
-            rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
-            rawCreatures: _listFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
-            rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
-            rawTechnologies: _listFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
+            rawCharacters: _linksFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawAbilities: _linksFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
+            rawFactions: _linksFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawEvents: _linksFromPopulatedOrRaw(json['events'], json['rawEvents']),
+            rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawCreatures: _linksFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
+            rawReligions: _linksFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawTechnologies: _linksFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
         );
     }
 }

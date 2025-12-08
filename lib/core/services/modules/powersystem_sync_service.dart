@@ -249,14 +249,14 @@ class PowerSystemSyncService {
       'tagColor': ps.tagColor,
       'images': ps.images,
       
-      'rawCharacters': ps.rawCharacters,
-      'rawAbilities': ps.rawAbilities,
-      'rawFactions': ps.rawFactions,
-      'rawEvents': ps.rawEvents,
-      'rawStories': ps.rawStories,
-      'rawCreatures': ps.rawCreatures,
-      'rawReligions': ps.rawReligions,
-      'rawTechnologies': ps.rawTechnologies,
+      'rawCharacters': ps.rawCharacters.map((e) => e.name).toList(),
+      'rawAbilities': ps.rawAbilities.map((e) => e.name).toList(),
+      'rawFactions': ps.rawFactions.map((e) => e.name).toList(),
+      'rawEvents': ps.rawEvents.map((e) => e.name).toList(),
+      'rawStories': ps.rawStories.map((e) => e.name).toList(),
+      'rawCreatures': ps.rawCreatures.map((e) => e.name).toList(),
+      'rawReligions': ps.rawReligions.map((e) => e.name).toList(),
+      'rawTechnologies': ps.rawTechnologies.map((e) => e.name).toList(),
     };
   }
 }

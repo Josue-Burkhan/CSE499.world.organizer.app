@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/models/api_models/modules/event_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/faction_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/location_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/item_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/ability_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/creature_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
 
 final eventDetailStreamProvider =
     StreamProvider.family.autoDispose<EventEntity?, String>((ref, serverId) {
@@ -119,11 +131,12 @@ class EventDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
+                        errorWidget: (context, error, stackTrace) => 
                           Container(color: tagColor.withOpacity(0.5)),
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
               ),
@@ -134,16 +147,16 @@ class EventDetailScreen extends ConsumerWidget {
               _buildBasicInfo(event),
               _buildDescription(event),
               _buildCustomNotes(event),
-              _buildRawList('Characters', event.rawCharacters),
-              _buildRawList('Factions', event.rawFactions),
-              _buildRawList('Locations', event.rawLocations),
-              _buildRawList('Items', event.rawItems),
-              _buildRawList('Abilities', event.rawAbilities),
-              _buildRawList('Stories', event.rawStories),
-              _buildRawList('Power Systems', event.rawPowerSystems),
-              _buildRawList('Creatures', event.rawCreatures),
-              _buildRawList('Religions', event.rawReligions),
-              _buildRawList('Technologies', event.rawTechnologies),
+              _buildLinkList(context, 'Characters', event.rawCharacters),
+              _buildLinkList(context, 'Factions', event.rawFactions),
+              _buildLinkList(context, 'Locations', event.rawLocations),
+              _buildLinkList(context, 'Items', event.rawItems),
+              _buildLinkList(context, 'Abilities', event.rawAbilities),
+              _buildLinkList(context, 'Stories', event.rawStories),
+              _buildLinkList(context, 'Power Systems', event.rawPowerSystems),
+              _buildLinkList(context, 'Creatures', event.rawCreatures),
+              _buildLinkList(context, 'Religions', event.rawReligions),
+              _buildLinkList(context, 'Technologies', event.rawTechnologies),
             ]),
           ),
         ],
@@ -200,8 +213,8 @@ class EventDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links) {
+    if (links.isEmpty) return const SizedBox.shrink();
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -215,12 +228,56 @@ class EventDetailScreen extends ConsumerWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: rawList.map((item) => Chip(label: Text(item))).toList(),
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: link.id.isEmpty ? null : () => _navigateToModule(context, link, title),
+              )).toList(),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _navigateToModule(BuildContext context, ModuleLink link, String type) {
+    if (link.id.isEmpty) return;
+
+    Widget? screen;
+    switch (type) {
+      case 'Characters':
+        screen = CharacterDetailScreen(characterServerId: link.id);
+        break;
+      case 'Factions':
+        screen = FactionDetailScreen(factionServerId: link.id);
+        break;
+      case 'Locations':
+        screen = LocationDetailScreen(locationServerId: link.id);
+        break;
+      case 'Items':
+        screen = ItemDetailScreen(itemServerId: link.id);
+        break;
+      case 'Abilities':
+        screen = AbilityDetailScreen(abilityServerId: link.id);
+        break;
+      case 'Stories':
+        screen = StoryDetailScreen(storyServerId: link.id);
+        break;
+        // Need to check if PowerSystemDetailScreen exists? 
+        // Assuming patterns. If not, default to nothing.
+      case 'Creatures':
+          screen = CreatureDetailScreen(creatureServerId: link.id);
+          break;
+      case 'Religions':
+          screen = ReligionDetailScreen(religionServerId: link.id);
+          break;
+      case 'Technologies':
+          screen = TechnologyDetailScreen(technologyServerId: link.id);
+          break;
+    }
+
+    if (screen != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => screen!));
+    }
   }
 }
 
@@ -242,7 +299,7 @@ class FullScreenImageViewer extends StatelessWidget {
           panEnabled: true,
           minScale: 1.0,
           maxScale: 4.0,
-          child: Image.network(imageUrl),
+          child: CachedNetworkImage(imageUrl: imageUrl, placeholder: (c, u) => const CircularProgressIndicator(),),
         ),
       ),
     );

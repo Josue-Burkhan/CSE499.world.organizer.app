@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/event_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/faction_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/location_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/ability_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/creature_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/powersystem_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/language_detail_screen.dart';
 
 final itemDetailStreamProvider =
     StreamProvider.family.autoDispose<ItemEntity?, String>((ref, serverId) {
@@ -119,10 +132,11 @@ class ItemDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
+                        errorWidget: (context, url, error) => 
                           Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
@@ -138,18 +152,18 @@ class ItemDetailScreen extends ConsumerWidget {
               _buildRawList('Technological Features', item.technologicalFeatures),
               _buildRawList('Custom Effects', item.customEffects),
               _buildCustomNotes(item),
-              _buildRawList('Created By', item.rawCreatedBy),
-              _buildRawList('Used By', item.rawUsedBy),
-              _buildRawList('Current Owner', item.rawCurrentOwnerCharacter),
-              _buildRawList('Factions', item.rawFactions),
-              _buildRawList('Events', item.rawEvents),
-              _buildRawList('Stories', item.rawStories),
-              _buildRawList('Locations', item.rawLocations),
-              _buildRawList('Religions', item.rawReligions),
-              _buildRawList('Technologies', item.rawTechnologies),
-              _buildRawList('Power Systems', item.rawPowerSystems),
-              _buildRawList('Languages', item.rawLanguages),
-              _buildRawList('Abilities', item.rawAbilities),
+              _buildLinkList(context, 'Created By', item.rawCreatedBy),
+              _buildLinkList(context, 'Used By', item.rawUsedBy),
+              _buildLinkList(context, 'Current Owner', item.rawCurrentOwnerCharacter),
+              _buildLinkList(context, 'Factions', item.rawFactions),
+              _buildLinkList(context, 'Events', item.rawEvents),
+              _buildLinkList(context, 'Stories', item.rawStories),
+              _buildLinkList(context, 'Locations', item.rawLocations),
+              _buildLinkList(context, 'Religions', item.rawReligions),
+              _buildLinkList(context, 'Technologies', item.rawTechnologies),
+              _buildLinkList(context, 'Power Systems', item.rawPowerSystems),
+              _buildLinkList(context, 'Languages', item.rawLanguages),
+              _buildLinkList(context, 'Abilities', item.rawAbilities),
             ]),
           ),
         ],
@@ -273,6 +287,68 @@ class ItemDetailScreen extends ConsumerWidget {
               spacing: 8.0,
               runSpacing: 4.0,
               children: rawList.map((item) => Chip(label: Text(item))).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  
+  // Revised _buildLinkList to accept type
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links) {
+    if (links.isEmpty) return const SizedBox.shrink();
+
+    String type = '';
+    if (title == 'Created By' || title == 'Used By' || title == 'Current Owner') type = 'character';
+    else if (title == 'Factions') type = 'faction';
+    else if (title == 'Events') type = 'event';
+    else if (title == 'Stories') type = 'story';
+    else if (title == 'Locations') type = 'location';
+    else if (title == 'Religions') type = 'religion';
+    else if (title == 'Technologies') type = 'technology';
+    else if (title == 'Power Systems') type = 'powersystem';
+    else if (title == 'Languages') type = 'language';
+    else if (title == 'Abilities') type = 'ability';
+
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8.0),
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: () {
+                   if (link.id.isEmpty) return;
+                   
+                   Widget? page;
+                   switch (type) {
+                     case 'character': page = CharacterDetailScreen(characterServerId: link.id); break;
+                     case 'faction': page = FactionDetailScreen(factionServerId: link.id); break;
+                     case 'event': page = EventDetailScreen(eventServerId: link.id); break;
+                     case 'location': page = LocationDetailScreen(locationServerId: link.id); break;
+                     case 'story': page = StoryDetailScreen(storyServerId: link.id); break;
+                     case 'ability': page = AbilityDetailScreen(abilityServerId: link.id); break;
+                     case 'creature': page = CreatureDetailScreen(creatureServerId: link.id); break;
+                     case 'technology': page = TechnologyDetailScreen(technologyServerId: link.id); break;
+                     case 'religion': page = ReligionDetailScreen(religionServerId: link.id); break;
+                     case 'powersystem': page = PowerSystemDetailScreen(powerSystemServerId: link.id); break;
+                     case 'language': page = LanguageDetailScreen(languageServerId: link.id); break;
+                   }
+                   
+                   if (page != null) {
+                     Navigator.of(context).push(MaterialPageRoute(builder: (_) => page!));
+                   }
+                },
+              )).toList(),
             ),
           ],
         ),

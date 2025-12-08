@@ -249,14 +249,14 @@ class RaceSyncService {
       'tagColor': race.tagColor,
       'images': race.images,
       
-      'rawLanguages': race.rawLanguages,
-      'rawCharacters': race.rawCharacters,
-      'rawLocations': race.rawLocations,
-      'rawReligions': race.rawReligions,
-      'rawStories': race.rawStories,
-      'rawEvents': race.rawEvents,
-      'rawPowerSystems': race.rawPowerSystems,
-      'rawTechnologies': race.rawTechnologies,
+      'rawLanguages': race.rawLanguages.map((e) => e.name).toList(),
+      'rawCharacters': race.rawCharacters.map((e) => e.name).toList(),
+      'rawLocations': race.rawLocations.map((e) => e.name).toList(),
+      'rawReligions': race.rawReligions.map((e) => e.name).toList(),
+      'rawStories': race.rawStories.map((e) => e.name).toList(),
+      'rawEvents': race.rawEvents.map((e) => e.name).toList(),
+      'rawPowerSystems': race.rawPowerSystems.map((e) => e.name).toList(),
+      'rawTechnologies': race.rawTechnologies.map((e) => e.name).toList(),
     };
   }
 }

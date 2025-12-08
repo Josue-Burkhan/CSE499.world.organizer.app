@@ -5736,7 +5736,7 @@ class $EconomiesTable extends Economies
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($EconomiesTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -5744,9 +5744,9 @@ class $EconomiesTable extends Economies
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EconomiesTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($EconomiesTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawFactions = GeneratedColumn<String>(
     'raw_factions',
     aliasedName,
@@ -5754,9 +5754,9 @@ class $EconomiesTable extends Economies
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EconomiesTable.$converterrawFactions);
+  ).withConverter<List<ModuleLink>>($EconomiesTable.$converterrawFactions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -5764,37 +5764,37 @@ class $EconomiesTable extends Economies
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EconomiesTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($EconomiesTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawItems =
-      GeneratedColumn<String>(
-        'raw_items',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($EconomiesTable.$converterrawItems);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawItems = GeneratedColumn<String>(
+    'raw_items',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($EconomiesTable.$converterrawItems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawRaces =
-      GeneratedColumn<String>(
-        'raw_races',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($EconomiesTable.$converterrawRaces);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawRaces = GeneratedColumn<String>(
+    'raw_races',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($EconomiesTable.$converterrawRaces);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($EconomiesTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($EconomiesTable.$converterrawStories);
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -6011,18 +6011,18 @@ class $EconomiesTable extends Economies
       const ListStringConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawFactions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawItems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawRaces =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawFactions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawItems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawRaces =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
 }
 
 class EconomyEntity extends DataClass implements Insertable<EconomyEntity> {
@@ -6038,12 +6038,12 @@ class EconomyEntity extends DataClass implements Insertable<EconomyEntity> {
   final String economicSystem;
   final String tagColor;
   final List<String> images;
-  final List<String> rawCharacters;
-  final List<String> rawFactions;
-  final List<String> rawLocations;
-  final List<String> rawItems;
-  final List<String> rawRaces;
-  final List<String> rawStories;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawItems;
+  final List<ModuleLink> rawRaces;
+  final List<ModuleLink> rawStories;
   const EconomyEntity({
     required this.localId,
     this.serverId,
@@ -6181,12 +6181,14 @@ class EconomyEntity extends DataClass implements Insertable<EconomyEntity> {
       economicSystem: serializer.fromJson<String>(json['economicSystem']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawItems: serializer.fromJson<List<String>>(json['rawItems']),
-      rawRaces: serializer.fromJson<List<String>>(json['rawRaces']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawFactions: serializer.fromJson<List<ModuleLink>>(json['rawFactions']),
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawItems: serializer.fromJson<List<ModuleLink>>(json['rawItems']),
+      rawRaces: serializer.fromJson<List<ModuleLink>>(json['rawRaces']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
     );
   }
   @override
@@ -6205,12 +6207,12 @@ class EconomyEntity extends DataClass implements Insertable<EconomyEntity> {
       'economicSystem': serializer.toJson<String>(economicSystem),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawFactions': serializer.toJson<List<String>>(rawFactions),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawItems': serializer.toJson<List<String>>(rawItems),
-      'rawRaces': serializer.toJson<List<String>>(rawRaces),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawFactions': serializer.toJson<List<ModuleLink>>(rawFactions),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawItems': serializer.toJson<List<ModuleLink>>(rawItems),
+      'rawRaces': serializer.toJson<List<ModuleLink>>(rawRaces),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
     };
   }
 
@@ -6227,12 +6229,12 @@ class EconomyEntity extends DataClass implements Insertable<EconomyEntity> {
     String? economicSystem,
     String? tagColor,
     List<String>? images,
-    List<String>? rawCharacters,
-    List<String>? rawFactions,
-    List<String>? rawLocations,
-    List<String>? rawItems,
-    List<String>? rawRaces,
-    List<String>? rawStories,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawFactions,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawItems,
+    List<ModuleLink>? rawRaces,
+    List<ModuleLink>? rawStories,
   }) => EconomyEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -6381,12 +6383,12 @@ class EconomiesCompanion extends UpdateCompanion<EconomyEntity> {
   final Value<String> economicSystem;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawFactions;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawItems;
-  final Value<List<String>> rawRaces;
-  final Value<List<String>> rawStories;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawFactions;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawItems;
+  final Value<List<ModuleLink>> rawRaces;
+  final Value<List<ModuleLink>> rawStories;
   final Value<int> rowid;
   const EconomiesCompanion({
     this.localId = const Value.absent(),
@@ -6489,12 +6491,12 @@ class EconomiesCompanion extends UpdateCompanion<EconomyEntity> {
     Value<String>? economicSystem,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawFactions,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawItems,
-    Value<List<String>>? rawRaces,
-    Value<List<String>>? rawStories,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawFactions,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawItems,
+    Value<List<ModuleLink>>? rawRaces,
+    Value<List<ModuleLink>>? rawStories,
     Value<int>? rowid,
   }) {
     return EconomiesCompanion(
@@ -6745,7 +6747,7 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($EventsTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -6753,9 +6755,9 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EventsTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawFactions = GeneratedColumn<String>(
     'raw_factions',
     aliasedName,
@@ -6763,9 +6765,9 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EventsTable.$converterrawFactions);
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawFactions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -6773,19 +6775,19 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EventsTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawItems =
-      GeneratedColumn<String>(
-        'raw_items',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($EventsTable.$converterrawItems);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawItems = GeneratedColumn<String>(
+    'raw_items',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawItems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawAbilities = GeneratedColumn<String>(
     'raw_abilities',
     aliasedName,
@@ -6793,19 +6795,19 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EventsTable.$converterrawAbilities);
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawAbilities);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($EventsTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawPowerSystems = GeneratedColumn<String>(
     'raw_power_systems',
     aliasedName,
@@ -6813,9 +6815,9 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EventsTable.$converterrawPowerSystems);
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawPowerSystems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCreatures = GeneratedColumn<String>(
     'raw_creatures',
     aliasedName,
@@ -6823,9 +6825,9 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EventsTable.$converterrawCreatures);
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawCreatures);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawReligions = GeneratedColumn<String>(
     'raw_religions',
     aliasedName,
@@ -6833,9 +6835,9 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EventsTable.$converterrawReligions);
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawReligions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawTechnologies = GeneratedColumn<String>(
     'raw_technologies',
     aliasedName,
@@ -6843,7 +6845,7 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($EventsTable.$converterrawTechnologies);
+  ).withConverter<List<ModuleLink>>($EventsTable.$converterrawTechnologies);
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -7065,26 +7067,26 @@ class $EventsTable extends Events with TableInfo<$EventsTable, EventEntity> {
       const SyncStatusConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawFactions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawItems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawAbilities =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawPowerSystems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCreatures =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawReligions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawTechnologies =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawFactions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawItems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawAbilities =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawPowerSystems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCreatures =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawReligions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawTechnologies =
+      const ModuleLinkListConverter();
 }
 
 class EventEntity extends DataClass implements Insertable<EventEntity> {
@@ -7098,16 +7100,16 @@ class EventEntity extends DataClass implements Insertable<EventEntity> {
   final String? customNotes;
   final String tagColor;
   final List<String> images;
-  final List<String> rawCharacters;
-  final List<String> rawFactions;
-  final List<String> rawLocations;
-  final List<String> rawItems;
-  final List<String> rawAbilities;
-  final List<String> rawStories;
-  final List<String> rawPowerSystems;
-  final List<String> rawCreatures;
-  final List<String> rawReligions;
-  final List<String> rawTechnologies;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawItems;
+  final List<ModuleLink> rawAbilities;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawPowerSystems;
+  final List<ModuleLink> rawCreatures;
+  final List<ModuleLink> rawReligions;
+  final List<ModuleLink> rawTechnologies;
   const EventEntity({
     required this.localId,
     this.serverId,
@@ -7259,18 +7261,20 @@ class EventEntity extends DataClass implements Insertable<EventEntity> {
       customNotes: serializer.fromJson<String?>(json['customNotes']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawItems: serializer.fromJson<List<String>>(json['rawItems']),
-      rawAbilities: serializer.fromJson<List<String>>(json['rawAbilities']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawPowerSystems: serializer.fromJson<List<String>>(
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawFactions: serializer.fromJson<List<ModuleLink>>(json['rawFactions']),
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawItems: serializer.fromJson<List<ModuleLink>>(json['rawItems']),
+      rawAbilities: serializer.fromJson<List<ModuleLink>>(json['rawAbilities']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawPowerSystems: serializer.fromJson<List<ModuleLink>>(
         json['rawPowerSystems'],
       ),
-      rawCreatures: serializer.fromJson<List<String>>(json['rawCreatures']),
-      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
-      rawTechnologies: serializer.fromJson<List<String>>(
+      rawCreatures: serializer.fromJson<List<ModuleLink>>(json['rawCreatures']),
+      rawReligions: serializer.fromJson<List<ModuleLink>>(json['rawReligions']),
+      rawTechnologies: serializer.fromJson<List<ModuleLink>>(
         json['rawTechnologies'],
       ),
     );
@@ -7289,16 +7293,16 @@ class EventEntity extends DataClass implements Insertable<EventEntity> {
       'customNotes': serializer.toJson<String?>(customNotes),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawFactions': serializer.toJson<List<String>>(rawFactions),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawItems': serializer.toJson<List<String>>(rawItems),
-      'rawAbilities': serializer.toJson<List<String>>(rawAbilities),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
-      'rawCreatures': serializer.toJson<List<String>>(rawCreatures),
-      'rawReligions': serializer.toJson<List<String>>(rawReligions),
-      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawFactions': serializer.toJson<List<ModuleLink>>(rawFactions),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawItems': serializer.toJson<List<ModuleLink>>(rawItems),
+      'rawAbilities': serializer.toJson<List<ModuleLink>>(rawAbilities),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawPowerSystems': serializer.toJson<List<ModuleLink>>(rawPowerSystems),
+      'rawCreatures': serializer.toJson<List<ModuleLink>>(rawCreatures),
+      'rawReligions': serializer.toJson<List<ModuleLink>>(rawReligions),
+      'rawTechnologies': serializer.toJson<List<ModuleLink>>(rawTechnologies),
     };
   }
 
@@ -7313,16 +7317,16 @@ class EventEntity extends DataClass implements Insertable<EventEntity> {
     Value<String?> customNotes = const Value.absent(),
     String? tagColor,
     List<String>? images,
-    List<String>? rawCharacters,
-    List<String>? rawFactions,
-    List<String>? rawLocations,
-    List<String>? rawItems,
-    List<String>? rawAbilities,
-    List<String>? rawStories,
-    List<String>? rawPowerSystems,
-    List<String>? rawCreatures,
-    List<String>? rawReligions,
-    List<String>? rawTechnologies,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawFactions,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawItems,
+    List<ModuleLink>? rawAbilities,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawPowerSystems,
+    List<ModuleLink>? rawCreatures,
+    List<ModuleLink>? rawReligions,
+    List<ModuleLink>? rawTechnologies,
   }) => EventEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -7483,16 +7487,16 @@ class EventsCompanion extends UpdateCompanion<EventEntity> {
   final Value<String?> customNotes;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawFactions;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawItems;
-  final Value<List<String>> rawAbilities;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawPowerSystems;
-  final Value<List<String>> rawCreatures;
-  final Value<List<String>> rawReligions;
-  final Value<List<String>> rawTechnologies;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawFactions;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawItems;
+  final Value<List<ModuleLink>> rawAbilities;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawPowerSystems;
+  final Value<List<ModuleLink>> rawCreatures;
+  final Value<List<ModuleLink>> rawReligions;
+  final Value<List<ModuleLink>> rawTechnologies;
   final Value<int> rowid;
   const EventsCompanion({
     this.localId = const Value.absent(),
@@ -7600,16 +7604,16 @@ class EventsCompanion extends UpdateCompanion<EventEntity> {
     Value<String?>? customNotes,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawFactions,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawItems,
-    Value<List<String>>? rawAbilities,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawPowerSystems,
-    Value<List<String>>? rawCreatures,
-    Value<List<String>>? rawReligions,
-    Value<List<String>>? rawTechnologies,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawFactions,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawItems,
+    Value<List<ModuleLink>>? rawAbilities,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawPowerSystems,
+    Value<List<ModuleLink>>? rawCreatures,
+    Value<List<ModuleLink>>? rawReligions,
+    Value<List<ModuleLink>>? rawTechnologies,
     Value<int>? rowid,
   }) {
     return EventsCompanion(
@@ -7969,7 +7973,7 @@ class $FactionsTable extends Factions
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($FactionsTable.$converterrawEnemies);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -7977,9 +7981,9 @@ class $FactionsTable extends Factions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($FactionsTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -7987,9 +7991,9 @@ class $FactionsTable extends Factions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($FactionsTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawHeadquarters = GeneratedColumn<String>(
     'raw_headquarters',
     aliasedName,
@@ -7997,9 +8001,9 @@ class $FactionsTable extends Factions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($FactionsTable.$converterrawHeadquarters);
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawHeadquarters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawTerritory = GeneratedColumn<String>(
     'raw_territory',
     aliasedName,
@@ -8007,39 +8011,39 @@ class $FactionsTable extends Factions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($FactionsTable.$converterrawTerritory);
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawTerritory);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEvents =
-      GeneratedColumn<String>(
-        'raw_events',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($FactionsTable.$converterrawEvents);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawEvents = GeneratedColumn<String>(
+    'raw_events',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawEvents);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawItems =
-      GeneratedColumn<String>(
-        'raw_items',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($FactionsTable.$converterrawItems);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawItems = GeneratedColumn<String>(
+    'raw_items',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawItems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($FactionsTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawReligions = GeneratedColumn<String>(
     'raw_religions',
     aliasedName,
@@ -8047,9 +8051,9 @@ class $FactionsTable extends Factions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($FactionsTable.$converterrawReligions);
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawReligions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawTechnologies = GeneratedColumn<String>(
     'raw_technologies',
     aliasedName,
@@ -8057,9 +8061,9 @@ class $FactionsTable extends Factions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($FactionsTable.$converterrawTechnologies);
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawTechnologies);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLanguages = GeneratedColumn<String>(
     'raw_languages',
     aliasedName,
@@ -8067,9 +8071,9 @@ class $FactionsTable extends Factions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($FactionsTable.$converterrawLanguages);
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawLanguages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawPowerSystems = GeneratedColumn<String>(
     'raw_power_systems',
     aliasedName,
@@ -8077,7 +8081,7 @@ class $FactionsTable extends Factions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($FactionsTable.$converterrawPowerSystems);
+  ).withConverter<List<ModuleLink>>($FactionsTable.$converterrawPowerSystems);
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -8405,28 +8409,28 @@ class $FactionsTable extends Factions
       const ListStringConverter();
   static TypeConverter<List<String>, String> $converterrawEnemies =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawHeadquarters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawTerritory =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawEvents =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawItems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawReligions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawTechnologies =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLanguages =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawPowerSystems =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawHeadquarters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawTerritory =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawEvents =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawItems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawReligions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawTechnologies =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLanguages =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawPowerSystems =
+      const ModuleLinkListConverter();
 }
 
 class FactionEntity extends DataClass implements Insertable<FactionEntity> {
@@ -8449,17 +8453,17 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
   final String? enemiesJson;
   final List<String> rawAllies;
   final List<String> rawEnemies;
-  final List<String> rawCharacters;
-  final List<String> rawLocations;
-  final List<String> rawHeadquarters;
-  final List<String> rawTerritory;
-  final List<String> rawEvents;
-  final List<String> rawItems;
-  final List<String> rawStories;
-  final List<String> rawReligions;
-  final List<String> rawTechnologies;
-  final List<String> rawLanguages;
-  final List<String> rawPowerSystems;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawHeadquarters;
+  final List<ModuleLink> rawTerritory;
+  final List<ModuleLink> rawEvents;
+  final List<ModuleLink> rawItems;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawReligions;
+  final List<ModuleLink> rawTechnologies;
+  final List<ModuleLink> rawLanguages;
+  final List<ModuleLink> rawPowerSystems;
   const FactionEntity({
     required this.localId,
     this.serverId,
@@ -8690,21 +8694,23 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
       enemiesJson: serializer.fromJson<String?>(json['enemiesJson']),
       rawAllies: serializer.fromJson<List<String>>(json['rawAllies']),
       rawEnemies: serializer.fromJson<List<String>>(json['rawEnemies']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawHeadquarters: serializer.fromJson<List<String>>(
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawHeadquarters: serializer.fromJson<List<ModuleLink>>(
         json['rawHeadquarters'],
       ),
-      rawTerritory: serializer.fromJson<List<String>>(json['rawTerritory']),
-      rawEvents: serializer.fromJson<List<String>>(json['rawEvents']),
-      rawItems: serializer.fromJson<List<String>>(json['rawItems']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
-      rawTechnologies: serializer.fromJson<List<String>>(
+      rawTerritory: serializer.fromJson<List<ModuleLink>>(json['rawTerritory']),
+      rawEvents: serializer.fromJson<List<ModuleLink>>(json['rawEvents']),
+      rawItems: serializer.fromJson<List<ModuleLink>>(json['rawItems']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawReligions: serializer.fromJson<List<ModuleLink>>(json['rawReligions']),
+      rawTechnologies: serializer.fromJson<List<ModuleLink>>(
         json['rawTechnologies'],
       ),
-      rawLanguages: serializer.fromJson<List<String>>(json['rawLanguages']),
-      rawPowerSystems: serializer.fromJson<List<String>>(
+      rawLanguages: serializer.fromJson<List<ModuleLink>>(json['rawLanguages']),
+      rawPowerSystems: serializer.fromJson<List<ModuleLink>>(
         json['rawPowerSystems'],
       ),
     );
@@ -8732,17 +8738,17 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
       'enemiesJson': serializer.toJson<String?>(enemiesJson),
       'rawAllies': serializer.toJson<List<String>>(rawAllies),
       'rawEnemies': serializer.toJson<List<String>>(rawEnemies),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawHeadquarters': serializer.toJson<List<String>>(rawHeadquarters),
-      'rawTerritory': serializer.toJson<List<String>>(rawTerritory),
-      'rawEvents': serializer.toJson<List<String>>(rawEvents),
-      'rawItems': serializer.toJson<List<String>>(rawItems),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawReligions': serializer.toJson<List<String>>(rawReligions),
-      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
-      'rawLanguages': serializer.toJson<List<String>>(rawLanguages),
-      'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawHeadquarters': serializer.toJson<List<ModuleLink>>(rawHeadquarters),
+      'rawTerritory': serializer.toJson<List<ModuleLink>>(rawTerritory),
+      'rawEvents': serializer.toJson<List<ModuleLink>>(rawEvents),
+      'rawItems': serializer.toJson<List<ModuleLink>>(rawItems),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawReligions': serializer.toJson<List<ModuleLink>>(rawReligions),
+      'rawTechnologies': serializer.toJson<List<ModuleLink>>(rawTechnologies),
+      'rawLanguages': serializer.toJson<List<ModuleLink>>(rawLanguages),
+      'rawPowerSystems': serializer.toJson<List<ModuleLink>>(rawPowerSystems),
     };
   }
 
@@ -8766,17 +8772,17 @@ class FactionEntity extends DataClass implements Insertable<FactionEntity> {
     Value<String?> enemiesJson = const Value.absent(),
     List<String>? rawAllies,
     List<String>? rawEnemies,
-    List<String>? rawCharacters,
-    List<String>? rawLocations,
-    List<String>? rawHeadquarters,
-    List<String>? rawTerritory,
-    List<String>? rawEvents,
-    List<String>? rawItems,
-    List<String>? rawStories,
-    List<String>? rawReligions,
-    List<String>? rawTechnologies,
-    List<String>? rawLanguages,
-    List<String>? rawPowerSystems,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawHeadquarters,
+    List<ModuleLink>? rawTerritory,
+    List<ModuleLink>? rawEvents,
+    List<ModuleLink>? rawItems,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawReligions,
+    List<ModuleLink>? rawTechnologies,
+    List<ModuleLink>? rawLanguages,
+    List<ModuleLink>? rawPowerSystems,
   }) => FactionEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -9008,17 +9014,17 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
   final Value<String?> enemiesJson;
   final Value<List<String>> rawAllies;
   final Value<List<String>> rawEnemies;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawHeadquarters;
-  final Value<List<String>> rawTerritory;
-  final Value<List<String>> rawEvents;
-  final Value<List<String>> rawItems;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawReligions;
-  final Value<List<String>> rawTechnologies;
-  final Value<List<String>> rawLanguages;
-  final Value<List<String>> rawPowerSystems;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawHeadquarters;
+  final Value<List<ModuleLink>> rawTerritory;
+  final Value<List<ModuleLink>> rawEvents;
+  final Value<List<ModuleLink>> rawItems;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawReligions;
+  final Value<List<ModuleLink>> rawTechnologies;
+  final Value<List<ModuleLink>> rawLanguages;
+  final Value<List<ModuleLink>> rawPowerSystems;
   final Value<int> rowid;
   const FactionsCompanion({
     this.localId = const Value.absent(),
@@ -9175,17 +9181,17 @@ class FactionsCompanion extends UpdateCompanion<FactionEntity> {
     Value<String?>? enemiesJson,
     Value<List<String>>? rawAllies,
     Value<List<String>>? rawEnemies,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawHeadquarters,
-    Value<List<String>>? rawTerritory,
-    Value<List<String>>? rawEvents,
-    Value<List<String>>? rawItems,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawReligions,
-    Value<List<String>>? rawTechnologies,
-    Value<List<String>>? rawLanguages,
-    Value<List<String>>? rawPowerSystems,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawHeadquarters,
+    Value<List<ModuleLink>>? rawTerritory,
+    Value<List<ModuleLink>>? rawEvents,
+    Value<List<ModuleLink>>? rawItems,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawReligions,
+    Value<List<ModuleLink>>? rawTechnologies,
+    Value<List<ModuleLink>>? rawLanguages,
+    Value<List<ModuleLink>>? rawPowerSystems,
     Value<int>? rowid,
   }) {
     return FactionsCompanion(
@@ -9615,7 +9621,7 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($ItemsTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCreatedBy = GeneratedColumn<String>(
     'raw_created_by',
     aliasedName,
@@ -9623,29 +9629,32 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawCreatedBy);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawCreatedBy);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawUsedBy =
-      GeneratedColumn<String>(
-        'raw_used_by',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($ItemsTable.$converterrawUsedBy);
-  @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
-  rawCurrentOwnerCharacter = GeneratedColumn<String>(
-    'raw_current_owner_character',
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawUsedBy = GeneratedColumn<String>(
+    'raw_used_by',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawCurrentOwnerCharacter);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawUsedBy);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawCurrentOwnerCharacter =
+      GeneratedColumn<String>(
+        'raw_current_owner_character',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<ModuleLink>>(
+        $ItemsTable.$converterrawCurrentOwnerCharacter,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawFactions = GeneratedColumn<String>(
     'raw_factions',
     aliasedName,
@@ -9653,29 +9662,29 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawFactions);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawFactions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEvents =
-      GeneratedColumn<String>(
-        'raw_events',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($ItemsTable.$converterrawEvents);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawEvents = GeneratedColumn<String>(
+    'raw_events',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawEvents);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($ItemsTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -9683,9 +9692,9 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawReligions = GeneratedColumn<String>(
     'raw_religions',
     aliasedName,
@@ -9693,9 +9702,9 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawReligions);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawReligions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawTechnologies = GeneratedColumn<String>(
     'raw_technologies',
     aliasedName,
@@ -9703,9 +9712,9 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawTechnologies);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawTechnologies);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawPowerSystems = GeneratedColumn<String>(
     'raw_power_systems',
     aliasedName,
@@ -9713,9 +9722,9 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawPowerSystems);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawPowerSystems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLanguages = GeneratedColumn<String>(
     'raw_languages',
     aliasedName,
@@ -9723,9 +9732,9 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawLanguages);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawLanguages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawAbilities = GeneratedColumn<String>(
     'raw_abilities',
     aliasedName,
@@ -9733,7 +9742,7 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ItemsTable.$converterrawAbilities);
+  ).withConverter<List<ModuleLink>>($ItemsTable.$converterrawAbilities);
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -10100,30 +10109,30 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, ItemEntity> {
       const ListStringConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCreatedBy =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawUsedBy =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String>
-  $converterrawCurrentOwnerCharacter = const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawFactions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawEvents =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawReligions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawTechnologies =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawPowerSystems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLanguages =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawAbilities =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCreatedBy =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawUsedBy =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String>
+  $converterrawCurrentOwnerCharacter = const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawFactions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawEvents =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawReligions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawTechnologies =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawPowerSystems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLanguages =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawAbilities =
+      const ModuleLinkListConverter();
 }
 
 class ItemEntity extends DataClass implements Insertable<ItemEntity> {
@@ -10147,18 +10156,18 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
   final String? customNotes;
   final String tagColor;
   final List<String> images;
-  final List<String> rawCreatedBy;
-  final List<String> rawUsedBy;
-  final List<String> rawCurrentOwnerCharacter;
-  final List<String> rawFactions;
-  final List<String> rawEvents;
-  final List<String> rawStories;
-  final List<String> rawLocations;
-  final List<String> rawReligions;
-  final List<String> rawTechnologies;
-  final List<String> rawPowerSystems;
-  final List<String> rawLanguages;
-  final List<String> rawAbilities;
+  final List<ModuleLink> rawCreatedBy;
+  final List<ModuleLink> rawUsedBy;
+  final List<ModuleLink> rawCurrentOwnerCharacter;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawEvents;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawReligions;
+  final List<ModuleLink> rawTechnologies;
+  final List<ModuleLink> rawPowerSystems;
+  final List<ModuleLink> rawLanguages;
+  final List<ModuleLink> rawAbilities;
   final DateTime? updatedAt;
   const ItemEntity({
     required this.localId,
@@ -10412,24 +10421,24 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
       customNotes: serializer.fromJson<String?>(json['customNotes']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawCreatedBy: serializer.fromJson<List<String>>(json['rawCreatedBy']),
-      rawUsedBy: serializer.fromJson<List<String>>(json['rawUsedBy']),
-      rawCurrentOwnerCharacter: serializer.fromJson<List<String>>(
+      rawCreatedBy: serializer.fromJson<List<ModuleLink>>(json['rawCreatedBy']),
+      rawUsedBy: serializer.fromJson<List<ModuleLink>>(json['rawUsedBy']),
+      rawCurrentOwnerCharacter: serializer.fromJson<List<ModuleLink>>(
         json['rawCurrentOwnerCharacter'],
       ),
-      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
-      rawEvents: serializer.fromJson<List<String>>(json['rawEvents']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
-      rawTechnologies: serializer.fromJson<List<String>>(
+      rawFactions: serializer.fromJson<List<ModuleLink>>(json['rawFactions']),
+      rawEvents: serializer.fromJson<List<ModuleLink>>(json['rawEvents']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawReligions: serializer.fromJson<List<ModuleLink>>(json['rawReligions']),
+      rawTechnologies: serializer.fromJson<List<ModuleLink>>(
         json['rawTechnologies'],
       ),
-      rawPowerSystems: serializer.fromJson<List<String>>(
+      rawPowerSystems: serializer.fromJson<List<ModuleLink>>(
         json['rawPowerSystems'],
       ),
-      rawLanguages: serializer.fromJson<List<String>>(json['rawLanguages']),
-      rawAbilities: serializer.fromJson<List<String>>(json['rawAbilities']),
+      rawLanguages: serializer.fromJson<List<ModuleLink>>(json['rawLanguages']),
+      rawAbilities: serializer.fromJson<List<ModuleLink>>(json['rawAbilities']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
@@ -10459,20 +10468,20 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
       'customNotes': serializer.toJson<String?>(customNotes),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawCreatedBy': serializer.toJson<List<String>>(rawCreatedBy),
-      'rawUsedBy': serializer.toJson<List<String>>(rawUsedBy),
-      'rawCurrentOwnerCharacter': serializer.toJson<List<String>>(
+      'rawCreatedBy': serializer.toJson<List<ModuleLink>>(rawCreatedBy),
+      'rawUsedBy': serializer.toJson<List<ModuleLink>>(rawUsedBy),
+      'rawCurrentOwnerCharacter': serializer.toJson<List<ModuleLink>>(
         rawCurrentOwnerCharacter,
       ),
-      'rawFactions': serializer.toJson<List<String>>(rawFactions),
-      'rawEvents': serializer.toJson<List<String>>(rawEvents),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawReligions': serializer.toJson<List<String>>(rawReligions),
-      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
-      'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
-      'rawLanguages': serializer.toJson<List<String>>(rawLanguages),
-      'rawAbilities': serializer.toJson<List<String>>(rawAbilities),
+      'rawFactions': serializer.toJson<List<ModuleLink>>(rawFactions),
+      'rawEvents': serializer.toJson<List<ModuleLink>>(rawEvents),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawReligions': serializer.toJson<List<ModuleLink>>(rawReligions),
+      'rawTechnologies': serializer.toJson<List<ModuleLink>>(rawTechnologies),
+      'rawPowerSystems': serializer.toJson<List<ModuleLink>>(rawPowerSystems),
+      'rawLanguages': serializer.toJson<List<ModuleLink>>(rawLanguages),
+      'rawAbilities': serializer.toJson<List<ModuleLink>>(rawAbilities),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
@@ -10498,18 +10507,18 @@ class ItemEntity extends DataClass implements Insertable<ItemEntity> {
     Value<String?> customNotes = const Value.absent(),
     String? tagColor,
     List<String>? images,
-    List<String>? rawCreatedBy,
-    List<String>? rawUsedBy,
-    List<String>? rawCurrentOwnerCharacter,
-    List<String>? rawFactions,
-    List<String>? rawEvents,
-    List<String>? rawStories,
-    List<String>? rawLocations,
-    List<String>? rawReligions,
-    List<String>? rawTechnologies,
-    List<String>? rawPowerSystems,
-    List<String>? rawLanguages,
-    List<String>? rawAbilities,
+    List<ModuleLink>? rawCreatedBy,
+    List<ModuleLink>? rawUsedBy,
+    List<ModuleLink>? rawCurrentOwnerCharacter,
+    List<ModuleLink>? rawFactions,
+    List<ModuleLink>? rawEvents,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawReligions,
+    List<ModuleLink>? rawTechnologies,
+    List<ModuleLink>? rawPowerSystems,
+    List<ModuleLink>? rawLanguages,
+    List<ModuleLink>? rawAbilities,
     Value<DateTime?> updatedAt = const Value.absent(),
   }) => ItemEntity(
     localId: localId ?? this.localId,
@@ -10757,18 +10766,18 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
   final Value<String?> customNotes;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawCreatedBy;
-  final Value<List<String>> rawUsedBy;
-  final Value<List<String>> rawCurrentOwnerCharacter;
-  final Value<List<String>> rawFactions;
-  final Value<List<String>> rawEvents;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawReligions;
-  final Value<List<String>> rawTechnologies;
-  final Value<List<String>> rawPowerSystems;
-  final Value<List<String>> rawLanguages;
-  final Value<List<String>> rawAbilities;
+  final Value<List<ModuleLink>> rawCreatedBy;
+  final Value<List<ModuleLink>> rawUsedBy;
+  final Value<List<ModuleLink>> rawCurrentOwnerCharacter;
+  final Value<List<ModuleLink>> rawFactions;
+  final Value<List<ModuleLink>> rawEvents;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawReligions;
+  final Value<List<ModuleLink>> rawTechnologies;
+  final Value<List<ModuleLink>> rawPowerSystems;
+  final Value<List<ModuleLink>> rawLanguages;
+  final Value<List<ModuleLink>> rawAbilities;
   final Value<DateTime?> updatedAt;
   final Value<int> rowid;
   const ItemsCompanion({
@@ -10941,18 +10950,18 @@ class ItemsCompanion extends UpdateCompanion<ItemEntity> {
     Value<String?>? customNotes,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawCreatedBy,
-    Value<List<String>>? rawUsedBy,
-    Value<List<String>>? rawCurrentOwnerCharacter,
-    Value<List<String>>? rawFactions,
-    Value<List<String>>? rawEvents,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawReligions,
-    Value<List<String>>? rawTechnologies,
-    Value<List<String>>? rawPowerSystems,
-    Value<List<String>>? rawLanguages,
-    Value<List<String>>? rawAbilities,
+    Value<List<ModuleLink>>? rawCreatedBy,
+    Value<List<ModuleLink>>? rawUsedBy,
+    Value<List<ModuleLink>>? rawCurrentOwnerCharacter,
+    Value<List<ModuleLink>>? rawFactions,
+    Value<List<ModuleLink>>? rawEvents,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawReligions,
+    Value<List<ModuleLink>>? rawTechnologies,
+    Value<List<ModuleLink>>? rawPowerSystems,
+    Value<List<ModuleLink>>? rawLanguages,
+    Value<List<ModuleLink>>? rawAbilities,
     Value<DateTime?>? updatedAt,
     Value<int>? rowid,
   }) {
@@ -11343,17 +11352,17 @@ class $LanguagesTable extends Languages
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($LanguagesTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawRaces =
-      GeneratedColumn<String>(
-        'raw_races',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($LanguagesTable.$converterrawRaces);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawRaces = GeneratedColumn<String>(
+    'raw_races',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($LanguagesTable.$converterrawRaces);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawFactions = GeneratedColumn<String>(
     'raw_factions',
     aliasedName,
@@ -11361,9 +11370,9 @@ class $LanguagesTable extends Languages
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LanguagesTable.$converterrawFactions);
+  ).withConverter<List<ModuleLink>>($LanguagesTable.$converterrawFactions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -11371,9 +11380,9 @@ class $LanguagesTable extends Languages
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LanguagesTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($LanguagesTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -11381,19 +11390,19 @@ class $LanguagesTable extends Languages
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LanguagesTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($LanguagesTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($LanguagesTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($LanguagesTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawReligions = GeneratedColumn<String>(
     'raw_religions',
     aliasedName,
@@ -11401,7 +11410,7 @@ class $LanguagesTable extends Languages
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LanguagesTable.$converterrawReligions);
+  ).withConverter<List<ModuleLink>>($LanguagesTable.$converterrawReligions);
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -11631,18 +11640,18 @@ class $LanguagesTable extends Languages
       const SyncStatusConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawRaces =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawFactions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawReligions =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawRaces =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawFactions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawReligions =
+      const ModuleLinkListConverter();
 }
 
 class LanguageEntity extends DataClass implements Insertable<LanguageEntity> {
@@ -11659,12 +11668,12 @@ class LanguageEntity extends DataClass implements Insertable<LanguageEntity> {
   final String? customNotes;
   final String tagColor;
   final List<String> images;
-  final List<String> rawRaces;
-  final List<String> rawFactions;
-  final List<String> rawCharacters;
-  final List<String> rawLocations;
-  final List<String> rawStories;
-  final List<String> rawReligions;
+  final List<ModuleLink> rawRaces;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawReligions;
   const LanguageEntity({
     required this.localId,
     this.serverId,
@@ -11808,12 +11817,14 @@ class LanguageEntity extends DataClass implements Insertable<LanguageEntity> {
       customNotes: serializer.fromJson<String?>(json['customNotes']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawRaces: serializer.fromJson<List<String>>(json['rawRaces']),
-      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
+      rawRaces: serializer.fromJson<List<ModuleLink>>(json['rawRaces']),
+      rawFactions: serializer.fromJson<List<ModuleLink>>(json['rawFactions']),
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawReligions: serializer.fromJson<List<ModuleLink>>(json['rawReligions']),
     );
   }
   @override
@@ -11833,12 +11844,12 @@ class LanguageEntity extends DataClass implements Insertable<LanguageEntity> {
       'customNotes': serializer.toJson<String?>(customNotes),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawRaces': serializer.toJson<List<String>>(rawRaces),
-      'rawFactions': serializer.toJson<List<String>>(rawFactions),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawReligions': serializer.toJson<List<String>>(rawReligions),
+      'rawRaces': serializer.toJson<List<ModuleLink>>(rawRaces),
+      'rawFactions': serializer.toJson<List<ModuleLink>>(rawFactions),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawReligions': serializer.toJson<List<ModuleLink>>(rawReligions),
     };
   }
 
@@ -11856,12 +11867,12 @@ class LanguageEntity extends DataClass implements Insertable<LanguageEntity> {
     Value<String?> customNotes = const Value.absent(),
     String? tagColor,
     List<String>? images,
-    List<String>? rawRaces,
-    List<String>? rawFactions,
-    List<String>? rawCharacters,
-    List<String>? rawLocations,
-    List<String>? rawStories,
-    List<String>? rawReligions,
+    List<ModuleLink>? rawRaces,
+    List<ModuleLink>? rawFactions,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawReligions,
   }) => LanguageEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -12016,12 +12027,12 @@ class LanguagesCompanion extends UpdateCompanion<LanguageEntity> {
   final Value<String?> customNotes;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawRaces;
-  final Value<List<String>> rawFactions;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawReligions;
+  final Value<List<ModuleLink>> rawRaces;
+  final Value<List<ModuleLink>> rawFactions;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawReligions;
   final Value<int> rowid;
   const LanguagesCompanion({
     this.localId = const Value.absent(),
@@ -12128,12 +12139,12 @@ class LanguagesCompanion extends UpdateCompanion<LanguageEntity> {
     Value<String?>? customNotes,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawRaces,
-    Value<List<String>>? rawFactions,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawReligions,
+    Value<List<ModuleLink>>? rawRaces,
+    Value<List<ModuleLink>>? rawFactions,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawReligions,
     Value<int>? rowid,
   }) {
     return LanguagesCompanion(
@@ -12421,7 +12432,7 @@ class $LocationsTable extends Locations
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($LocationsTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -12429,9 +12440,9 @@ class $LocationsTable extends Locations
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LocationsTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawFactions = GeneratedColumn<String>(
     'raw_factions',
     aliasedName,
@@ -12439,19 +12450,19 @@ class $LocationsTable extends Locations
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LocationsTable.$converterrawFactions);
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawFactions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEvents =
-      GeneratedColumn<String>(
-        'raw_events',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($LocationsTable.$converterrawEvents);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawEvents = GeneratedColumn<String>(
+    'raw_events',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawEvents);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -12459,19 +12470,19 @@ class $LocationsTable extends Locations
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LocationsTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawItems =
-      GeneratedColumn<String>(
-        'raw_items',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($LocationsTable.$converterrawItems);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawItems = GeneratedColumn<String>(
+    'raw_items',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawItems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCreatures = GeneratedColumn<String>(
     'raw_creatures',
     aliasedName,
@@ -12479,19 +12490,19 @@ class $LocationsTable extends Locations
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LocationsTable.$converterrawCreatures);
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawCreatures);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($LocationsTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLanguages = GeneratedColumn<String>(
     'raw_languages',
     aliasedName,
@@ -12499,9 +12510,9 @@ class $LocationsTable extends Locations
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LocationsTable.$converterrawLanguages);
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawLanguages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawReligions = GeneratedColumn<String>(
     'raw_religions',
     aliasedName,
@@ -12509,9 +12520,9 @@ class $LocationsTable extends Locations
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LocationsTable.$converterrawReligions);
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawReligions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawTechnologies = GeneratedColumn<String>(
     'raw_technologies',
     aliasedName,
@@ -12519,7 +12530,7 @@ class $LocationsTable extends Locations
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($LocationsTable.$converterrawTechnologies);
+  ).withConverter<List<ModuleLink>>($LocationsTable.$converterrawTechnologies);
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -12796,26 +12807,26 @@ class $LocationsTable extends Locations
       const SyncStatusConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawFactions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawEvents =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawItems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCreatures =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLanguages =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawReligions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawTechnologies =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawFactions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawEvents =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawItems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCreatures =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLanguages =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawReligions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawTechnologies =
+      const ModuleLinkListConverter();
 }
 
 class LocationEntity extends DataClass implements Insertable<LocationEntity> {
@@ -12832,16 +12843,16 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
   final String? customNotes;
   final String tagColor;
   final List<String> images;
-  final List<String> rawLocations;
-  final List<String> rawFactions;
-  final List<String> rawEvents;
-  final List<String> rawCharacters;
-  final List<String> rawItems;
-  final List<String> rawCreatures;
-  final List<String> rawStories;
-  final List<String> rawLanguages;
-  final List<String> rawReligions;
-  final List<String> rawTechnologies;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawEvents;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawItems;
+  final List<ModuleLink> rawCreatures;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawLanguages;
+  final List<ModuleLink> rawReligions;
+  final List<ModuleLink> rawTechnologies;
   final DateTime? updatedAt;
   const LocationEntity({
     required this.localId,
@@ -13027,16 +13038,18 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
       customNotes: serializer.fromJson<String?>(json['customNotes']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
-      rawEvents: serializer.fromJson<List<String>>(json['rawEvents']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawItems: serializer.fromJson<List<String>>(json['rawItems']),
-      rawCreatures: serializer.fromJson<List<String>>(json['rawCreatures']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawLanguages: serializer.fromJson<List<String>>(json['rawLanguages']),
-      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
-      rawTechnologies: serializer.fromJson<List<String>>(
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawFactions: serializer.fromJson<List<ModuleLink>>(json['rawFactions']),
+      rawEvents: serializer.fromJson<List<ModuleLink>>(json['rawEvents']),
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawItems: serializer.fromJson<List<ModuleLink>>(json['rawItems']),
+      rawCreatures: serializer.fromJson<List<ModuleLink>>(json['rawCreatures']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawLanguages: serializer.fromJson<List<ModuleLink>>(json['rawLanguages']),
+      rawReligions: serializer.fromJson<List<ModuleLink>>(json['rawReligions']),
+      rawTechnologies: serializer.fromJson<List<ModuleLink>>(
         json['rawTechnologies'],
       ),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
@@ -13059,16 +13072,16 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
       'customNotes': serializer.toJson<String?>(customNotes),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawFactions': serializer.toJson<List<String>>(rawFactions),
-      'rawEvents': serializer.toJson<List<String>>(rawEvents),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawItems': serializer.toJson<List<String>>(rawItems),
-      'rawCreatures': serializer.toJson<List<String>>(rawCreatures),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawLanguages': serializer.toJson<List<String>>(rawLanguages),
-      'rawReligions': serializer.toJson<List<String>>(rawReligions),
-      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawFactions': serializer.toJson<List<ModuleLink>>(rawFactions),
+      'rawEvents': serializer.toJson<List<ModuleLink>>(rawEvents),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawItems': serializer.toJson<List<ModuleLink>>(rawItems),
+      'rawCreatures': serializer.toJson<List<ModuleLink>>(rawCreatures),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawLanguages': serializer.toJson<List<ModuleLink>>(rawLanguages),
+      'rawReligions': serializer.toJson<List<ModuleLink>>(rawReligions),
+      'rawTechnologies': serializer.toJson<List<ModuleLink>>(rawTechnologies),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
@@ -13087,16 +13100,16 @@ class LocationEntity extends DataClass implements Insertable<LocationEntity> {
     Value<String?> customNotes = const Value.absent(),
     String? tagColor,
     List<String>? images,
-    List<String>? rawLocations,
-    List<String>? rawFactions,
-    List<String>? rawEvents,
-    List<String>? rawCharacters,
-    List<String>? rawItems,
-    List<String>? rawCreatures,
-    List<String>? rawStories,
-    List<String>? rawLanguages,
-    List<String>? rawReligions,
-    List<String>? rawTechnologies,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawFactions,
+    List<ModuleLink>? rawEvents,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawItems,
+    List<ModuleLink>? rawCreatures,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawLanguages,
+    List<ModuleLink>? rawReligions,
+    List<ModuleLink>? rawTechnologies,
     Value<DateTime?> updatedAt = const Value.absent(),
   }) => LocationEntity(
     localId: localId ?? this.localId,
@@ -13281,16 +13294,16 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
   final Value<String?> customNotes;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawFactions;
-  final Value<List<String>> rawEvents;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawItems;
-  final Value<List<String>> rawCreatures;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawLanguages;
-  final Value<List<String>> rawReligions;
-  final Value<List<String>> rawTechnologies;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawFactions;
+  final Value<List<ModuleLink>> rawEvents;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawItems;
+  final Value<List<ModuleLink>> rawCreatures;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawLanguages;
+  final Value<List<ModuleLink>> rawReligions;
+  final Value<List<ModuleLink>> rawTechnologies;
   final Value<DateTime?> updatedAt;
   final Value<int> rowid;
   const LocationsCompanion({
@@ -13418,16 +13431,16 @@ class LocationsCompanion extends UpdateCompanion<LocationEntity> {
     Value<String?>? customNotes,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawFactions,
-    Value<List<String>>? rawEvents,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawItems,
-    Value<List<String>>? rawCreatures,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawLanguages,
-    Value<List<String>>? rawReligions,
-    Value<List<String>>? rawTechnologies,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawFactions,
+    Value<List<ModuleLink>>? rawEvents,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawItems,
+    Value<List<ModuleLink>>? rawCreatures,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawLanguages,
+    Value<List<ModuleLink>>? rawReligions,
+    Value<List<ModuleLink>>? rawTechnologies,
     Value<DateTime?>? updatedAt,
     Value<int>? rowid,
   }) {
@@ -13760,7 +13773,7 @@ class $PowerSystemsTable extends PowerSystems
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($PowerSystemsTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -13768,9 +13781,9 @@ class $PowerSystemsTable extends PowerSystems
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($PowerSystemsTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($PowerSystemsTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawAbilities = GeneratedColumn<String>(
     'raw_abilities',
     aliasedName,
@@ -13778,9 +13791,9 @@ class $PowerSystemsTable extends PowerSystems
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($PowerSystemsTable.$converterrawAbilities);
+  ).withConverter<List<ModuleLink>>($PowerSystemsTable.$converterrawAbilities);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawFactions = GeneratedColumn<String>(
     'raw_factions',
     aliasedName,
@@ -13788,29 +13801,29 @@ class $PowerSystemsTable extends PowerSystems
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($PowerSystemsTable.$converterrawFactions);
+  ).withConverter<List<ModuleLink>>($PowerSystemsTable.$converterrawFactions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEvents =
-      GeneratedColumn<String>(
-        'raw_events',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($PowerSystemsTable.$converterrawEvents);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawEvents = GeneratedColumn<String>(
+    'raw_events',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($PowerSystemsTable.$converterrawEvents);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($PowerSystemsTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($PowerSystemsTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCreatures = GeneratedColumn<String>(
     'raw_creatures',
     aliasedName,
@@ -13818,9 +13831,9 @@ class $PowerSystemsTable extends PowerSystems
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($PowerSystemsTable.$converterrawCreatures);
+  ).withConverter<List<ModuleLink>>($PowerSystemsTable.$converterrawCreatures);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawReligions = GeneratedColumn<String>(
     'raw_religions',
     aliasedName,
@@ -13828,17 +13841,20 @@ class $PowerSystemsTable extends PowerSystems
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($PowerSystemsTable.$converterrawReligions);
+  ).withConverter<List<ModuleLink>>($PowerSystemsTable.$converterrawReligions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
-  rawTechnologies = GeneratedColumn<String>(
-    'raw_technologies',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($PowerSystemsTable.$converterrawTechnologies);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawTechnologies =
+      GeneratedColumn<String>(
+        'raw_technologies',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<ModuleLink>>(
+        $PowerSystemsTable.$converterrawTechnologies,
+      );
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -14098,22 +14114,22 @@ class $PowerSystemsTable extends PowerSystems
       const ListStringConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawAbilities =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawFactions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawEvents =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCreatures =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawReligions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawTechnologies =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawAbilities =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawFactions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawEvents =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCreatures =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawReligions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawTechnologies =
+      const ModuleLinkListConverter();
 }
 
 class PowerSystemEntity extends DataClass
@@ -14132,14 +14148,14 @@ class PowerSystemEntity extends DataClass
   final String? customNotes;
   final String tagColor;
   final List<String> images;
-  final List<String> rawCharacters;
-  final List<String> rawAbilities;
-  final List<String> rawFactions;
-  final List<String> rawEvents;
-  final List<String> rawStories;
-  final List<String> rawCreatures;
-  final List<String> rawReligions;
-  final List<String> rawTechnologies;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawAbilities;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawEvents;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawCreatures;
+  final List<ModuleLink> rawReligions;
+  final List<ModuleLink> rawTechnologies;
   const PowerSystemEntity({
     required this.localId,
     this.serverId,
@@ -14315,14 +14331,16 @@ class PowerSystemEntity extends DataClass
       customNotes: serializer.fromJson<String?>(json['customNotes']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawAbilities: serializer.fromJson<List<String>>(json['rawAbilities']),
-      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
-      rawEvents: serializer.fromJson<List<String>>(json['rawEvents']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawCreatures: serializer.fromJson<List<String>>(json['rawCreatures']),
-      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
-      rawTechnologies: serializer.fromJson<List<String>>(
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawAbilities: serializer.fromJson<List<ModuleLink>>(json['rawAbilities']),
+      rawFactions: serializer.fromJson<List<ModuleLink>>(json['rawFactions']),
+      rawEvents: serializer.fromJson<List<ModuleLink>>(json['rawEvents']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawCreatures: serializer.fromJson<List<ModuleLink>>(json['rawCreatures']),
+      rawReligions: serializer.fromJson<List<ModuleLink>>(json['rawReligions']),
+      rawTechnologies: serializer.fromJson<List<ModuleLink>>(
         json['rawTechnologies'],
       ),
     );
@@ -14347,14 +14365,14 @@ class PowerSystemEntity extends DataClass
       'customNotes': serializer.toJson<String?>(customNotes),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawAbilities': serializer.toJson<List<String>>(rawAbilities),
-      'rawFactions': serializer.toJson<List<String>>(rawFactions),
-      'rawEvents': serializer.toJson<List<String>>(rawEvents),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawCreatures': serializer.toJson<List<String>>(rawCreatures),
-      'rawReligions': serializer.toJson<List<String>>(rawReligions),
-      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawAbilities': serializer.toJson<List<ModuleLink>>(rawAbilities),
+      'rawFactions': serializer.toJson<List<ModuleLink>>(rawFactions),
+      'rawEvents': serializer.toJson<List<ModuleLink>>(rawEvents),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawCreatures': serializer.toJson<List<ModuleLink>>(rawCreatures),
+      'rawReligions': serializer.toJson<List<ModuleLink>>(rawReligions),
+      'rawTechnologies': serializer.toJson<List<ModuleLink>>(rawTechnologies),
     };
   }
 
@@ -14373,14 +14391,14 @@ class PowerSystemEntity extends DataClass
     Value<String?> customNotes = const Value.absent(),
     String? tagColor,
     List<String>? images,
-    List<String>? rawCharacters,
-    List<String>? rawAbilities,
-    List<String>? rawFactions,
-    List<String>? rawEvents,
-    List<String>? rawStories,
-    List<String>? rawCreatures,
-    List<String>? rawReligions,
-    List<String>? rawTechnologies,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawAbilities,
+    List<ModuleLink>? rawFactions,
+    List<ModuleLink>? rawEvents,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawCreatures,
+    List<ModuleLink>? rawReligions,
+    List<ModuleLink>? rawTechnologies,
   }) => PowerSystemEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -14563,14 +14581,14 @@ class PowerSystemsCompanion extends UpdateCompanion<PowerSystemEntity> {
   final Value<String?> customNotes;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawAbilities;
-  final Value<List<String>> rawFactions;
-  final Value<List<String>> rawEvents;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawCreatures;
-  final Value<List<String>> rawReligions;
-  final Value<List<String>> rawTechnologies;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawAbilities;
+  final Value<List<ModuleLink>> rawFactions;
+  final Value<List<ModuleLink>> rawEvents;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawCreatures;
+  final Value<List<ModuleLink>> rawReligions;
+  final Value<List<ModuleLink>> rawTechnologies;
   final Value<int> rowid;
   const PowerSystemsCompanion({
     this.localId = const Value.absent(),
@@ -14691,14 +14709,14 @@ class PowerSystemsCompanion extends UpdateCompanion<PowerSystemEntity> {
     Value<String?>? customNotes,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawAbilities,
-    Value<List<String>>? rawFactions,
-    Value<List<String>>? rawEvents,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawCreatures,
-    Value<List<String>>? rawReligions,
-    Value<List<String>>? rawTechnologies,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawAbilities,
+    Value<List<ModuleLink>>? rawFactions,
+    Value<List<ModuleLink>>? rawEvents,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawCreatures,
+    Value<List<ModuleLink>>? rawReligions,
+    Value<List<ModuleLink>>? rawTechnologies,
     Value<int>? rowid,
   }) {
     return PowerSystemsCompanion(
@@ -15024,7 +15042,7 @@ class $RacesTable extends Races with TableInfo<$RacesTable, RaceEntity> {
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($RacesTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLanguages = GeneratedColumn<String>(
     'raw_languages',
     aliasedName,
@@ -15032,9 +15050,9 @@ class $RacesTable extends Races with TableInfo<$RacesTable, RaceEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($RacesTable.$converterrawLanguages);
+  ).withConverter<List<ModuleLink>>($RacesTable.$converterrawLanguages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -15042,9 +15060,9 @@ class $RacesTable extends Races with TableInfo<$RacesTable, RaceEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($RacesTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($RacesTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -15052,9 +15070,9 @@ class $RacesTable extends Races with TableInfo<$RacesTable, RaceEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($RacesTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($RacesTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawReligions = GeneratedColumn<String>(
     'raw_religions',
     aliasedName,
@@ -15062,29 +15080,29 @@ class $RacesTable extends Races with TableInfo<$RacesTable, RaceEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($RacesTable.$converterrawReligions);
+  ).withConverter<List<ModuleLink>>($RacesTable.$converterrawReligions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($RacesTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($RacesTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEvents =
-      GeneratedColumn<String>(
-        'raw_events',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($RacesTable.$converterrawEvents);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawEvents = GeneratedColumn<String>(
+    'raw_events',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($RacesTable.$converterrawEvents);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawPowerSystems = GeneratedColumn<String>(
     'raw_power_systems',
     aliasedName,
@@ -15092,9 +15110,9 @@ class $RacesTable extends Races with TableInfo<$RacesTable, RaceEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($RacesTable.$converterrawPowerSystems);
+  ).withConverter<List<ModuleLink>>($RacesTable.$converterrawPowerSystems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawTechnologies = GeneratedColumn<String>(
     'raw_technologies',
     aliasedName,
@@ -15102,7 +15120,7 @@ class $RacesTable extends Races with TableInfo<$RacesTable, RaceEntity> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($RacesTable.$converterrawTechnologies);
+  ).withConverter<List<ModuleLink>>($RacesTable.$converterrawTechnologies);
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -15355,22 +15373,22 @@ class $RacesTable extends Races with TableInfo<$RacesTable, RaceEntity> {
       const ListStringConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLanguages =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawReligions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawEvents =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawPowerSystems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawTechnologies =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLanguages =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawReligions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawEvents =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawPowerSystems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawTechnologies =
+      const ModuleLinkListConverter();
 }
 
 class RaceEntity extends DataClass implements Insertable<RaceEntity> {
@@ -15388,14 +15406,14 @@ class RaceEntity extends DataClass implements Insertable<RaceEntity> {
   final bool isExtinct;
   final String tagColor;
   final List<String> images;
-  final List<String> rawLanguages;
-  final List<String> rawCharacters;
-  final List<String> rawLocations;
-  final List<String> rawReligions;
-  final List<String> rawStories;
-  final List<String> rawEvents;
-  final List<String> rawPowerSystems;
-  final List<String> rawTechnologies;
+  final List<ModuleLink> rawLanguages;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawReligions;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawEvents;
+  final List<ModuleLink> rawPowerSystems;
+  final List<ModuleLink> rawTechnologies;
   const RaceEntity({
     required this.localId,
     this.serverId,
@@ -15563,16 +15581,18 @@ class RaceEntity extends DataClass implements Insertable<RaceEntity> {
       isExtinct: serializer.fromJson<bool>(json['isExtinct']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawLanguages: serializer.fromJson<List<String>>(json['rawLanguages']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawReligions: serializer.fromJson<List<String>>(json['rawReligions']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawEvents: serializer.fromJson<List<String>>(json['rawEvents']),
-      rawPowerSystems: serializer.fromJson<List<String>>(
+      rawLanguages: serializer.fromJson<List<ModuleLink>>(json['rawLanguages']),
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawReligions: serializer.fromJson<List<ModuleLink>>(json['rawReligions']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawEvents: serializer.fromJson<List<ModuleLink>>(json['rawEvents']),
+      rawPowerSystems: serializer.fromJson<List<ModuleLink>>(
         json['rawPowerSystems'],
       ),
-      rawTechnologies: serializer.fromJson<List<String>>(
+      rawTechnologies: serializer.fromJson<List<ModuleLink>>(
         json['rawTechnologies'],
       ),
     );
@@ -15595,14 +15615,14 @@ class RaceEntity extends DataClass implements Insertable<RaceEntity> {
       'isExtinct': serializer.toJson<bool>(isExtinct),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawLanguages': serializer.toJson<List<String>>(rawLanguages),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawReligions': serializer.toJson<List<String>>(rawReligions),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawEvents': serializer.toJson<List<String>>(rawEvents),
-      'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
-      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+      'rawLanguages': serializer.toJson<List<ModuleLink>>(rawLanguages),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawReligions': serializer.toJson<List<ModuleLink>>(rawReligions),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawEvents': serializer.toJson<List<ModuleLink>>(rawEvents),
+      'rawPowerSystems': serializer.toJson<List<ModuleLink>>(rawPowerSystems),
+      'rawTechnologies': serializer.toJson<List<ModuleLink>>(rawTechnologies),
     };
   }
 
@@ -15621,14 +15641,14 @@ class RaceEntity extends DataClass implements Insertable<RaceEntity> {
     bool? isExtinct,
     String? tagColor,
     List<String>? images,
-    List<String>? rawLanguages,
-    List<String>? rawCharacters,
-    List<String>? rawLocations,
-    List<String>? rawReligions,
-    List<String>? rawStories,
-    List<String>? rawEvents,
-    List<String>? rawPowerSystems,
-    List<String>? rawTechnologies,
+    List<ModuleLink>? rawLanguages,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawReligions,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawEvents,
+    List<ModuleLink>? rawPowerSystems,
+    List<ModuleLink>? rawTechnologies,
   }) => RaceEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -15805,14 +15825,14 @@ class RacesCompanion extends UpdateCompanion<RaceEntity> {
   final Value<bool> isExtinct;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawLanguages;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawReligions;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawEvents;
-  final Value<List<String>> rawPowerSystems;
-  final Value<List<String>> rawTechnologies;
+  final Value<List<ModuleLink>> rawLanguages;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawReligions;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawEvents;
+  final Value<List<ModuleLink>> rawPowerSystems;
+  final Value<List<ModuleLink>> rawTechnologies;
   final Value<int> rowid;
   const RacesCompanion({
     this.localId = const Value.absent(),
@@ -15932,14 +15952,14 @@ class RacesCompanion extends UpdateCompanion<RaceEntity> {
     Value<bool>? isExtinct,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawLanguages,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawReligions,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawEvents,
-    Value<List<String>>? rawPowerSystems,
-    Value<List<String>>? rawTechnologies,
+    Value<List<ModuleLink>>? rawLanguages,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawReligions,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawEvents,
+    Value<List<ModuleLink>>? rawPowerSystems,
+    Value<List<ModuleLink>>? rawTechnologies,
     Value<int>? rowid,
   }) {
     return RacesCompanion(
@@ -16275,7 +16295,7 @@ class $ReligionsTable extends Religions
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($ReligionsTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -16283,9 +16303,9 @@ class $ReligionsTable extends Religions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ReligionsTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($ReligionsTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawFactions = GeneratedColumn<String>(
     'raw_factions',
     aliasedName,
@@ -16293,9 +16313,9 @@ class $ReligionsTable extends Religions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ReligionsTable.$converterrawFactions);
+  ).withConverter<List<ModuleLink>>($ReligionsTable.$converterrawFactions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -16303,9 +16323,9 @@ class $ReligionsTable extends Religions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ReligionsTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($ReligionsTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCreatures = GeneratedColumn<String>(
     'raw_creatures',
     aliasedName,
@@ -16313,19 +16333,19 @@ class $ReligionsTable extends Religions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ReligionsTable.$converterrawCreatures);
+  ).withConverter<List<ModuleLink>>($ReligionsTable.$converterrawCreatures);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEvents =
-      GeneratedColumn<String>(
-        'raw_events',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($ReligionsTable.$converterrawEvents);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawEvents = GeneratedColumn<String>(
+    'raw_events',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($ReligionsTable.$converterrawEvents);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawPowerSystems = GeneratedColumn<String>(
     'raw_power_systems',
     aliasedName,
@@ -16333,19 +16353,19 @@ class $ReligionsTable extends Religions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ReligionsTable.$converterrawPowerSystems);
+  ).withConverter<List<ModuleLink>>($ReligionsTable.$converterrawPowerSystems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($ReligionsTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($ReligionsTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawTechnologies = GeneratedColumn<String>(
     'raw_technologies',
     aliasedName,
@@ -16353,7 +16373,7 @@ class $ReligionsTable extends Religions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($ReligionsTable.$converterrawTechnologies);
+  ).withConverter<List<ModuleLink>>($ReligionsTable.$converterrawTechnologies);
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -16618,22 +16638,22 @@ class $ReligionsTable extends Religions
       const ListStringConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawFactions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCreatures =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawEvents =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawPowerSystems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawTechnologies =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawFactions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCreatures =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawEvents =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawPowerSystems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawTechnologies =
+      const ModuleLinkListConverter();
 }
 
 class ReligionEntity extends DataClass implements Insertable<ReligionEntity> {
@@ -16653,14 +16673,14 @@ class ReligionEntity extends DataClass implements Insertable<ReligionEntity> {
   final String? customNotes;
   final String tagColor;
   final List<String> images;
-  final List<String> rawCharacters;
-  final List<String> rawFactions;
-  final List<String> rawLocations;
-  final List<String> rawCreatures;
-  final List<String> rawEvents;
-  final List<String> rawPowerSystems;
-  final List<String> rawStories;
-  final List<String> rawTechnologies;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawCreatures;
+  final List<ModuleLink> rawEvents;
+  final List<ModuleLink> rawPowerSystems;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawTechnologies;
   const ReligionEntity({
     required this.localId,
     this.serverId,
@@ -16848,16 +16868,18 @@ class ReligionEntity extends DataClass implements Insertable<ReligionEntity> {
       customNotes: serializer.fromJson<String?>(json['customNotes']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawCreatures: serializer.fromJson<List<String>>(json['rawCreatures']),
-      rawEvents: serializer.fromJson<List<String>>(json['rawEvents']),
-      rawPowerSystems: serializer.fromJson<List<String>>(
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawFactions: serializer.fromJson<List<ModuleLink>>(json['rawFactions']),
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawCreatures: serializer.fromJson<List<ModuleLink>>(json['rawCreatures']),
+      rawEvents: serializer.fromJson<List<ModuleLink>>(json['rawEvents']),
+      rawPowerSystems: serializer.fromJson<List<ModuleLink>>(
         json['rawPowerSystems'],
       ),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawTechnologies: serializer.fromJson<List<String>>(
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawTechnologies: serializer.fromJson<List<ModuleLink>>(
         json['rawTechnologies'],
       ),
     );
@@ -16882,14 +16904,14 @@ class ReligionEntity extends DataClass implements Insertable<ReligionEntity> {
       'customNotes': serializer.toJson<String?>(customNotes),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawFactions': serializer.toJson<List<String>>(rawFactions),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawCreatures': serializer.toJson<List<String>>(rawCreatures),
-      'rawEvents': serializer.toJson<List<String>>(rawEvents),
-      'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawTechnologies': serializer.toJson<List<String>>(rawTechnologies),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawFactions': serializer.toJson<List<ModuleLink>>(rawFactions),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawCreatures': serializer.toJson<List<ModuleLink>>(rawCreatures),
+      'rawEvents': serializer.toJson<List<ModuleLink>>(rawEvents),
+      'rawPowerSystems': serializer.toJson<List<ModuleLink>>(rawPowerSystems),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawTechnologies': serializer.toJson<List<ModuleLink>>(rawTechnologies),
     };
   }
 
@@ -16910,14 +16932,14 @@ class ReligionEntity extends DataClass implements Insertable<ReligionEntity> {
     Value<String?> customNotes = const Value.absent(),
     String? tagColor,
     List<String>? images,
-    List<String>? rawCharacters,
-    List<String>? rawFactions,
-    List<String>? rawLocations,
-    List<String>? rawCreatures,
-    List<String>? rawEvents,
-    List<String>? rawPowerSystems,
-    List<String>? rawStories,
-    List<String>? rawTechnologies,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawFactions,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawCreatures,
+    List<ModuleLink>? rawEvents,
+    List<ModuleLink>? rawPowerSystems,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawTechnologies,
   }) => ReligionEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -17106,14 +17128,14 @@ class ReligionsCompanion extends UpdateCompanion<ReligionEntity> {
   final Value<String?> customNotes;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawFactions;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawCreatures;
-  final Value<List<String>> rawEvents;
-  final Value<List<String>> rawPowerSystems;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawTechnologies;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawFactions;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawCreatures;
+  final Value<List<ModuleLink>> rawEvents;
+  final Value<List<ModuleLink>> rawPowerSystems;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawTechnologies;
   final Value<int> rowid;
   const ReligionsCompanion({
     this.localId = const Value.absent(),
@@ -17243,14 +17265,14 @@ class ReligionsCompanion extends UpdateCompanion<ReligionEntity> {
     Value<String?>? customNotes,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawFactions,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawCreatures,
-    Value<List<String>>? rawEvents,
-    Value<List<String>>? rawPowerSystems,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawTechnologies,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawFactions,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawCreatures,
+    Value<List<ModuleLink>>? rawEvents,
+    Value<List<ModuleLink>>? rawPowerSystems,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawTechnologies,
     Value<int>? rowid,
   }) {
     return ReligionsCompanion(
@@ -18128,7 +18150,7 @@ class $TechnologiesTable extends Technologies
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($TechnologiesTable.$converterimages);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCreators = GeneratedColumn<String>(
     'raw_creators',
     aliasedName,
@@ -18136,9 +18158,9 @@ class $TechnologiesTable extends Technologies
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($TechnologiesTable.$converterrawCreators);
+  ).withConverter<List<ModuleLink>>($TechnologiesTable.$converterrawCreators);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawCharacters = GeneratedColumn<String>(
     'raw_characters',
     aliasedName,
@@ -18146,9 +18168,9 @@ class $TechnologiesTable extends Technologies
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($TechnologiesTable.$converterrawCharacters);
+  ).withConverter<List<ModuleLink>>($TechnologiesTable.$converterrawCharacters);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawFactions = GeneratedColumn<String>(
     'raw_factions',
     aliasedName,
@@ -18156,39 +18178,39 @@ class $TechnologiesTable extends Technologies
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($TechnologiesTable.$converterrawFactions);
+  ).withConverter<List<ModuleLink>>($TechnologiesTable.$converterrawFactions);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawItems =
-      GeneratedColumn<String>(
-        'raw_items',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($TechnologiesTable.$converterrawItems);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawItems = GeneratedColumn<String>(
+    'raw_items',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($TechnologiesTable.$converterrawItems);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawEvents =
-      GeneratedColumn<String>(
-        'raw_events',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($TechnologiesTable.$converterrawEvents);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawEvents = GeneratedColumn<String>(
+    'raw_events',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($TechnologiesTable.$converterrawEvents);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> rawStories =
-      GeneratedColumn<String>(
-        'raw_stories',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('[]'),
-      ).withConverter<List<String>>($TechnologiesTable.$converterrawStories);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawStories = GeneratedColumn<String>(
+    'raw_stories',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<ModuleLink>>($TechnologiesTable.$converterrawStories);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   rawLocations = GeneratedColumn<String>(
     'raw_locations',
     aliasedName,
@@ -18196,17 +18218,20 @@ class $TechnologiesTable extends Technologies
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($TechnologiesTable.$converterrawLocations);
+  ).withConverter<List<ModuleLink>>($TechnologiesTable.$converterrawLocations);
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
-  rawPowerSystems = GeneratedColumn<String>(
-    'raw_power_systems',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('[]'),
-  ).withConverter<List<String>>($TechnologiesTable.$converterrawPowerSystems);
+  late final GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  rawPowerSystems =
+      GeneratedColumn<String>(
+        'raw_power_systems',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<ModuleLink>>(
+        $TechnologiesTable.$converterrawPowerSystems,
+      );
   @override
   List<GeneratedColumn> get $columns => [
     localId,
@@ -18478,22 +18503,22 @@ class $TechnologiesTable extends Technologies
       const SyncStatusConverter();
   static TypeConverter<List<String>, String> $converterimages =
       const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCreators =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawCharacters =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawFactions =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawItems =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawEvents =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawStories =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawLocations =
-      const ListStringConverter();
-  static TypeConverter<List<String>, String> $converterrawPowerSystems =
-      const ListStringConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCreators =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawCharacters =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawFactions =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawItems =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawEvents =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawStories =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawLocations =
+      const ModuleLinkListConverter();
+  static TypeConverter<List<ModuleLink>, String> $converterrawPowerSystems =
+      const ModuleLinkListConverter();
 }
 
 class TechnologyEntity extends DataClass
@@ -18513,14 +18538,14 @@ class TechnologyEntity extends DataClass
   final String? customNotes;
   final String tagColor;
   final List<String> images;
-  final List<String> rawCreators;
-  final List<String> rawCharacters;
-  final List<String> rawFactions;
-  final List<String> rawItems;
-  final List<String> rawEvents;
-  final List<String> rawStories;
-  final List<String> rawLocations;
-  final List<String> rawPowerSystems;
+  final List<ModuleLink> rawCreators;
+  final List<ModuleLink> rawCharacters;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawItems;
+  final List<ModuleLink> rawEvents;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawPowerSystems;
   const TechnologyEntity({
     required this.localId,
     this.serverId,
@@ -18700,14 +18725,16 @@ class TechnologyEntity extends DataClass
       customNotes: serializer.fromJson<String?>(json['customNotes']),
       tagColor: serializer.fromJson<String>(json['tagColor']),
       images: serializer.fromJson<List<String>>(json['images']),
-      rawCreators: serializer.fromJson<List<String>>(json['rawCreators']),
-      rawCharacters: serializer.fromJson<List<String>>(json['rawCharacters']),
-      rawFactions: serializer.fromJson<List<String>>(json['rawFactions']),
-      rawItems: serializer.fromJson<List<String>>(json['rawItems']),
-      rawEvents: serializer.fromJson<List<String>>(json['rawEvents']),
-      rawStories: serializer.fromJson<List<String>>(json['rawStories']),
-      rawLocations: serializer.fromJson<List<String>>(json['rawLocations']),
-      rawPowerSystems: serializer.fromJson<List<String>>(
+      rawCreators: serializer.fromJson<List<ModuleLink>>(json['rawCreators']),
+      rawCharacters: serializer.fromJson<List<ModuleLink>>(
+        json['rawCharacters'],
+      ),
+      rawFactions: serializer.fromJson<List<ModuleLink>>(json['rawFactions']),
+      rawItems: serializer.fromJson<List<ModuleLink>>(json['rawItems']),
+      rawEvents: serializer.fromJson<List<ModuleLink>>(json['rawEvents']),
+      rawStories: serializer.fromJson<List<ModuleLink>>(json['rawStories']),
+      rawLocations: serializer.fromJson<List<ModuleLink>>(json['rawLocations']),
+      rawPowerSystems: serializer.fromJson<List<ModuleLink>>(
         json['rawPowerSystems'],
       ),
     );
@@ -18731,14 +18758,14 @@ class TechnologyEntity extends DataClass
       'customNotes': serializer.toJson<String?>(customNotes),
       'tagColor': serializer.toJson<String>(tagColor),
       'images': serializer.toJson<List<String>>(images),
-      'rawCreators': serializer.toJson<List<String>>(rawCreators),
-      'rawCharacters': serializer.toJson<List<String>>(rawCharacters),
-      'rawFactions': serializer.toJson<List<String>>(rawFactions),
-      'rawItems': serializer.toJson<List<String>>(rawItems),
-      'rawEvents': serializer.toJson<List<String>>(rawEvents),
-      'rawStories': serializer.toJson<List<String>>(rawStories),
-      'rawLocations': serializer.toJson<List<String>>(rawLocations),
-      'rawPowerSystems': serializer.toJson<List<String>>(rawPowerSystems),
+      'rawCreators': serializer.toJson<List<ModuleLink>>(rawCreators),
+      'rawCharacters': serializer.toJson<List<ModuleLink>>(rawCharacters),
+      'rawFactions': serializer.toJson<List<ModuleLink>>(rawFactions),
+      'rawItems': serializer.toJson<List<ModuleLink>>(rawItems),
+      'rawEvents': serializer.toJson<List<ModuleLink>>(rawEvents),
+      'rawStories': serializer.toJson<List<ModuleLink>>(rawStories),
+      'rawLocations': serializer.toJson<List<ModuleLink>>(rawLocations),
+      'rawPowerSystems': serializer.toJson<List<ModuleLink>>(rawPowerSystems),
     };
   }
 
@@ -18758,14 +18785,14 @@ class TechnologyEntity extends DataClass
     Value<String?> customNotes = const Value.absent(),
     String? tagColor,
     List<String>? images,
-    List<String>? rawCreators,
-    List<String>? rawCharacters,
-    List<String>? rawFactions,
-    List<String>? rawItems,
-    List<String>? rawEvents,
-    List<String>? rawStories,
-    List<String>? rawLocations,
-    List<String>? rawPowerSystems,
+    List<ModuleLink>? rawCreators,
+    List<ModuleLink>? rawCharacters,
+    List<ModuleLink>? rawFactions,
+    List<ModuleLink>? rawItems,
+    List<ModuleLink>? rawEvents,
+    List<ModuleLink>? rawStories,
+    List<ModuleLink>? rawLocations,
+    List<ModuleLink>? rawPowerSystems,
   }) => TechnologyEntity(
     localId: localId ?? this.localId,
     serverId: serverId.present ? serverId.value : this.serverId,
@@ -18948,14 +18975,14 @@ class TechnologiesCompanion extends UpdateCompanion<TechnologyEntity> {
   final Value<String?> customNotes;
   final Value<String> tagColor;
   final Value<List<String>> images;
-  final Value<List<String>> rawCreators;
-  final Value<List<String>> rawCharacters;
-  final Value<List<String>> rawFactions;
-  final Value<List<String>> rawItems;
-  final Value<List<String>> rawEvents;
-  final Value<List<String>> rawStories;
-  final Value<List<String>> rawLocations;
-  final Value<List<String>> rawPowerSystems;
+  final Value<List<ModuleLink>> rawCreators;
+  final Value<List<ModuleLink>> rawCharacters;
+  final Value<List<ModuleLink>> rawFactions;
+  final Value<List<ModuleLink>> rawItems;
+  final Value<List<ModuleLink>> rawEvents;
+  final Value<List<ModuleLink>> rawStories;
+  final Value<List<ModuleLink>> rawLocations;
+  final Value<List<ModuleLink>> rawPowerSystems;
   final Value<int> rowid;
   const TechnologiesCompanion({
     this.localId = const Value.absent(),
@@ -19080,14 +19107,14 @@ class TechnologiesCompanion extends UpdateCompanion<TechnologyEntity> {
     Value<String?>? customNotes,
     Value<String>? tagColor,
     Value<List<String>>? images,
-    Value<List<String>>? rawCreators,
-    Value<List<String>>? rawCharacters,
-    Value<List<String>>? rawFactions,
-    Value<List<String>>? rawItems,
-    Value<List<String>>? rawEvents,
-    Value<List<String>>? rawStories,
-    Value<List<String>>? rawLocations,
-    Value<List<String>>? rawPowerSystems,
+    Value<List<ModuleLink>>? rawCreators,
+    Value<List<ModuleLink>>? rawCharacters,
+    Value<List<ModuleLink>>? rawFactions,
+    Value<List<ModuleLink>>? rawItems,
+    Value<List<ModuleLink>>? rawEvents,
+    Value<List<ModuleLink>>? rawStories,
+    Value<List<ModuleLink>>? rawLocations,
+    Value<List<ModuleLink>>? rawPowerSystems,
     Value<int>? rowid,
   }) {
     return TechnologiesCompanion(
@@ -24043,12 +24070,12 @@ typedef $$EconomiesTableCreateCompanionBuilder =
       required String economicSystem,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawRaces,
-      Value<List<String>> rawStories,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawRaces,
+      Value<List<ModuleLink>> rawStories,
       Value<int> rowid,
     });
 typedef $$EconomiesTableUpdateCompanionBuilder =
@@ -24065,12 +24092,12 @@ typedef $$EconomiesTableUpdateCompanionBuilder =
       Value<String> economicSystem,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawRaces,
-      Value<List<String>> rawStories,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawRaces,
+      Value<List<ModuleLink>> rawStories,
       Value<int> rowid,
     });
 
@@ -24166,37 +24193,37 @@ class $$EconomiesTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawFactions => $composableBuilder(
     column: $table.rawFactions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawItems => $composableBuilder(
     column: $table.rawItems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawRaces => $composableBuilder(
     column: $table.rawRaces,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -24401,31 +24428,31 @@ class $$EconomiesTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawFactions =>
       $composableBuilder(
         column: $table.rawFactions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawItems =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawItems =>
       $composableBuilder(column: $table.rawItems, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawRaces =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawRaces =>
       $composableBuilder(column: $table.rawRaces, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
@@ -24495,12 +24522,12 @@ class $$EconomiesTableTableManager
                 Value<String> economicSystem = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawRaces = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawRaces = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EconomiesCompanion(
                 localId: localId,
@@ -24537,12 +24564,12 @@ class $$EconomiesTableTableManager
                 required String economicSystem,
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawRaces = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawRaces = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EconomiesCompanion.insert(
                 localId: localId,
@@ -24644,16 +24671,16 @@ typedef $$EventsTableCreateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawAbilities,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawPowerSystems,
-      Value<List<String>> rawCreatures,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawAbilities,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawPowerSystems,
+      Value<List<ModuleLink>> rawCreatures,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<int> rowid,
     });
 typedef $$EventsTableUpdateCompanionBuilder =
@@ -24668,16 +24695,16 @@ typedef $$EventsTableUpdateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawAbilities,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawPowerSystems,
-      Value<List<String>> rawCreatures,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawAbilities,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawPowerSystems,
+      Value<List<ModuleLink>> rawCreatures,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<int> rowid,
     });
 
@@ -24761,61 +24788,61 @@ class $$EventsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawFactions => $composableBuilder(
     column: $table.rawFactions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawItems => $composableBuilder(
     column: $table.rawItems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawAbilities => $composableBuilder(
     column: $table.rawAbilities,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawPowerSystems => $composableBuilder(
     column: $table.rawPowerSystems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCreatures => $composableBuilder(
     column: $table.rawCreatures,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawReligions => $composableBuilder(
     column: $table.rawReligions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawTechnologies => $composableBuilder(
     column: $table.rawTechnologies,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -25016,62 +25043,62 @@ class $$EventsTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawFactions =>
       $composableBuilder(
         column: $table.rawFactions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawItems =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawItems =>
       $composableBuilder(column: $table.rawItems, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawAbilities =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawAbilities =>
       $composableBuilder(
         column: $table.rawAbilities,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawPowerSystems =>
-      $composableBuilder(
-        column: $table.rawPowerSystems,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCreatures =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawCreatures =>
       $composableBuilder(
         column: $table.rawCreatures,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawReligions =>
       $composableBuilder(
         column: $table.rawReligions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
-      $composableBuilder(
-        column: $table.rawTechnologies,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => column,
+  );
 
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
@@ -25135,16 +25162,16 @@ class $$EventsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawAbilities = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
-                Value<List<String>> rawCreatures = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawAbilities = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawCreatures = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EventsCompanion(
                 localId: localId,
@@ -25181,16 +25208,16 @@ class $$EventsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawAbilities = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
-                Value<List<String>> rawCreatures = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawAbilities = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawCreatures = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EventsCompanion.insert(
                 localId: localId,
@@ -25301,17 +25328,17 @@ typedef $$FactionsTableCreateCompanionBuilder =
       Value<String?> enemiesJson,
       Value<List<String>> rawAllies,
       Value<List<String>> rawEnemies,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawHeadquarters,
-      Value<List<String>> rawTerritory,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
-      Value<List<String>> rawLanguages,
-      Value<List<String>> rawPowerSystems,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawHeadquarters,
+      Value<List<ModuleLink>> rawTerritory,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
+      Value<List<ModuleLink>> rawLanguages,
+      Value<List<ModuleLink>> rawPowerSystems,
       Value<int> rowid,
     });
 typedef $$FactionsTableUpdateCompanionBuilder =
@@ -25335,17 +25362,17 @@ typedef $$FactionsTableUpdateCompanionBuilder =
       Value<String?> enemiesJson,
       Value<List<String>> rawAllies,
       Value<List<String>> rawEnemies,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawHeadquarters,
-      Value<List<String>> rawTerritory,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
-      Value<List<String>> rawLanguages,
-      Value<List<String>> rawPowerSystems,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawHeadquarters,
+      Value<List<ModuleLink>> rawTerritory,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
+      Value<List<ModuleLink>> rawLanguages,
+      Value<List<ModuleLink>> rawPowerSystems,
       Value<int> rowid,
     });
 
@@ -25477,67 +25504,67 @@ class $$FactionsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawHeadquarters => $composableBuilder(
     column: $table.rawHeadquarters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawTerritory => $composableBuilder(
     column: $table.rawTerritory,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawEvents => $composableBuilder(
     column: $table.rawEvents,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawItems => $composableBuilder(
     column: $table.rawItems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawReligions => $composableBuilder(
     column: $table.rawReligions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawTechnologies => $composableBuilder(
     column: $table.rawTechnologies,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLanguages => $composableBuilder(
     column: $table.rawLanguages,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawPowerSystems => $composableBuilder(
     column: $table.rawPowerSystems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -25826,65 +25853,65 @@ class $$FactionsTableAnnotationComposer
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawHeadquarters =>
-      $composableBuilder(
-        column: $table.rawHeadquarters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawHeadquarters => $composableBuilder(
+    column: $table.rawHeadquarters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawTerritory =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawTerritory =>
       $composableBuilder(
         column: $table.rawTerritory,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawEvents =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawEvents =>
       $composableBuilder(column: $table.rawEvents, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawItems =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawItems =>
       $composableBuilder(column: $table.rawItems, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawReligions =>
       $composableBuilder(
         column: $table.rawReligions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
-      $composableBuilder(
-        column: $table.rawTechnologies,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLanguages =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLanguages =>
       $composableBuilder(
         column: $table.rawLanguages,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawPowerSystems =>
-      $composableBuilder(
-        column: $table.rawPowerSystems,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => column,
+  );
 
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
@@ -25957,17 +25984,17 @@ class $$FactionsTableTableManager
                 Value<String?> enemiesJson = const Value.absent(),
                 Value<List<String>> rawAllies = const Value.absent(),
                 Value<List<String>> rawEnemies = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawHeadquarters = const Value.absent(),
-                Value<List<String>> rawTerritory = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
-                Value<List<String>> rawLanguages = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawHeadquarters = const Value.absent(),
+                Value<List<ModuleLink>> rawTerritory = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawLanguages = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => FactionsCompanion(
                 localId: localId,
@@ -26023,17 +26050,17 @@ class $$FactionsTableTableManager
                 Value<String?> enemiesJson = const Value.absent(),
                 Value<List<String>> rawAllies = const Value.absent(),
                 Value<List<String>> rawEnemies = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawHeadquarters = const Value.absent(),
-                Value<List<String>> rawTerritory = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
-                Value<List<String>> rawLanguages = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawHeadquarters = const Value.absent(),
+                Value<List<ModuleLink>> rawTerritory = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawLanguages = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => FactionsCompanion.insert(
                 localId: localId,
@@ -26157,18 +26184,18 @@ typedef $$ItemsTableCreateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCreatedBy,
-      Value<List<String>> rawUsedBy,
-      Value<List<String>> rawCurrentOwnerCharacter,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
-      Value<List<String>> rawPowerSystems,
-      Value<List<String>> rawLanguages,
-      Value<List<String>> rawAbilities,
+      Value<List<ModuleLink>> rawCreatedBy,
+      Value<List<ModuleLink>> rawUsedBy,
+      Value<List<ModuleLink>> rawCurrentOwnerCharacter,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
+      Value<List<ModuleLink>> rawPowerSystems,
+      Value<List<ModuleLink>> rawLanguages,
+      Value<List<ModuleLink>> rawAbilities,
       Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
@@ -26194,18 +26221,18 @@ typedef $$ItemsTableUpdateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCreatedBy,
-      Value<List<String>> rawUsedBy,
-      Value<List<String>> rawCurrentOwnerCharacter,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
-      Value<List<String>> rawPowerSystems,
-      Value<List<String>> rawLanguages,
-      Value<List<String>> rawAbilities,
+      Value<List<ModuleLink>> rawCreatedBy,
+      Value<List<ModuleLink>> rawUsedBy,
+      Value<List<ModuleLink>> rawCurrentOwnerCharacter,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
+      Value<List<ModuleLink>> rawPowerSystems,
+      Value<List<ModuleLink>> rawLanguages,
+      Value<List<ModuleLink>> rawAbilities,
       Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
@@ -26342,73 +26369,73 @@ class $$ItemsTableFilterComposer extends Composer<_$AppDatabase, $ItemsTable> {
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCreatedBy => $composableBuilder(
     column: $table.rawCreatedBy,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawUsedBy => $composableBuilder(
     column: $table.rawUsedBy,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCurrentOwnerCharacter => $composableBuilder(
     column: $table.rawCurrentOwnerCharacter,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawFactions => $composableBuilder(
     column: $table.rawFactions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawEvents => $composableBuilder(
     column: $table.rawEvents,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawReligions => $composableBuilder(
     column: $table.rawReligions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawTechnologies => $composableBuilder(
     column: $table.rawTechnologies,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawPowerSystems => $composableBuilder(
     column: $table.rawPowerSystems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLanguages => $composableBuilder(
     column: $table.rawLanguages,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawAbilities => $composableBuilder(
     column: $table.rawAbilities,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -26720,67 +26747,67 @@ class $$ItemsTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCreatedBy =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawCreatedBy =>
       $composableBuilder(
         column: $table.rawCreatedBy,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawUsedBy =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawUsedBy =>
       $composableBuilder(column: $table.rawUsedBy, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
   get rawCurrentOwnerCharacter => $composableBuilder(
     column: $table.rawCurrentOwnerCharacter,
     builder: (column) => column,
   );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawFactions =>
       $composableBuilder(
         column: $table.rawFactions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawEvents =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawEvents =>
       $composableBuilder(column: $table.rawEvents, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawReligions =>
       $composableBuilder(
         column: $table.rawReligions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
-      $composableBuilder(
-        column: $table.rawTechnologies,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawPowerSystems =>
-      $composableBuilder(
-        column: $table.rawPowerSystems,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLanguages =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLanguages =>
       $composableBuilder(
         column: $table.rawLanguages,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawAbilities =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawAbilities =>
       $composableBuilder(
         column: $table.rawAbilities,
         builder: (column) => column,
@@ -26862,19 +26889,19 @@ class $$ItemsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCreatedBy = const Value.absent(),
-                Value<List<String>> rawUsedBy = const Value.absent(),
-                Value<List<String>> rawCurrentOwnerCharacter =
+                Value<List<ModuleLink>> rawCreatedBy = const Value.absent(),
+                Value<List<ModuleLink>> rawUsedBy = const Value.absent(),
+                Value<List<ModuleLink>> rawCurrentOwnerCharacter =
                     const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
-                Value<List<String>> rawLanguages = const Value.absent(),
-                Value<List<String>> rawAbilities = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawLanguages = const Value.absent(),
+                Value<List<ModuleLink>> rawAbilities = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ItemsCompanion(
@@ -26936,19 +26963,19 @@ class $$ItemsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCreatedBy = const Value.absent(),
-                Value<List<String>> rawUsedBy = const Value.absent(),
-                Value<List<String>> rawCurrentOwnerCharacter =
+                Value<List<ModuleLink>> rawCreatedBy = const Value.absent(),
+                Value<List<ModuleLink>> rawUsedBy = const Value.absent(),
+                Value<List<ModuleLink>> rawCurrentOwnerCharacter =
                     const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
-                Value<List<String>> rawLanguages = const Value.absent(),
-                Value<List<String>> rawAbilities = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawLanguages = const Value.absent(),
+                Value<List<ModuleLink>> rawAbilities = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ItemsCompanion.insert(
@@ -27067,12 +27094,12 @@ typedef $$LanguagesTableCreateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawRaces,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawReligions,
+      Value<List<ModuleLink>> rawRaces,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawReligions,
       Value<int> rowid,
     });
 typedef $$LanguagesTableUpdateCompanionBuilder =
@@ -27090,12 +27117,12 @@ typedef $$LanguagesTableUpdateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawRaces,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawReligions,
+      Value<List<ModuleLink>> rawRaces,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawReligions,
       Value<int> rowid,
     });
 
@@ -27194,37 +27221,37 @@ class $$LanguagesTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawRaces => $composableBuilder(
     column: $table.rawRaces,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawFactions => $composableBuilder(
     column: $table.rawFactions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawReligions => $composableBuilder(
     column: $table.rawReligions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -27431,34 +27458,34 @@ class $$LanguagesTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawRaces =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawRaces =>
       $composableBuilder(column: $table.rawRaces, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawFactions =>
       $composableBuilder(
         column: $table.rawFactions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawReligions =>
       $composableBuilder(
         column: $table.rawReligions,
         builder: (column) => column,
@@ -27529,12 +27556,12 @@ class $$LanguagesTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawRaces = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawRaces = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LanguagesCompanion(
                 localId: localId,
@@ -27573,12 +27600,12 @@ class $$LanguagesTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawRaces = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawRaces = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LanguagesCompanion.insert(
                 localId: localId,
@@ -27684,16 +27711,16 @@ typedef $$LocationsTableCreateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawCreatures,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawLanguages,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawCreatures,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawLanguages,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
@@ -27712,16 +27739,16 @@ typedef $$LocationsTableUpdateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawCreatures,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawLanguages,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawCreatures,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawLanguages,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<DateTime?> updatedAt,
       Value<int> rowid,
     });
@@ -27821,61 +27848,61 @@ class $$LocationsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawFactions => $composableBuilder(
     column: $table.rawFactions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawEvents => $composableBuilder(
     column: $table.rawEvents,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawItems => $composableBuilder(
     column: $table.rawItems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCreatures => $composableBuilder(
     column: $table.rawCreatures,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLanguages => $composableBuilder(
     column: $table.rawLanguages,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawReligions => $composableBuilder(
     column: $table.rawReligions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawTechnologies => $composableBuilder(
     column: $table.rawTechnologies,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -28112,59 +28139,59 @@ class $$LocationsTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawFactions =>
       $composableBuilder(
         column: $table.rawFactions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawEvents =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawEvents =>
       $composableBuilder(column: $table.rawEvents, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawItems =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawItems =>
       $composableBuilder(column: $table.rawItems, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCreatures =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawCreatures =>
       $composableBuilder(
         column: $table.rawCreatures,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLanguages =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLanguages =>
       $composableBuilder(
         column: $table.rawLanguages,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawReligions =>
       $composableBuilder(
         column: $table.rawReligions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
-      $composableBuilder(
-        column: $table.rawTechnologies,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -28234,16 +28261,16 @@ class $$LocationsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawCreatures = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawLanguages = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawCreatures = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawLanguages = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LocationsCompanion(
@@ -28288,16 +28315,16 @@ class $$LocationsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawCreatures = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawLanguages = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawCreatures = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawLanguages = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LocationsCompanion.insert(
@@ -28410,14 +28437,14 @@ typedef $$PowerSystemsTableCreateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawAbilities,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawCreatures,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawAbilities,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawCreatures,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<int> rowid,
     });
 typedef $$PowerSystemsTableUpdateCompanionBuilder =
@@ -28436,14 +28463,14 @@ typedef $$PowerSystemsTableUpdateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawAbilities,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawCreatures,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawAbilities,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawCreatures,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<int> rowid,
     });
 
@@ -28549,49 +28576,49 @@ class $$PowerSystemsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawAbilities => $composableBuilder(
     column: $table.rawAbilities,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawFactions => $composableBuilder(
     column: $table.rawFactions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawEvents => $composableBuilder(
     column: $table.rawEvents,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCreatures => $composableBuilder(
     column: $table.rawCreatures,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawReligions => $composableBuilder(
     column: $table.rawReligions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawTechnologies => $composableBuilder(
     column: $table.rawTechnologies,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -28823,50 +28850,50 @@ class $$PowerSystemsTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawAbilities =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawAbilities =>
       $composableBuilder(
         column: $table.rawAbilities,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawFactions =>
       $composableBuilder(
         column: $table.rawFactions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawEvents =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawEvents =>
       $composableBuilder(column: $table.rawEvents, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCreatures =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawCreatures =>
       $composableBuilder(
         column: $table.rawCreatures,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawReligions =>
       $composableBuilder(
         column: $table.rawReligions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
-      $composableBuilder(
-        column: $table.rawTechnologies,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => column,
+  );
 
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
@@ -28934,14 +28961,14 @@ class $$PowerSystemsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawAbilities = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawCreatures = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawAbilities = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawCreatures = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PowerSystemsCompanion(
                 localId: localId,
@@ -28984,14 +29011,14 @@ class $$PowerSystemsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawAbilities = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawCreatures = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawAbilities = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawCreatures = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PowerSystemsCompanion.insert(
                 localId: localId,
@@ -29101,14 +29128,14 @@ typedef $$RacesTableCreateCompanionBuilder =
       Value<bool> isExtinct,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawLanguages,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawPowerSystems,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawLanguages,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawPowerSystems,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<int> rowid,
     });
 typedef $$RacesTableUpdateCompanionBuilder =
@@ -29127,14 +29154,14 @@ typedef $$RacesTableUpdateCompanionBuilder =
       Value<bool> isExtinct,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawLanguages,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawReligions,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawPowerSystems,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawLanguages,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawReligions,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawPowerSystems,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<int> rowid,
     });
 
@@ -29238,49 +29265,49 @@ class $$RacesTableFilterComposer extends Composer<_$AppDatabase, $RacesTable> {
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLanguages => $composableBuilder(
     column: $table.rawLanguages,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawReligions => $composableBuilder(
     column: $table.rawReligions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawEvents => $composableBuilder(
     column: $table.rawEvents,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawPowerSystems => $composableBuilder(
     column: $table.rawPowerSystems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawTechnologies => $composableBuilder(
     column: $table.rawTechnologies,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -29505,50 +29532,50 @@ class $$RacesTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLanguages =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLanguages =>
       $composableBuilder(
         column: $table.rawLanguages,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawReligions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawReligions =>
       $composableBuilder(
         column: $table.rawReligions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawEvents =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawEvents =>
       $composableBuilder(column: $table.rawEvents, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawPowerSystems =>
-      $composableBuilder(
-        column: $table.rawPowerSystems,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
-      $composableBuilder(
-        column: $table.rawTechnologies,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => column,
+  );
 
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
@@ -29616,14 +29643,14 @@ class $$RacesTableTableManager
                 Value<bool> isExtinct = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawLanguages = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawLanguages = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RacesCompanion(
                 localId: localId,
@@ -29666,14 +29693,14 @@ class $$RacesTableTableManager
                 Value<bool> isExtinct = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawLanguages = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawReligions = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawLanguages = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawReligions = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RacesCompanion.insert(
                 localId: localId,
@@ -29783,14 +29810,14 @@ typedef $$ReligionsTableCreateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawCreatures,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawPowerSystems,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawCreatures,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawPowerSystems,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<int> rowid,
     });
 typedef $$ReligionsTableUpdateCompanionBuilder =
@@ -29811,14 +29838,14 @@ typedef $$ReligionsTableUpdateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawCreatures,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawPowerSystems,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawTechnologies,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawCreatures,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawPowerSystems,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawTechnologies,
       Value<int> rowid,
     });
 
@@ -29938,49 +29965,49 @@ class $$ReligionsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawFactions => $composableBuilder(
     column: $table.rawFactions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCreatures => $composableBuilder(
     column: $table.rawCreatures,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawEvents => $composableBuilder(
     column: $table.rawEvents,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawPowerSystems => $composableBuilder(
     column: $table.rawPowerSystems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawTechnologies => $composableBuilder(
     column: $table.rawTechnologies,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -30227,50 +30254,50 @@ class $$ReligionsTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawFactions =>
       $composableBuilder(
         column: $table.rawFactions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCreatures =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawCreatures =>
       $composableBuilder(
         column: $table.rawCreatures,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawEvents =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawEvents =>
       $composableBuilder(column: $table.rawEvents, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawPowerSystems =>
-      $composableBuilder(
-        column: $table.rawPowerSystems,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawTechnologies =>
-      $composableBuilder(
-        column: $table.rawTechnologies,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawTechnologies => $composableBuilder(
+    column: $table.rawTechnologies,
+    builder: (column) => column,
+  );
 
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
@@ -30340,14 +30367,14 @@ class $$ReligionsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawCreatures = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawCreatures = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ReligionsCompanion(
                 localId: localId,
@@ -30394,14 +30421,14 @@ class $$ReligionsTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawCreatures = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawTechnologies = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawCreatures = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawTechnologies = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ReligionsCompanion.insert(
                 localId: localId,
@@ -30896,14 +30923,14 @@ typedef $$TechnologiesTableCreateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCreators,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawPowerSystems,
+      Value<List<ModuleLink>> rawCreators,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawPowerSystems,
       Value<int> rowid,
     });
 typedef $$TechnologiesTableUpdateCompanionBuilder =
@@ -30923,14 +30950,14 @@ typedef $$TechnologiesTableUpdateCompanionBuilder =
       Value<String?> customNotes,
       Value<String> tagColor,
       Value<List<String>> images,
-      Value<List<String>> rawCreators,
-      Value<List<String>> rawCharacters,
-      Value<List<String>> rawFactions,
-      Value<List<String>> rawItems,
-      Value<List<String>> rawEvents,
-      Value<List<String>> rawStories,
-      Value<List<String>> rawLocations,
-      Value<List<String>> rawPowerSystems,
+      Value<List<ModuleLink>> rawCreators,
+      Value<List<ModuleLink>> rawCharacters,
+      Value<List<ModuleLink>> rawFactions,
+      Value<List<ModuleLink>> rawItems,
+      Value<List<ModuleLink>> rawEvents,
+      Value<List<ModuleLink>> rawStories,
+      Value<List<ModuleLink>> rawLocations,
+      Value<List<ModuleLink>> rawPowerSystems,
       Value<int> rowid,
     });
 
@@ -31040,49 +31067,49 @@ class $$TechnologiesTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCreators => $composableBuilder(
     column: $table.rawCreators,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawCharacters => $composableBuilder(
     column: $table.rawCharacters,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawFactions => $composableBuilder(
     column: $table.rawFactions,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawItems => $composableBuilder(
     column: $table.rawItems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawEvents => $composableBuilder(
     column: $table.rawEvents,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawStories => $composableBuilder(
     column: $table.rawStories,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawLocations => $composableBuilder(
     column: $table.rawLocations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  ColumnWithTypeConverterFilters<List<ModuleLink>, List<ModuleLink>, String>
   get rawPowerSystems => $composableBuilder(
     column: $table.rawPowerSystems,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -31321,47 +31348,47 @@ class $$TechnologiesTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<String>, String> get images =>
       $composableBuilder(column: $table.images, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCreators =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawCreators =>
       $composableBuilder(
         column: $table.rawCreators,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawCharacters =>
-      $composableBuilder(
-        column: $table.rawCharacters,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawCharacters => $composableBuilder(
+    column: $table.rawCharacters,
+    builder: (column) => column,
+  );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawFactions =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawFactions =>
       $composableBuilder(
         column: $table.rawFactions,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawItems =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawItems =>
       $composableBuilder(column: $table.rawItems, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawEvents =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawEvents =>
       $composableBuilder(column: $table.rawEvents, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawStories =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawStories =>
       $composableBuilder(
         column: $table.rawStories,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawLocations =>
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String> get rawLocations =>
       $composableBuilder(
         column: $table.rawLocations,
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<List<String>, String> get rawPowerSystems =>
-      $composableBuilder(
-        column: $table.rawPowerSystems,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<List<ModuleLink>, String>
+  get rawPowerSystems => $composableBuilder(
+    column: $table.rawPowerSystems,
+    builder: (column) => column,
+  );
 
   $$WorldsTableAnnotationComposer get worldLocalId {
     final $$WorldsTableAnnotationComposer composer = $composerBuilder(
@@ -31430,14 +31457,14 @@ class $$TechnologiesTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCreators = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawCreators = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TechnologiesCompanion(
                 localId: localId,
@@ -31482,14 +31509,14 @@ class $$TechnologiesTableTableManager
                 Value<String?> customNotes = const Value.absent(),
                 Value<String> tagColor = const Value.absent(),
                 Value<List<String>> images = const Value.absent(),
-                Value<List<String>> rawCreators = const Value.absent(),
-                Value<List<String>> rawCharacters = const Value.absent(),
-                Value<List<String>> rawFactions = const Value.absent(),
-                Value<List<String>> rawItems = const Value.absent(),
-                Value<List<String>> rawEvents = const Value.absent(),
-                Value<List<String>> rawStories = const Value.absent(),
-                Value<List<String>> rawLocations = const Value.absent(),
-                Value<List<String>> rawPowerSystems = const Value.absent(),
+                Value<List<ModuleLink>> rawCreators = const Value.absent(),
+                Value<List<ModuleLink>> rawCharacters = const Value.absent(),
+                Value<List<ModuleLink>> rawFactions = const Value.absent(),
+                Value<List<ModuleLink>> rawItems = const Value.absent(),
+                Value<List<ModuleLink>> rawEvents = const Value.absent(),
+                Value<List<ModuleLink>> rawStories = const Value.absent(),
+                Value<List<ModuleLink>> rawLocations = const Value.absent(),
+                Value<List<ModuleLink>> rawPowerSystems = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TechnologiesCompanion.insert(
                 localId: localId,

@@ -242,16 +242,16 @@ class EventSyncService {
       'tagColor': event.tagColor,
       'images': event.images,
       
-      'rawCharacters': event.rawCharacters,
-      'rawFactions': event.rawFactions,
-      'rawLocations': event.rawLocations,
-      'rawItems': event.rawItems,
-      'rawAbilities': event.rawAbilities,
-      'rawStories': event.rawStories,
-      'rawPowerSystems': event.rawPowerSystems,
-      'rawCreatures': event.rawCreatures,
-      'rawReligions': event.rawReligions,
-      'rawTechnologies': event.rawTechnologies,
+      'rawCharacters': event.rawCharacters.map((e) => e.name).toList(),
+      'rawFactions': event.rawFactions.map((e) => e.name).toList(),
+      'rawLocations': event.rawLocations.map((e) => e.name).toList(),
+      'rawItems': event.rawItems.map((e) => e.name).toList(),
+      'rawAbilities': event.rawAbilities.map((e) => e.name).toList(),
+      'rawStories': event.rawStories.map((e) => e.name).toList(),
+      'rawPowerSystems': event.rawPowerSystems.map((e) => e.name).toList(),
+      'rawCreatures': event.rawCreatures.map((e) => e.name).toList(),
+      'rawReligions': event.rawReligions.map((e) => e.name).toList(),
+      'rawTechnologies': event.rawTechnologies.map((e) => e.name).toList(),
     };
   }
 }

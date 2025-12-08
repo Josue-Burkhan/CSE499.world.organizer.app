@@ -250,16 +250,16 @@ class LocationSyncService {
       'tagColor': loc.tagColor,
       'images': loc.images,
       
-      'rawLocations': loc.rawLocations,
-      'rawFactions': loc.rawFactions,
-      'rawEvents': loc.rawEvents,
-      'rawCharacters': loc.rawCharacters,
-      'rawItems': loc.rawItems,
-      'rawCreatures': loc.rawCreatures,
-      'rawStories': loc.rawStories,
-      'rawLanguages': loc.rawLanguages,
-      'rawReligions': loc.rawReligions,
-      'rawTechnologies': loc.rawTechnologies,
+      'rawLocations': loc.rawLocations.map((e) => e.name).toList(),
+      'rawFactions': loc.rawFactions.map((e) => e.name).toList(),
+      'rawEvents': loc.rawEvents.map((e) => e.name).toList(),
+      'rawCharacters': loc.rawCharacters.map((e) => e.name).toList(),
+      'rawItems': loc.rawItems.map((e) => e.name).toList(),
+      'rawCreatures': loc.rawCreatures.map((e) => e.name).toList(),
+      'rawStories': loc.rawStories.map((e) => e.name).toList(),
+      'rawLanguages': loc.rawLanguages.map((e) => e.name).toList(),
+      'rawReligions': loc.rawReligions.map((e) => e.name).toList(),
+      'rawTechnologies': loc.rawTechnologies.map((e) => e.name).toList(),
     };
   }
 }

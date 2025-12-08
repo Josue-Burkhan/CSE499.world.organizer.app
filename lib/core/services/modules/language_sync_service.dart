@@ -242,12 +242,12 @@ class LanguageSyncService {
       'tagColor': language.tagColor,
       'images': language.images,
       
-      'rawRaces': language.rawRaces,
-      'rawFactions': language.rawFactions,
-      'rawCharacters': language.rawCharacters,
-      'rawLocations': language.rawLocations,
-      'rawStories': language.rawStories,
-      'rawReligions': language.rawReligions,
+      'rawRaces': language.rawRaces.map((e) => e.name).toList(),
+      'rawFactions': language.rawFactions.map((e) => e.name).toList(),
+      'rawCharacters': language.rawCharacters.map((e) => e.name).toList(),
+      'rawLocations': language.rawLocations.map((e) => e.name).toList(),
+      'rawStories': language.rawStories.map((e) => e.name).toList(),
+      'rawReligions': language.rawReligions.map((e) => e.name).toList(),
     };
   }
 }

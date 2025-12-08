@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/autocomplete_chips.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
 
 class RaceFormScreen extends ConsumerStatefulWidget {
   final String? raceLocalId;
@@ -41,14 +42,15 @@ class _RaceFormScreenState extends ConsumerState<RaceFormScreen> {
   bool _isExtinct = false;
 
   // Links (Raw)
-  List<String> _rawLanguages = [];
-  List<String> _rawCharacters = [];
-  List<String> _rawLocations = [];
-  List<String> _rawReligions = [];
-  List<String> _rawStories = [];
-  List<String> _rawEvents = [];
-  List<String> _rawPowerSystems = [];
-  List<String> _rawTechnologies = [];
+  // Links (Raw)
+  List<ModuleLink> _rawLanguages = [];
+  List<ModuleLink> _rawCharacters = [];
+  List<ModuleLink> _rawLocations = [];
+  List<ModuleLink> _rawReligions = [];
+  List<ModuleLink> _rawStories = [];
+  List<ModuleLink> _rawEvents = [];
+  List<ModuleLink> _rawPowerSystems = [];
+  List<ModuleLink> _rawTechnologies = [];
 
   @override
   void initState() {
@@ -152,6 +154,19 @@ class _RaceFormScreenState extends ConsumerState<RaceFormScreen> {
         );
       }
     }
+  }
+
+  List<ModuleLink> _updateLinksList(List<ModuleLink> currentList, List<String> newNames) {
+    final Map<String, ModuleLink> existingMap = {
+      for (var item in currentList) item.name: item,
+    };
+    
+    return newNames.map((name) {
+      if (existingMap.containsKey(name)) {
+        return existingMap[name]!;
+      }
+      return ModuleLink(id: '', name: name);
+    }).toList();
   }
 
   Future<List<String>> _search(String query, String type) async {
@@ -258,18 +273,9 @@ class _RaceFormScreenState extends ConsumerState<RaceFormScreen> {
             controller: _averageHeightController,
             decoration: const InputDecoration(labelText: 'Average Height', border: OutlineInputBorder()),
           ),
-          const SizedBox(height: 16),
           TextFormField(
             controller: _averageWeightController,
             decoration: const InputDecoration(labelText: 'Average Weight', border: OutlineInputBorder()),
-          ),
-          const SizedBox(height: 16),
-          AutocompleteChips(
-            label: 'Traits',
-            initialValues: _traits,
-            onChanged: (values) => _traits = values,
-            searchFunction: (q) => Future.value([]),
-            hintText: 'Add a trait...',
           ),
         ],
       ),
@@ -298,57 +304,57 @@ class _RaceFormScreenState extends ConsumerState<RaceFormScreen> {
         children: [
           AutocompleteChips(
             label: 'Languages',
-            initialValues: _rawLanguages,
-            onChanged: (values) => _rawLanguages = values,
+            initialValues: _rawLanguages.map((e) => e.name).toList(),
+            onChanged: (values) => _rawLanguages = _updateLinksList(_rawLanguages, values),
             searchFunction: (q) => _search(q, 'language'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Characters',
-            initialValues: _rawCharacters,
-            onChanged: (values) => _rawCharacters = values,
+            initialValues: _rawCharacters.map((e) => e.name).toList(),
+            onChanged: (values) => _rawCharacters = _updateLinksList(_rawCharacters, values),
             searchFunction: (q) => _search(q, 'character'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Locations',
-            initialValues: _rawLocations,
-            onChanged: (values) => _rawLocations = values,
+            initialValues: _rawLocations.map((e) => e.name).toList(),
+            onChanged: (values) => _rawLocations = _updateLinksList(_rawLocations, values),
             searchFunction: (q) => _search(q, 'location'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Religions',
-            initialValues: _rawReligions,
-            onChanged: (values) => _rawReligions = values,
+            initialValues: _rawReligions.map((e) => e.name).toList(),
+            onChanged: (values) => _rawReligions = _updateLinksList(_rawReligions, values),
             searchFunction: (q) => _search(q, 'religion'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Stories',
-            initialValues: _rawStories,
-            onChanged: (values) => _rawStories = values,
+            initialValues: _rawStories.map((e) => e.name).toList(),
+            onChanged: (values) => _rawStories = _updateLinksList(_rawStories, values),
             searchFunction: (q) => _search(q, 'story'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Events',
-            initialValues: _rawEvents,
-            onChanged: (values) => _rawEvents = values,
+            initialValues: _rawEvents.map((e) => e.name).toList(),
+            onChanged: (values) => _rawEvents = _updateLinksList(_rawEvents, values),
             searchFunction: (q) => _search(q, 'event'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Power Systems',
-            initialValues: _rawPowerSystems,
-            onChanged: (values) => _rawPowerSystems = values,
+            initialValues: _rawPowerSystems.map((e) => e.name).toList(),
+            onChanged: (values) => _rawPowerSystems = _updateLinksList(_rawPowerSystems, values),
             searchFunction: (q) => _search(q, 'powersystem'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Technologies',
-            initialValues: _rawTechnologies,
-            onChanged: (values) => _rawTechnologies = values,
+            initialValues: _rawTechnologies.map((e) => e.name).toList(),
+            onChanged: (values) => _rawTechnologies = _updateLinksList(_rawTechnologies, values),
             searchFunction: (q) => _search(q, 'technology'),
           ),
         ],

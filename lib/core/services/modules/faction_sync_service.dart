@@ -270,17 +270,17 @@ class FactionSyncService {
       'allies': faction.alliesJson != null ? jsonDecode(faction.alliesJson!) : [],
       'enemies': faction.enemiesJson != null ? jsonDecode(faction.enemiesJson!) : [],
       
-      'rawCharacters': faction.rawCharacters,
-      'rawLocations': faction.rawLocations,
-      'rawHeadquarters': faction.rawHeadquarters,
-      'rawTerritory': faction.rawTerritory,
-      'rawEvents': faction.rawEvents,
-      'rawItems': faction.rawItems,
-      'rawStories': faction.rawStories,
-      'rawReligions': faction.rawReligions,
-      'rawTechnologies': faction.rawTechnologies,
-      'rawLanguages': faction.rawLanguages,
-      'rawPowerSystems': faction.rawPowerSystems,
+      'rawCharacters': faction.rawCharacters.map((e) => e.name).toList(),
+      'rawLocations': faction.rawLocations.map((e) => e.name).toList(),
+      'rawHeadquarters': faction.rawHeadquarters.map((e) => e.name).toList(),
+      'rawTerritory': faction.rawTerritory.map((e) => e.name).toList(),
+      'rawEvents': faction.rawEvents.map((e) => e.name).toList(),
+      'rawItems': faction.rawItems.map((e) => e.name).toList(),
+      'rawStories': faction.rawStories.map((e) => e.name).toList(),
+      'rawReligions': faction.rawReligions.map((e) => e.name).toList(),
+      'rawTechnologies': faction.rawTechnologies.map((e) => e.name).toList(),
+      'rawLanguages': faction.rawLanguages.map((e) => e.name).toList(),
+      'rawPowerSystems': faction.rawPowerSystems.map((e) => e.name).toList(),
     };
   }
 

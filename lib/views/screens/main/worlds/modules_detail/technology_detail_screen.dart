@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/faction_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/location_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/item_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/event_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/powersystem_detail_screen.dart';
 
 final technologyDetailStreamProvider =
     StreamProvider.family.autoDispose<TechnologyEntity?, String>((ref, serverId) {
@@ -119,10 +128,10 @@ class TechnologyDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
+                        errorWidget: (context, url, error) => 
                           Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
@@ -135,14 +144,14 @@ class TechnologyDetailScreen extends ConsumerWidget {
               _buildDescription(technology.description),
               _buildTechnologyDetails(technology),
               _buildCustomNotes(technology.customNotes),
-              _buildRawList('Creators', technology.rawCreators),
-              _buildRawList('Characters', technology.rawCharacters),
-              _buildRawList('Factions', technology.rawFactions),
-              _buildRawList('Items', technology.rawItems),
-              _buildRawList('Events', technology.rawEvents),
-              _buildRawList('Stories', technology.rawStories),
-              _buildRawList('Locations', technology.rawLocations),
-              _buildRawList('Power Systems', technology.rawPowerSystems),
+              _buildLinkList(context, 'Creators', technology.rawCreators),
+              _buildLinkList(context, 'Characters', technology.rawCharacters),
+              _buildLinkList(context, 'Factions', technology.rawFactions),
+              _buildLinkList(context, 'Items', technology.rawItems),
+              _buildLinkList(context, 'Events', technology.rawEvents),
+              _buildLinkList(context, 'Stories', technology.rawStories),
+              _buildLinkList(context, 'Locations', technology.rawLocations),
+              _buildLinkList(context, 'Power Systems', technology.rawPowerSystems),
             ]),
           ),
         ],
@@ -261,8 +270,8 @@ class TechnologyDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links) {
+    if (links.isEmpty) return const SizedBox.shrink();
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -276,12 +285,35 @@ class TechnologyDetailScreen extends ConsumerWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: rawList.map((item) => Chip(label: Text(item))).toList(),
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: () => _navigateToModule(context, link, title),
+              )).toList(),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _navigateToModule(BuildContext context, ModuleLink link, String title) {
+    if (link.id.isEmpty) return;
+
+    Widget? page;
+    switch (title) {
+      case 'Creators': // Assuming creators are characters
+      case 'Characters': page = CharacterDetailScreen(characterServerId: link.id); break;
+      case 'Factions': page = FactionDetailScreen(factionServerId: link.id); break;
+      case 'Locations': page = LocationDetailScreen(locationServerId: link.id); break;
+      case 'Items': page = ItemDetailScreen(itemServerId: link.id); break;
+      case 'Events': page = EventDetailScreen(eventServerId: link.id); break;
+      case 'Power Systems': page = PowerSystemDetailScreen(powerSystemServerId: link.id); break;
+      case 'Stories': page = StoryDetailScreen(storyServerId: link.id); break;
+    }
+
+    if (page != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => page!));
+    }
   }
   Widget _buildEmptyStateCard(String title, IconData icon) {
     return Card(
@@ -352,7 +384,7 @@ class FullScreenImageViewer extends StatelessWidget {
           panEnabled: true,
           minScale: 1.0,
           maxScale: 4.0,
-          child: Image.network(imageUrl),
+          child: CachedNetworkImage(imageUrl: imageUrl),
         ),
       ),
     );

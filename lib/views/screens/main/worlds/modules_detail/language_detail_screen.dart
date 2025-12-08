@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/faction_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/location_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/race_detail_screen.dart';
 
 final languageDetailStreamProvider =
     StreamProvider.family.autoDispose<LanguageEntity?, String>((ref, serverId) {
@@ -119,10 +127,11 @@ class LanguageDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
+                        errorWidget: (context, url, error) => 
                           Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
@@ -134,12 +143,12 @@ class LanguageDetailScreen extends ConsumerWidget {
               _buildBasicInfo(language),
               _buildLinguisticDetails(language),
               _buildCustomNotes(language.customNotes),
-              _buildRawList('Races', language.rawRaces),
-              _buildRawList('Factions', language.rawFactions),
-              _buildRawList('Characters', language.rawCharacters),
-              _buildRawList('Locations', language.rawLocations),
-              _buildRawList('Stories', language.rawStories),
-              _buildRawList('Religions', language.rawReligions),
+              _buildLinkList(context, 'Races', language.rawRaces),
+              _buildLinkList(context, 'Factions', language.rawFactions),
+              _buildLinkList(context, 'Characters', language.rawCharacters),
+              _buildLinkList(context, 'Locations', language.rawLocations),
+              _buildLinkList(context, 'Stories', language.rawStories),
+              _buildLinkList(context, 'Religions', language.rawReligions),
             ]),
           ),
         ],
@@ -234,8 +243,16 @@ class LanguageDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links) {
+    if (links.isEmpty) return const SizedBox.shrink();
+
+    String type = '';
+    if (title == 'Races') type = 'race';
+    else if (title == 'Factions') type = 'faction';
+    else if (title == 'Characters') type = 'character';
+    else if (title == 'Locations') type = 'location';
+    else if (title == 'Stories') type = 'story';
+    else if (title == 'Religions') type = 'religion';
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -249,7 +266,26 @@ class LanguageDetailScreen extends ConsumerWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: rawList.map((item) => Chip(label: Text(item))).toList(),
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: () {
+                   if (link.id.isEmpty) return;
+                   
+                   Widget? page;
+                   switch (type) {
+                     case 'race': page = RaceDetailScreen(raceServerId: link.id); break;
+                     case 'faction': page = FactionDetailScreen(factionServerId: link.id); break;
+                     case 'character': page = CharacterDetailScreen(characterServerId: link.id); break;
+                     case 'location': page = LocationDetailScreen(locationServerId: link.id); break;
+                     case 'story': page = StoryDetailScreen(storyServerId: link.id); break;
+                     case 'religion': page = ReligionDetailScreen(religionServerId: link.id); break;
+                   }
+                   
+                   if (page != null) {
+                     Navigator.of(context).push(MaterialPageRoute(builder: (_) => page!));
+                   }
+                },
+              )).toList(),
             ),
           ],
         ),

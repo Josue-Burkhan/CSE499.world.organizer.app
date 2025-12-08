@@ -4,6 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/models/api_models/modules/economy_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/faction_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/location_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/item_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/race_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
 
 final economyDetailStreamProvider =
     StreamProvider.family.autoDispose<EconomyEntity?, String>((ref, serverId) {
@@ -126,11 +134,12 @@ class EconomyDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
+                        errorWidget: (context, error, stackTrace) => 
                           Container(color: tagColor.withOpacity(0.5)),
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
               ),
@@ -141,14 +150,14 @@ class EconomyDetailScreen extends ConsumerWidget {
               _buildBasicInfo(economy),
               _buildDescription(economy),
               if (currency != null) _buildCurrency(currency),
-              _buildRawList('Trade Goods', economy.tradeGoods),
-              _buildRawList('Key Industries', economy.keyIndustries),
-              _buildRawList('Characters', economy.rawCharacters),
-              _buildRawList('Factions', economy.rawFactions),
-              _buildRawList('Locations', economy.rawLocations),
-              _buildRawList('Items', economy.rawItems),
-              _buildRawList('Races', economy.rawRaces),
-              _buildRawList('Stories', economy.rawStories),
+              _buildLinkList(context, 'Trade Goods', economy.tradeGoods.map((e) => ModuleLink(id: '', name: e)).toList()), // TradeGoods is List<String>
+              _buildLinkList(context, 'Key Industries', economy.keyIndustries.map((e) => ModuleLink(id: '', name: e)).toList()), // List<String>
+              _buildLinkList(context, 'Characters', economy.rawCharacters),
+              _buildLinkList(context, 'Factions', economy.rawFactions),
+              _buildLinkList(context, 'Locations', economy.rawLocations),
+              _buildLinkList(context, 'Items', economy.rawItems),
+              _buildLinkList(context, 'Races', economy.rawRaces),
+              _buildLinkList(context, 'Stories', economy.rawStories),
             ]),
           ),
         ],
@@ -217,8 +226,38 @@ class EconomyDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
+  void _navigateToModule(BuildContext context, ModuleLink link, String type) {
+    if (link.id.isEmpty) return;
+
+    Widget? screen;
+    switch (type) {
+      case 'Characters':
+        screen = CharacterDetailScreen(characterServerId: link.id);
+        break;
+      case 'Factions':
+        screen = FactionDetailScreen(factionServerId: link.id);
+        break;
+      case 'Locations':
+        screen = LocationDetailScreen(locationServerId: link.id);
+        break;
+      case 'Items':
+        screen = ItemDetailScreen(itemServerId: link.id);
+        break;
+      case 'Races':
+        screen = RaceDetailScreen(raceServerId: link.id);
+        break;
+      case 'Stories':
+        screen = StoryDetailScreen(storyServerId: link.id);
+        break;
+    }
+
+    if (screen != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => screen!));
+    }
+  }
+
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links) {
+    if (links.isEmpty) return const SizedBox.shrink();
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -232,13 +271,17 @@ class EconomyDetailScreen extends ConsumerWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: rawList.map((item) => Chip(label: Text(item))).toList(),
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: link.id.isEmpty ? null : () => _navigateToModule(context, link, title),
+              )).toList(), // Pass title as type
             ),
           ],
         ),
       ),
     );
   }
+
 }
 
 class FullScreenImageViewer extends StatelessWidget {
@@ -259,7 +302,7 @@ class FullScreenImageViewer extends StatelessWidget {
           panEnabled: true,
           minScale: 1.0,
           maxScale: 4.0,
-          child: Image.network(imageUrl),
+          child: CachedNetworkImage(imageUrl: imageUrl, placeholder: (c, u) => const CircularProgressIndicator(),),
         ),
       ),
     );

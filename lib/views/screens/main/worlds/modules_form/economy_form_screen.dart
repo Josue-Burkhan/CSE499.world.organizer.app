@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/models/api_models/modules/economy_model.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/autocomplete_chips.dart';
 
@@ -43,12 +44,22 @@ class _EconomyFormScreenState extends ConsumerState<EconomyFormScreen> {
   List<String> _keyIndustries = [];
 
   // Links (Raw)
-  List<String> _rawCharacters = [];
-  List<String> _rawFactions = [];
-  List<String> _rawLocations = [];
-  List<String> _rawItems = [];
-  List<String> _rawRaces = [];
-  List<String> _rawStories = [];
+  List<ModuleLink> _rawCharacters = [];
+  List<ModuleLink> _rawFactions = [];
+  List<ModuleLink> _rawLocations = [];
+  List<ModuleLink> _rawItems = [];
+  List<ModuleLink> _rawRaces = [];
+  List<ModuleLink> _rawStories = [];
+
+  List<ModuleLink> _updateLinksList(List<String> newNames, List<ModuleLink> currentLinks) {
+    final currentMap = {for (var e in currentLinks) e.name: e};
+    return newNames.map((name) {
+      if (currentMap.containsKey(name)) {
+        return currentMap[name]!;
+      }
+      return ModuleLink(id: '', name: name);
+    }).toList();
+  }
 
   @override
   void initState() {
@@ -306,43 +317,43 @@ class _EconomyFormScreenState extends ConsumerState<EconomyFormScreen> {
         children: [
           AutocompleteChips(
             label: 'Characters',
-            initialValues: _rawCharacters,
-            onChanged: (values) => _rawCharacters = values,
+            initialValues: _rawCharacters.map((e) => e.name).toList(),
+            onChanged: (values) => _rawCharacters = _updateLinksList(values, _rawCharacters),
             searchFunction: (q) => _search(q, 'character'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Factions',
-            initialValues: _rawFactions,
-            onChanged: (values) => _rawFactions = values,
+            initialValues: _rawFactions.map((e) => e.name).toList(),
+            onChanged: (values) => _rawFactions = _updateLinksList(values, _rawFactions),
             searchFunction: (q) => _search(q, 'faction'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Locations',
-            initialValues: _rawLocations,
-            onChanged: (values) => _rawLocations = values,
+            initialValues: _rawLocations.map((e) => e.name).toList(),
+            onChanged: (values) => _rawLocations = _updateLinksList(values, _rawLocations),
             searchFunction: (q) => _search(q, 'location'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Items',
-            initialValues: _rawItems,
-            onChanged: (values) => _rawItems = values,
+            initialValues: _rawItems.map((e) => e.name).toList(),
+            onChanged: (values) => _rawItems = _updateLinksList(values, _rawItems),
             searchFunction: (q) => _search(q, 'item'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Races',
-            initialValues: _rawRaces,
-            onChanged: (values) => _rawRaces = values,
+            initialValues: _rawRaces.map((e) => e.name).toList(),
+            onChanged: (values) => _rawRaces = _updateLinksList(values, _rawRaces),
             searchFunction: (q) => _search(q, 'race'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Stories',
-            initialValues: _rawStories,
-            onChanged: (values) => _rawStories = values,
+            initialValues: _rawStories.map((e) => e.name).toList(),
+            onChanged: (values) => _rawStories = _updateLinksList(values, _rawStories),
             searchFunction: (q) => _search(q, 'story'),
           ),
         ],

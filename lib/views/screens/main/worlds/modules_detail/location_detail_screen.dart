@@ -2,6 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/faction_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/event_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/item_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/creature_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/language_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
 
 final locationDetailStreamProvider =
     StreamProvider.family.autoDispose<LocationEntity?, String>((ref, serverId) {
@@ -119,10 +130,11 @@ class LocationDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
+                        errorWidget: (context, url, error) => 
                           Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
@@ -134,16 +146,16 @@ class LocationDetailScreen extends ConsumerWidget {
               _buildBasicInfo(location),
               _buildDescription(location.description),
               _buildCustomNotes(location.customNotes),
-              _buildRawList('Locations', location.rawLocations),
-              _buildRawList('Factions', location.rawFactions),
-              _buildRawList('Events', location.rawEvents),
-              _buildRawList('Characters', location.rawCharacters),
-              _buildRawList('Items', location.rawItems),
-              _buildRawList('Creatures', location.rawCreatures),
-              _buildRawList('Stories', location.rawStories),
-              _buildRawList('Languages', location.rawLanguages),
-              _buildRawList('Religions', location.rawReligions),
-              _buildRawList('Technologies', location.rawTechnologies),
+              _buildLinkList(context, 'Locations', location.rawLocations),
+              _buildLinkList(context, 'Factions', location.rawFactions),
+              _buildLinkList(context, 'Events', location.rawEvents),
+              _buildLinkList(context, 'Characters', location.rawCharacters),
+              _buildLinkList(context, 'Items', location.rawItems),
+              _buildLinkList(context, 'Creatures', location.rawCreatures),
+              _buildLinkList(context, 'Stories', location.rawStories),
+              _buildLinkList(context, 'Languages', location.rawLanguages),
+              _buildLinkList(context, 'Religions', location.rawReligions),
+              _buildLinkList(context, 'Technologies', location.rawTechnologies),
             ]),
           ),
         ],
@@ -221,8 +233,20 @@ class LocationDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links) {
+    if (links.isEmpty) return const SizedBox.shrink();
+
+    String type = '';
+    if (title == 'Locations') type = 'location';
+    else if (title == 'Factions') type = 'faction';
+    else if (title == 'Events') type = 'event';
+    else if (title == 'Characters') type = 'character';
+    else if (title == 'Items') type = 'item';
+    else if (title == 'Creatures') type = 'creature';
+    else if (title == 'Stories') type = 'story';
+    else if (title == 'Languages') type = 'language';
+    else if (title == 'Religions') type = 'religion';
+    else if (title == 'Technologies') type = 'technology';
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -236,7 +260,30 @@ class LocationDetailScreen extends ConsumerWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: rawList.map((item) => Chip(label: Text(item))).toList(),
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: () {
+                   if (link.id.isEmpty) return;
+                   
+                   Widget? page;
+                   switch (type) {
+                     case 'location': page = LocationDetailScreen(locationServerId: link.id); break;
+                     case 'faction': page = FactionDetailScreen(factionServerId: link.id); break;
+                     case 'event': page = EventDetailScreen(eventServerId: link.id); break;
+                     case 'character': page = CharacterDetailScreen(characterServerId: link.id); break;
+                     case 'item': page = ItemDetailScreen(itemServerId: link.id); break;
+                     case 'creature': page = CreatureDetailScreen(creatureServerId: link.id); break;
+                     case 'story': page = StoryDetailScreen(storyServerId: link.id); break;
+                     case 'language': page = LanguageDetailScreen(languageServerId: link.id); break;
+                     case 'religion': page = ReligionDetailScreen(religionServerId: link.id); break;
+                     case 'technology': page = TechnologyDetailScreen(technologyServerId: link.id); break;
+                   }
+                   
+                   if (page != null) {
+                     Navigator.of(context).push(MaterialPageRoute(builder: (_) => page!));
+                   }
+                },
+              )).toList(),
             ),
           ],
         ),

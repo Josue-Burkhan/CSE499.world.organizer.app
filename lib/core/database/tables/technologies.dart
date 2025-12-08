@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 import '../app_database.dart';
 import 'worlds.dart';
 import '../converters/list_string_converter.dart';
+import 'package:worldorganizer_app/core/database/converters/module_link_list_converter.dart';
 
 @DataClassName('TechnologyEntity')
 class Technologies extends Table {
@@ -24,14 +25,14 @@ class Technologies extends Table {
   
   TextColumn get images => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
   
-  TextColumn get rawCreators => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawCharacters => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawFactions => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawItems => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawEvents => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawStories => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawLocations => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
-  TextColumn get rawPowerSystems => text().map(const ListStringConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawCreators => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawCharacters => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawFactions => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawItems => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawEvents => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawStories => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawLocations => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
+  TextColumn get rawPowerSystems => text().map(const ModuleLinkListConverter()).withDefault(const Constant('[]'))();
 
   @override
   Set<Column> get primaryKey => {localId};
