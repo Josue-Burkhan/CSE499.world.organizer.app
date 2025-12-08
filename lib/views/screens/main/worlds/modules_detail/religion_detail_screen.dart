@@ -131,15 +131,15 @@ class ReligionDetailScreen extends ConsumerWidget {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              if (religion.description != null) _buildDescription(religion.description!),
-              if (religion.originStory != null) _buildOriginStory(religion.originStory!),
+              _buildDescription(religion.description),
+              _buildOriginStory(religion.originStory),
               _buildChipList('Deity Names', religion.deityNames),
               _buildChipList('Practices', religion.practices),
               _buildChipList('Taboos', religion.taboos),
               _buildChipList('Sacred Texts', religion.sacredTexts),
               _buildChipList('Festivals', religion.festivals),
               _buildChipList('Symbols', religion.symbols),
-              if (religion.customNotes != null) _buildCustomNotes(religion.customNotes!),
+              _buildCustomNotes(religion.customNotes),
               _buildRawList('Characters', religion.rawCharacters),
               _buildRawList('Factions', religion.rawFactions),
               _buildRawList('Locations', religion.rawLocations),
@@ -155,9 +155,12 @@ class ReligionDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDescription(String description) {
+  Widget _buildDescription(String? description) {
+    if (description == null || description.isEmpty) {
+      return _buildEmptyStateCard('Description', Icons.description_outlined);
+    }
     return Card(
-      margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -175,7 +178,10 @@ class ReligionDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildOriginStory(String originStory) {
+  Widget _buildOriginStory(String? originStory) {
+    if (originStory == null || originStory.isEmpty) {
+      return _buildEmptyStateCard('Origin Story', Icons.auto_stories);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -195,7 +201,10 @@ class ReligionDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCustomNotes(String notes) {
+  Widget _buildCustomNotes(String? notes) {
+    if (notes == null || notes.isEmpty) {
+      return _buildEmptyStateCard('Custom Notes', Icons.note_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -217,7 +226,6 @@ class ReligionDetailScreen extends ConsumerWidget {
 
   Widget _buildChipList(String title, List<String> items) {
     if (items.isEmpty) return const SizedBox.shrink();
-
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -254,6 +262,55 @@ class ReligionDetailScreen extends ConsumerWidget {
               spacing: 8.0,
               runSpacing: 4.0,
               children: rawList.map((item) => Chip(label: Text(item))).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -72,6 +72,26 @@ class Location {
         return [];
     }
 
+    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first
+        if (raw is List && raw.isNotEmpty) {
+            return List<String>.from(raw.map((item) => item.toString()));
+        }
+        // Fallback to populated if it contains objects with names
+        if (populated is List) {
+            return populated.map((item) {
+                if (item is Map<String, dynamic> && item['name'] != null) {
+                    return item['name'].toString();
+                }
+                if (item is String) {
+                    return item;
+                }
+                return null;
+            }).whereType<String>().toList();
+        }
+        return [];
+    }
+
     factory Location.fromJson(Map<String, dynamic> json) {
         return Location(
             id: json['_id'],
@@ -85,16 +105,16 @@ class Location {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawLocations: _listFromRaw(json['rawLocations']),
-            rawFactions: _listFromRaw(json['rawFactions']),
-            rawEvents: _listFromRaw(json['rawEvents']),
-            rawCharacters: _listFromRaw(json['rawCharacters']),
-            rawItems: _listFromRaw(json['rawItems']),
-            rawCreatures: _listFromRaw(json['rawCreatures']),
-            rawStories: _listFromRaw(json['rawStories']),
-            rawLanguages: _listFromRaw(json['rawLanguages']),
-            rawReligions: _listFromRaw(json['rawReligions']),
-            rawTechnologies: _listFromRaw(json['rawTechnologies']),
+            rawLocations: _listFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawEvents: _listFromPopulatedOrRaw(json['events'], json['rawEvents']),
+            rawCharacters: _listFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawItems: _listFromPopulatedOrRaw(json['items'], json['rawItems']),
+            rawCreatures: _listFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
+            rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawLanguages: _listFromPopulatedOrRaw(json['languages'], json['rawLanguages']),
+            rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawTechnologies: _listFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
         );
     }
 }

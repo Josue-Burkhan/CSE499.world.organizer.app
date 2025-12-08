@@ -64,6 +64,26 @@ class Language {
         return [];
     }
 
+    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first
+        if (raw is List && raw.isNotEmpty) {
+            return List<String>.from(raw.map((item) => item.toString()));
+        }
+        // Fallback to populated if it contains objects with names
+        if (populated is List) {
+            return populated.map((item) {
+                if (item is Map<String, dynamic> && item['name'] != null) {
+                    return item['name'].toString();
+                }
+                if (item is String) {
+                    return item;
+                }
+                return null;
+            }).whereType<String>().toList();
+        }
+        return [];
+    }
+
     factory Language.fromJson(Map<String, dynamic> json) {
         return Language(
             id: json['_id'],
@@ -77,12 +97,12 @@ class Language {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawRaces: _listFromRaw(json['rawRaces']),
-            rawFactions: _listFromRaw(json['rawFactions']),
-            rawCharacters: _listFromRaw(json['rawCharacters']),
-            rawLocations: _listFromRaw(json['rawLocations']),
-            rawStories: _listFromRaw(json['rawStories']),
-            rawReligions: _listFromRaw(json['rawReligions']),
+            rawRaces: _listFromPopulatedOrRaw(json['races'], json['rawRaces']),
+            rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawCharacters: _listFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawLocations: _listFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
         );
     }
 }

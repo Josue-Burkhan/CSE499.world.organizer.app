@@ -101,16 +101,18 @@ class StoryDetailScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (story.summary != null) _buildSummary(story.summary!),
-            if (timeline != null && timeline.timelineEvents != null && timeline.timelineEvents!.isNotEmpty)
-              _buildTimeline(timeline),
+            _buildSummary(story.summary),
+            _buildTimeline(timeline),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSummary(String summary) {
+  Widget _buildSummary(String? summary) {
+    if (summary == null || summary.isEmpty) {
+      return _buildEmptyStateCard('Summary', Icons.subject);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: Padding(
@@ -130,7 +132,10 @@ class StoryDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTimeline(Timeline timeline) {
+  Widget _buildTimeline(Timeline? timeline) {
+    if (timeline == null || timeline.timelineEvents == null || timeline.timelineEvents!.isEmpty) {
+      return _buildEmptyStateCard('Timeline', Icons.timeline);
+    }
     final events = timeline.timelineEvents!;
     
     return Card(
@@ -184,24 +189,76 @@ class StoryDetailScreen extends ConsumerWidget {
                   event.description,
                   style: const TextStyle(fontSize: 14),
                 ),
-                if (event.rawEvents.isNotEmpty) ...[
                   const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 6.0,
-                    runSpacing: 4.0,
-                    children: event.rawEvents
-                        .map((e) => Chip(
-                              label: Text(e, style: const TextStyle(fontSize: 11)),
-                              padding: const EdgeInsets.all(4),
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ))
-                        .toList(),
-                  ),
+                  event.rawEvents.isNotEmpty
+                      ? Wrap(
+                          spacing: 6.0,
+                          runSpacing: 4.0,
+                          children: event.rawEvents
+                              .map((e) => Chip(
+                                    label: Text(e, style: const TextStyle(fontSize: 11)),
+                                    padding: const EdgeInsets.all(4),
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ))
+                              .toList(),
+                        )
+                      : const Text(
+                          'Related: None',
+                          style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: Colors.grey),
+                        ),
                 ],
-              ],
             ),
           ),
         ],
+      ),
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

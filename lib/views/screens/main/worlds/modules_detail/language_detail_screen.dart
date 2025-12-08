@@ -133,7 +133,7 @@ class LanguageDetailScreen extends ConsumerWidget {
             delegate: SliverChildListDelegate([
               _buildBasicInfo(language),
               _buildLinguisticDetails(language),
-              if (language.customNotes != null) _buildCustomNotes(language.customNotes!),
+              _buildCustomNotes(language.customNotes),
               _buildRawList('Races', language.rawRaces),
               _buildRawList('Factions', language.rawFactions),
               _buildRawList('Characters', language.rawCharacters),
@@ -174,13 +174,14 @@ class LanguageDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildLinguisticDetails(LanguageEntity lang) {
-    final hasAlphabet = lang.alphabet != null && lang.alphabet!.isNotEmpty;
-    final hasPronunciation = lang.pronunciationRules != null && lang.pronunciationRules!.isNotEmpty;
-    final hasGrammar = lang.grammarNotes != null && lang.grammarNotes!.isNotEmpty;
+    // Always show the card, but use "Unknown" for empty fields
+    // final hasAlphabet = lang.alphabet != null && lang.alphabet!.isNotEmpty;
+    // final hasPronunciation = lang.pronunciationRules != null && lang.pronunciationRules!.isNotEmpty;
+    // final hasGrammar = lang.grammarNotes != null && lang.grammarNotes!.isNotEmpty;
 
-    if (!hasAlphabet && !hasPronunciation && !hasGrammar) {
-      return const SizedBox.shrink();
-    }
+    // if (!hasAlphabet && !hasPronunciation && !hasGrammar) {
+    //   return const SizedBox.shrink();
+    // }
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -193,40 +194,27 @@ class LanguageDetailScreen extends ConsumerWidget {
               'Linguistic Details',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            if (hasAlphabet) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Alphabet',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(lang.alphabet!),
-            ],
-            if (hasPronunciation) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Pronunciation Rules',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(lang.pronunciationRules!),
-            ],
-            if (hasGrammar) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Grammar Notes',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(lang.grammarNotes!),
-            ],
+            const SizedBox(height: 16),
+            const Text('Alphabet', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(lang.alphabet?.isEmpty == true ? 'Unknown' : lang.alphabet ?? 'Unknown'),
+
+            const SizedBox(height: 16),
+            const Text('Pronunciation Rules', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(lang.pronunciationRules?.isEmpty == true ? 'Unknown' : lang.pronunciationRules ?? 'Unknown'),
+
+            const SizedBox(height: 16),
+            const Text('Grammar Notes', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(lang.grammarNotes?.isEmpty == true ? 'Unknown' : lang.grammarNotes ?? 'Unknown'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCustomNotes(String notes) {
+  Widget _buildCustomNotes(String? notes) {
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -239,7 +227,7 @@ class LanguageDetailScreen extends ConsumerWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(notes),
+            Text(notes?.isEmpty == true ? 'No custom notes.' : notes ?? 'No custom notes.'),
           ],
         ),
       ),
@@ -292,5 +280,54 @@ class FullScreenImageViewer extends StatelessWidget {
         ),
       ),
     );
+    Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
+}
 }

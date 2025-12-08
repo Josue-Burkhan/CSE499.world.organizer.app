@@ -132,9 +132,9 @@ class TechnologyDetailScreen extends ConsumerWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               _buildBasicInfo(technology),
-              if (technology.description != null) _buildDescription(technology.description!),
+              _buildDescription(technology.description),
               _buildTechnologyDetails(technology),
-              if (technology.customNotes != null) _buildCustomNotes(technology.customNotes!),
+              _buildCustomNotes(technology.customNotes),
               _buildRawList('Creators', technology.rawCreators),
               _buildRawList('Characters', technology.rawCharacters),
               _buildRawList('Factions', technology.rawFactions),
@@ -155,30 +155,30 @@ class TechnologyDetailScreen extends ConsumerWidget {
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: Column(
         children: [
-          if (tech.techType != null)
-            ListTile(
-              leading: const Icon(Icons.category_outlined),
-              title: Text(tech.techType!),
-              subtitle: const Text('Technology Type'),
-            ),
-          if (tech.yearCreated != null)
-            ListTile(
-              leading: const Icon(Icons.calendar_today),
-              title: Text(tech.yearCreated.toString()),
-              subtitle: const Text('Year Created'),
-            ),
-          if (tech.energySource != null)
-            ListTile(
-              leading: const Icon(Icons.bolt),
-              title: Text(tech.energySource!),
-              subtitle: const Text('Energy Source'),
-            ),
+          ListTile(
+            leading: const Icon(Icons.category_outlined),
+            title: Text(tech.techType?.isEmpty == true ? 'Unknown' : tech.techType ?? 'Unknown'),
+            subtitle: const Text('Technology Type'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.calendar_today),
+            title: Text(tech.yearCreated == null ? 'Unknown' : tech.yearCreated.toString()),
+            subtitle: const Text('Year Created'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.bolt),
+            title: Text(tech.energySource?.isEmpty == true ? 'Unknown' : tech.energySource ?? 'Unknown'),
+            subtitle: const Text('Energy Source'),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDescription(String description) {
+  Widget _buildDescription(String? description) {
+    if (description == null || description.isEmpty) {
+      return _buildEmptyStateCard('Description', Icons.description_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -199,13 +199,13 @@ class TechnologyDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildTechnologyDetails(TechnologyEntity tech) {
-    final hasOrigin = tech.origin != null && tech.origin!.isNotEmpty;
-    final hasCurrentUse = tech.currentUse != null && tech.currentUse!.isNotEmpty;
-    final hasLimitations = tech.limitations != null && tech.limitations!.isNotEmpty;
+    // final hasOrigin = tech.origin != null && tech.origin!.isNotEmpty;
+    // final hasCurrentUse = tech.currentUse != null && tech.currentUse!.isNotEmpty;
+    // final hasLimitations = tech.limitations != null && tech.limitations!.isNotEmpty;
 
-    if (!hasOrigin && !hasCurrentUse && !hasLimitations) {
-      return const SizedBox.shrink();
-    }
+    // if (!hasOrigin && !hasCurrentUse && !hasLimitations) {
+    //   return const SizedBox.shrink();
+    // }
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -218,40 +218,30 @@ class TechnologyDetailScreen extends ConsumerWidget {
               'Technology Details',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            if (hasOrigin) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Origin',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(tech.origin!),
-            ],
-            if (hasCurrentUse) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Current Use',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(tech.currentUse!),
-            ],
-            if (hasLimitations) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Limitations',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(tech.limitations!),
-            ],
+            const SizedBox(height: 16),
+            const Text('Origin', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(tech.origin?.isEmpty==true ? 'Unknown' : tech.origin ?? 'Unknown'),
+
+            const SizedBox(height: 16),
+            const Text('Current Use', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(tech.currentUse?.isEmpty==true ? 'Unknown' : tech.currentUse ?? 'Unknown'),
+
+            const SizedBox(height: 16),
+            const Text('Limitations', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(tech.limitations?.isEmpty==true ? 'Unknown' : tech.limitations ?? 'Unknown'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCustomNotes(String notes) {
+  Widget _buildCustomNotes(String? notes) {
+    if (notes == null || notes.isEmpty) {
+      return _buildEmptyStateCard('Custom Notes', Icons.note_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -287,6 +277,55 @@ class TechnologyDetailScreen extends ConsumerWidget {
               spacing: 8.0,
               runSpacing: 4.0,
               children: rawList.map((item) => Chip(label: Text(item))).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

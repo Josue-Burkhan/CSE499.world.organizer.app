@@ -134,6 +134,7 @@ class CreatureDetailScreen extends ConsumerWidget {
               _buildBasicInfo(creature),
               _buildDescription(creature),
               _buildWeaknesses(creature),
+              _buildCustomNotes(creature.customNotes),
               _buildRawList('Characters', creature.rawCharacters),
               _buildRawList('Abilities', creature.rawAbilities),
               _buildRawList('Factions', creature.rawFactions),
@@ -156,12 +157,12 @@ class CreatureDetailScreen extends ConsumerWidget {
         children: [
           ListTile(
             leading: const Icon(Icons.category_outlined),
-            title: Text(creature.speciesType ?? 'Unknown'),
+            title: Text(creature.speciesType?.isEmpty == true ? 'Unknown' : creature.speciesType ?? 'Unknown'),
             subtitle: const Text('Species Type'),
           ),
           ListTile(
             leading: const Icon(Icons.landscape_outlined),
-            title: Text(creature.habitat),
+            title: Text(creature.habitat.isEmpty ? 'Unknown' : creature.habitat),
             subtitle: const Text('Habitat'),
           ),
           ListTile(
@@ -175,8 +176,9 @@ class CreatureDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildDescription(CreatureEntity creature) {
-    if (creature.description.isEmpty) return const SizedBox.shrink();
-
+    if (creature.description.isEmpty) {
+      return _buildEmptyStateCard('Description', Icons.description_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -187,6 +189,29 @@ class CreatureDetailScreen extends ConsumerWidget {
             const Text('Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
             Text(creature.description),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCustomNotes(String? notes) {
+    if (notes == null || notes.isEmpty) {
+      return _buildEmptyStateCard('Custom Notes', Icons.note_outlined);
+    }
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Custom Notes',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(notes!),
           ],
         ),
       ),
@@ -235,6 +260,55 @@ class CreatureDetailScreen extends ConsumerWidget {
               spacing: 8.0,
               runSpacing: 4.0,
               children: rawList.map((item) => Chip(label: Text(item))).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

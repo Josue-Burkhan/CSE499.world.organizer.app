@@ -57,6 +57,26 @@ class Economy {
         return [];
     }
 
+    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first
+        if (raw is List && raw.isNotEmpty) {
+            return List<String>.from(raw.map((item) => item.toString()));
+        }
+        // Fallback to populated if it contains objects with names
+        if (populated is List) {
+            return populated.map((item) {
+                if (item is Map<String, dynamic> && item['name'] != null) {
+                    return item['name'].toString();
+                }
+                if (item is String) {
+                    return item;
+                }
+                return null;
+            }).whereType<String>().toList();
+        }
+        return [];
+    }
+
     factory Economy.fromJson(Map<String, dynamic> json) {
         return Economy(
             id: json['_id'],
@@ -68,15 +88,15 @@ class Economy {
                 : null,
             tradeGoods: _listFromRaw(json['tradeGoods']),
             keyIndustries: _listFromRaw(json['keyIndustries']),
-            economicSystem: json['economicSystem'],
+            economicSystem: json['economicSystem'] ?? 'Unknown',
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawCharacters: _listFromRaw(json['rawCharacters']),
-            rawFactions: _listFromRaw(json['rawFactions']),
-            rawLocations: _listFromRaw(json['rawLocations']),
-            rawItems: _listFromRaw(json['rawItems']),
-            rawRaces: _listFromRaw(json['rawRaces']),
-            rawStories: _listFromRaw(json['rawStories']),
+            rawCharacters: _listFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawLocations: _listFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawItems: _listFromPopulatedOrRaw(json['items'], json['rawItems']),
+            rawRaces: _listFromPopulatedOrRaw(json['races'], json['rawRaces']),
+            rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
         );
     }
 }

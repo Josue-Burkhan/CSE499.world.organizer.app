@@ -131,12 +131,9 @@ class EventDetailScreen extends ConsumerWidget {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              if (event.date != null && event.date!.isNotEmpty)
-                _buildBasicInfo(event),
-              if (event.description != null && event.description!.isNotEmpty)
-                _buildDescription(event),
-              if (event.customNotes != null && event.customNotes!.isNotEmpty)
-                _buildCustomNotes(event),
+              _buildBasicInfo(event),
+              _buildDescription(event),
+              _buildCustomNotes(event),
               _buildRawList('Characters', event.rawCharacters),
               _buildRawList('Factions', event.rawFactions),
               _buildRawList('Locations', event.rawLocations),
@@ -161,7 +158,7 @@ class EventDetailScreen extends ConsumerWidget {
         children: [
           ListTile(
             leading: const Icon(Icons.calendar_today_outlined),
-            title: Text(event.date!),
+            title: Text(event.date ?? 'Unknown'),
             subtitle: const Text('Date'),
           ),
         ],
@@ -179,7 +176,7 @@ class EventDetailScreen extends ConsumerWidget {
           children: [
             const Text('Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            Text(event.description!),
+            Text(event.description?.isEmpty == true ? 'No description available.' : event.description ?? 'No description available.'),
           ],
         ),
       ),
@@ -196,7 +193,7 @@ class EventDetailScreen extends ConsumerWidget {
           children: [
             const Text('Custom Notes', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            Text(event.customNotes!),
+            Text(event.customNotes?.isEmpty == true ? 'No custom notes.' : event.customNotes ?? 'No custom notes.'),
           ],
         ),
       ),
@@ -246,6 +243,55 @@ class FullScreenImageViewer extends StatelessWidget {
           minScale: 1.0,
           maxScale: 4.0,
           child: Image.network(imageUrl),
+        ),
+      ),
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

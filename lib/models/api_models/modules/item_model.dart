@@ -90,6 +90,26 @@ class Item {
         return [];
     }
 
+    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first
+        if (raw is List && raw.isNotEmpty) {
+            return List<String>.from(raw.map((item) => item.toString()));
+        }
+        // Fallback to populated if it contains objects with names
+        if (populated is List) {
+            return populated.map((item) {
+                if (item is Map<String, dynamic> && item['name'] != null) {
+                    return item['name'].toString();
+                }
+                if (item is String) {
+                    return item;
+                }
+                return null;
+            }).whereType<String>().toList();
+        }
+        return [];
+    }
+
     factory Item.fromJson(Map<String, dynamic> json) {
         return Item(
           id: json['_id'],
@@ -110,18 +130,18 @@ class Item {
           customNotes: json['customNotes'],
           images: _listFromRaw(json['images']),
           tagColor: json['tagColor'] ?? 'neutral',
-          rawCreatedBy: _listFromRaw(json['rawCharacters']),
-          rawUsedBy: _listFromRaw(json['rawCharacters']),
-          rawCurrentOwnerCharacter: _listFromRaw(json['rawCharacters']),
-          rawFactions: _listFromRaw(json['rawFactions']),
-          rawEvents: _listFromRaw(json['rawEvents']),
-          rawStories: _listFromRaw(json['rawStories']),
-          rawLocations: _listFromRaw(json['rawLocations']),
-          rawReligions: _listFromRaw(json['rawReligions']),
-          rawTechnologies: _listFromRaw(json['rawTechnologies']),
-          rawPowerSystems: _listFromRaw(json['rawPowerSystems']),
-          rawLanguages: _listFromRaw(json['rawLanguages']),
-          rawAbilities: _listFromRaw(json['rawAbilities']),
+          rawCreatedBy: _listFromPopulatedOrRaw(json['createdBy'], json['rawCreatedBy']),
+          rawUsedBy: _listFromPopulatedOrRaw(json['usedBy'], json['rawUsedBy']),
+          rawCurrentOwnerCharacter: _listFromPopulatedOrRaw(json['currentOwnerCharacter'], json['rawCurrentOwnerCharacter']),
+          rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+          rawEvents: _listFromPopulatedOrRaw(json['events'], json['rawEvents']),
+          rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
+          rawLocations: _listFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+          rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+          rawTechnologies: _listFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
+          rawPowerSystems: _listFromPopulatedOrRaw(json['powerSystems'], json['rawPowerSystems']),
+          rawLanguages: _listFromPopulatedOrRaw(json['languages'], json['rawLanguages']),
+          rawAbilities: _listFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
         );
     }
 }

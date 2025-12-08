@@ -139,8 +139,7 @@ class EconomyDetailScreen extends ConsumerWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               _buildBasicInfo(economy),
-              if (economy.description != null && economy.description!.isNotEmpty)
-                _buildDescription(economy),
+              _buildDescription(economy),
               if (currency != null) _buildCurrency(currency),
               _buildRawList('Trade Goods', economy.tradeGoods),
               _buildRawList('Key Industries', economy.keyIndustries),
@@ -182,7 +181,7 @@ class EconomyDetailScreen extends ConsumerWidget {
           children: [
             const Text('Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            Text(economy.description!),
+            Text(economy.description?.isEmpty == true ? 'No description available.' : economy.description ?? 'No description available.'),
           ],
         ),
       ),
@@ -261,6 +260,55 @@ class FullScreenImageViewer extends StatelessWidget {
           minScale: 1.0,
           maxScale: 4.0,
           child: Image.network(imageUrl),
+        ),
+      ),
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

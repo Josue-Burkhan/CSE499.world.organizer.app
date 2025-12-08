@@ -70,6 +70,26 @@ class PowerSystem {
         return [];
     }
 
+    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first
+        if (raw is List && raw.isNotEmpty) {
+            return List<String>.from(raw.map((item) => item.toString()));
+        }
+        // Fallback to populated if it contains objects with names
+        if (populated is List) {
+            return populated.map((item) {
+                if (item is Map<String, dynamic> && item['name'] != null) {
+                    return item['name'].toString();
+                }
+                if (item is String) {
+                    return item;
+                }
+                return null;
+            }).whereType<String>().toList();
+        }
+        return [];
+    }
+
     factory PowerSystem.fromJson(Map<String, dynamic> json) {
         return PowerSystem(
             id: json['_id'],
@@ -84,14 +104,14 @@ class PowerSystem {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawCharacters: _listFromRaw(json['rawCharacters']),
-            rawAbilities: _listFromRaw(json['rawAbilities']),
-            rawFactions: _listFromRaw(json['rawFactions']),
-            rawEvents: _listFromRaw(json['rawEvents']),
-            rawStories: _listFromRaw(json['rawStories']),
-            rawCreatures: _listFromRaw(json['rawCreatures']),
-            rawReligions: _listFromRaw(json['rawReligions']),
-            rawTechnologies: _listFromRaw(json['rawTechnologies']),
+            rawCharacters: _listFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawAbilities: _listFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
+            rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawEvents: _listFromPopulatedOrRaw(json['events'], json['rawEvents']),
+            rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawCreatures: _listFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
+            rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawTechnologies: _listFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
         );
     }
 }

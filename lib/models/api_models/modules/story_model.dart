@@ -77,10 +77,30 @@ class TimelineEvent {
         required this.description,
     });
 
+    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first
+        if (raw is List && raw.isNotEmpty) {
+            return List<String>.from(raw.map((item) => item.toString()));
+        }
+        // Fallback to populated if it contains objects with names
+        if (populated is List) {
+            return populated.map((item) {
+                if (item is Map<String, dynamic> && item['name'] != null) {
+                    return item['name'].toString();
+                }
+                if (item is String) {
+                    return item;
+                }
+                return null;
+            }).whereType<String>().toList();
+        }
+        return [];
+    }
+
     factory TimelineEvent.fromJson(Map<String, dynamic> json) {
         return TimelineEvent(
             year: json['year'],
-            rawEvents: List<String>.from(json['rawEvents'] ?? []),
+            rawEvents: _listFromPopulatedOrRaw(json['events'], json['rawEvents']),
             description: json['description'],
         );
     }

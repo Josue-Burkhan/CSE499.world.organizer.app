@@ -132,10 +132,10 @@ class AbilityDetailScreen extends ConsumerWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               _buildBasicInfo(ability),
-              if (ability.description != null) _buildDescription(ability.description!),
-              if (ability.effect != null) _buildEffect(ability.effect!),
-              if (ability.requirements != null) _buildRequirements(ability.requirements!),
-              if (ability.customNotes != null) _buildCustomNotes(ability.customNotes!),
+              _buildDescription(ability.description),
+              _buildEffect(ability.effect),
+              _buildRequirements(ability.requirements),
+              _buildCustomNotes(ability.customNotes),
               _buildRawList('Characters', ability.rawCharacters),
               _buildRawList('Power Systems', ability.rawPowerSystems),
               _buildRawList('Stories', ability.rawStories),
@@ -157,42 +157,40 @@ class AbilityDetailScreen extends ConsumerWidget {
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: Column(
         children: [
-          if (ability.type != null)
-            ListTile(
-              leading: const Icon(Icons.category_outlined),
-              title: Text(ability.type!),
-              subtitle: const Text('Type'),
-            ),
-          if (ability.element != null)
-            ListTile(
-              leading: const Icon(Icons.wb_sunny_outlined),
-              title: Text(ability.element!),
-              subtitle: const Text('Element'),
-            ),
-          if (ability.level != null)
-            ListTile(
-              leading: const Icon(Icons.bar_chart_outlined),
-              title: Text(ability.level!),
-              subtitle: const Text('Level'),
-            ),
-          if (ability.cost != null)
-            ListTile(
-              leading: const Icon(Icons.attach_money_outlined),
-              title: Text(ability.cost!),
-              subtitle: const Text('Cost'),
-            ),
-          if (ability.cooldown != null)
-            ListTile(
-              leading: const Icon(Icons.timer_outlined),
-              title: Text(ability.cooldown!),
-              subtitle: const Text('Cooldown'),
-            ),
+          ListTile(
+            leading: const Icon(Icons.category_outlined),
+            title: Text(ability.type ?? 'Unknown'),
+            subtitle: const Text('Type'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.wb_sunny_outlined),
+            title: Text(ability.element ?? 'Unknown'),
+            subtitle: const Text('Element'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.bar_chart_outlined),
+            title: Text(ability.level ?? 'Unknown'),
+            subtitle: const Text('Level'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.attach_money_outlined),
+            title: Text(ability.cost ?? 'Unknown'),
+            subtitle: const Text('Cost'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.timer_outlined),
+            title: Text(ability.cooldown ?? 'Unknown'),
+            subtitle: const Text('Cooldown'),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDescription(String description) {
+  Widget _buildDescription(String? description) {
+    if (description == null || description.isEmpty) {
+      return _buildEmptyStateCard('Description', Icons.description_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -209,7 +207,10 @@ class AbilityDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildEffect(String effect) {
+  Widget _buildEffect(String? effect) {
+    if (effect == null || effect.isEmpty) {
+      return _buildEmptyStateCard('Effect', Icons.auto_fix_high_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -226,7 +227,10 @@ class AbilityDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRequirements(String requirements) {
+  Widget _buildRequirements(String? requirements) {
+    if (requirements == null || requirements.isEmpty) {
+      return _buildEmptyStateCard('Requirements', Icons.rule_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -243,7 +247,10 @@ class AbilityDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCustomNotes(String notes) {
+  Widget _buildCustomNotes(String? notes) {
+    if (notes == null || notes.isEmpty) {
+      return _buildEmptyStateCard('Custom Notes', Icons.note_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -261,8 +268,7 @@ class AbilityDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
-
+    // FORCE VISIBILITY: Check if empty and show "No links"
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -272,10 +278,62 @@ class AbilityDetailScreen extends ConsumerWidget {
           children: [
             Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
-              children: rawList.map((item) => Chip(label: Text(item))).toList(),
+            rawList.isEmpty
+                ? const Text('No links')
+                : Wrap(
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    children: rawList.map((item) => Chip(label: Text(item))).toList(),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -283,6 +341,7 @@ class AbilityDetailScreen extends ConsumerWidget {
     );
   }
 }
+
 
 class FullScreenImageViewer extends StatelessWidget {
   final String imageUrl;

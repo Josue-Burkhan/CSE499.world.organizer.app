@@ -132,14 +132,12 @@ class ItemDetailScreen extends ConsumerWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               _buildBasicInfo(item),
-              if (item.description != null && item.description!.isNotEmpty)
-                _buildDescription(item),
+              _buildDescription(item),
               _buildStatusInfo(item),
               _buildRawList('Magical Properties', item.magicalProperties),
               _buildRawList('Technological Features', item.technologicalFeatures),
               _buildRawList('Custom Effects', item.customEffects),
-              if (item.customNotes != null && item.customNotes!.isNotEmpty)
-                _buildCustomNotes(item),
+              _buildCustomNotes(item),
               _buildRawList('Created By', item.rawCreatedBy),
               _buildRawList('Used By', item.rawUsedBy),
               _buildRawList('Current Owner', item.rawCurrentOwnerCharacter),
@@ -164,42 +162,36 @@ class ItemDetailScreen extends ConsumerWidget {
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: Column(
         children: [
-          if (item.type != null && item.type!.isNotEmpty)
-            ListTile(
-              leading: const Icon(Icons.category_outlined),
-              title: Text(item.type!),
-              subtitle: const Text('Type'),
-            ),
-          if (item.rarity != null && item.rarity!.isNotEmpty)
-            ListTile(
-              leading: const Icon(Icons.star_outline),
-              title: Text(item.rarity!),
-              subtitle: const Text('Rarity'),
-            ),
-          if (item.material != null && item.material!.isNotEmpty)
-            ListTile(
-              leading: const Icon(Icons.texture_outlined),
-              title: Text(item.material!),
-              subtitle: const Text('Material'),
-            ),
-          if (item.origin != null && item.origin!.isNotEmpty)
-            ListTile(
-              leading: const Icon(Icons.place_outlined),
-              title: Text(item.origin!),
-              subtitle: const Text('Origin'),
-            ),
-          if (item.weight != null)
-            ListTile(
-              leading: const Icon(Icons.fitness_center_outlined),
-              title: Text('${item.weight}'),
-              subtitle: const Text('Weight'),
-            ),
-          if (item.value != null && item.value!.isNotEmpty)
-            ListTile(
-              leading: const Icon(Icons.attach_money),
-              title: Text(item.value!),
-              subtitle: const Text('Value'),
-            ),
+          ListTile(
+            leading: const Icon(Icons.category_outlined),
+            title: Text(item.type?.isEmpty == true ? 'Unknown' : item.type ?? 'Unknown'),
+            subtitle: const Text('Type'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.star_outline),
+            title: Text(item.rarity?.isEmpty == true ? 'Unknown' : item.rarity ?? 'Unknown'),
+            subtitle: const Text('Rarity'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.texture_outlined),
+            title: Text(item.material?.isEmpty == true ? 'Unknown' : item.material ?? 'Unknown'),
+            subtitle: const Text('Material'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.place_outlined),
+            title: Text(item.origin?.isEmpty == true ? 'Unknown' : item.origin ?? 'Unknown'),
+            subtitle: const Text('Origin'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.fitness_center_outlined),
+            title: Text(item.weight == null ? 'Unknown' : '${item.weight}'),
+            subtitle: const Text('Weight'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.attach_money),
+            title: Text(item.value?.isEmpty == true ? 'Unknown' : item.value ?? 'Unknown'),
+            subtitle: const Text('Value'),
+          ),
         ],
       ),
     );
@@ -215,7 +207,7 @@ class ItemDetailScreen extends ConsumerWidget {
           children: [
             const Text('Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            Text(item.description!),
+            Text(item.description?.isEmpty == true ? 'No description available.' : item.description ?? 'No description available.'),
           ],
         ),
       ),
@@ -258,7 +250,7 @@ class ItemDetailScreen extends ConsumerWidget {
           children: [
             const Text('Custom Notes', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            Text(item.customNotes!),
+            Text(item.customNotes?.isEmpty == true ? 'No custom notes.' : item.customNotes ?? 'No custom notes.'),
           ],
         ),
       ),
@@ -311,5 +303,54 @@ class FullScreenImageViewer extends StatelessWidget {
         ),
       ),
     );
+    Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
+}
 }

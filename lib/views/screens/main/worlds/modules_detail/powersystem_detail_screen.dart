@@ -131,9 +131,9 @@ class PowerSystemDetailScreen extends ConsumerWidget {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              if (powerSystem.description != null) _buildDescription(powerSystem.description!),
+              _buildDescription(powerSystem.description),
               _buildPowerSystemDetails(powerSystem),
-              if (powerSystem.customNotes != null) _buildCustomNotes(powerSystem.customNotes!),
+              _buildCustomNotes(powerSystem.customNotes),
               _buildChipList('Classification Types', powerSystem.classificationTypes),
               _buildRawList('Characters', powerSystem.rawCharacters),
               _buildRawList('Abilities', powerSystem.rawAbilities),
@@ -150,9 +150,12 @@ class PowerSystemDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDescription(String description) {
+  Widget _buildDescription(String? description) {
+    if (description == null || description.isEmpty) {
+      return _buildEmptyStateCard('Description', Icons.description_outlined);
+    }
     return Card(
-      margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -171,14 +174,14 @@ class PowerSystemDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildPowerSystemDetails(PowerSystemEntity ps) {
-    final hasSource = ps.sourceOfPower != null && ps.sourceOfPower!.isNotEmpty;
-    final hasRules = ps.rules != null && ps.rules!.isNotEmpty;
-    final hasLimitations = ps.limitations != null && ps.limitations!.isNotEmpty;
-    final hasSymbols = ps.symbolsOrMarks != null && ps.symbolsOrMarks!.isNotEmpty;
+    // final hasSource = ps.sourceOfPower != null && ps.sourceOfPower!.isNotEmpty;
+    // final hasRules = ps.rules != null && ps.rules!.isNotEmpty;
+    // final hasLimitations = ps.limitations != null && ps.limitations!.isNotEmpty;
+    // final hasSymbols = ps.symbolsOrMarks != null && ps.symbolsOrMarks!.isNotEmpty;
 
-    if (!hasSource && !hasRules && !hasLimitations && !hasSymbols) {
-      return const SizedBox.shrink();
-    }
+    // if (!hasSource && !hasRules && !hasLimitations && !hasSymbols) {
+    //   return const SizedBox.shrink();
+    // }
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -191,49 +194,35 @@ class PowerSystemDetailScreen extends ConsumerWidget {
               'Power System Details',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            if (hasSource) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Source of Power',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(ps.sourceOfPower!),
-            ],
-            if (hasRules) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Rules',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(ps.rules!),
-            ],
-            if (hasLimitations) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Limitations',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(ps.limitations!),
-            ],
-            if (hasSymbols) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Symbols or Marks',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(ps.symbolsOrMarks!),
-            ],
+            const SizedBox(height: 16),
+            const Text('Source of Power', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(ps.sourceOfPower?.isEmpty == true ? 'Unknown' : ps.sourceOfPower ?? 'Unknown'),
+
+            const SizedBox(height: 16),
+            const Text('Rules', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(ps.rules?.isEmpty == true ? 'Unknown' : ps.rules ?? 'Unknown'),
+
+            const SizedBox(height: 16),
+            const Text('Limitations', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(ps.limitations?.isEmpty == true ? 'Unknown' : ps.limitations ?? 'Unknown'),
+
+            const SizedBox(height: 16),
+            const Text('Symbols or Marks', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Text(ps.symbolsOrMarks?.isEmpty == true ? 'Unknown' : ps.symbolsOrMarks ?? 'Unknown'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCustomNotes(String notes) {
+  Widget _buildCustomNotes(String? notes) {
+    if (notes == null || notes.isEmpty) {
+      return _buildEmptyStateCard('Custom Notes', Icons.note_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -255,7 +244,6 @@ class PowerSystemDetailScreen extends ConsumerWidget {
 
   Widget _buildChipList(String title, List<String> items) {
     if (items.isEmpty) return const SizedBox.shrink();
-
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -292,6 +280,56 @@ class PowerSystemDetailScreen extends ConsumerWidget {
               spacing: 8.0,
               runSpacing: 4.0,
               children: rawList.map((item) => Chip(label: Text(item))).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

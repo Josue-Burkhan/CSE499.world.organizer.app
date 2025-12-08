@@ -133,8 +133,8 @@ class RaceDetailScreen extends ConsumerWidget {
             delegate: SliverChildListDelegate([
               if (race.isExtinct) _buildExtinctBanner(),
               _buildBasicInfo(race),
-              if (race.description != null) _buildDescription(race.description!),
-              if (race.culture != null) _buildCulture(race.culture!),
+              _buildDescription(race.description),
+              _buildCulture(race.culture),
               _buildChipList('Traits', race.traits),
               _buildRawList('Languages', race.rawLanguages),
               _buildRawList('Characters', race.rawCharacters),
@@ -183,30 +183,30 @@ class RaceDetailScreen extends ConsumerWidget {
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: Column(
         children: [
-          if (race.lifespan != null)
-            ListTile(
-              leading: const Icon(Icons.timelapse),
-              title: Text(race.lifespan!),
-              subtitle: const Text('Lifespan'),
-            ),
-          if (race.averageHeight != null)
-            ListTile(
-              leading: const Icon(Icons.height),
-              title: Text(race.averageHeight!),
-              subtitle: const Text('Average Height'),
-            ),
-          if (race.averageWeight != null)
-            ListTile(
-              leading: const Icon(Icons.monitor_weight_outlined),
-              title: Text(race.averageWeight!),
-              subtitle: const Text('Average Weight'),
-            ),
+          ListTile(
+            leading: const Icon(Icons.timelapse),
+            title: Text(race.lifespan?.isEmpty == true ? 'Unknown' : race.lifespan ?? 'Unknown'),
+            subtitle: const Text('Lifespan'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.height),
+            title: Text(race.averageHeight?.isEmpty == true ? 'Unknown' : race.averageHeight ?? 'Unknown'),
+            subtitle: const Text('Average Height'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.monitor_weight_outlined),
+            title: Text(race.averageWeight?.isEmpty == true ? 'Unknown' : race.averageWeight ?? 'Unknown'),
+            subtitle: const Text('Average Weight'),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDescription(String description) {
+  Widget _buildDescription(String? description) {
+    if (description == null || description.isEmpty) {
+      return _buildEmptyStateCard('Description', Icons.description_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -226,7 +226,10 @@ class RaceDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCulture(String culture) {
+  Widget _buildCulture(String? culture) {
+    if (culture == null || culture.isEmpty) {
+      return _buildEmptyStateCard('Culture', Icons.people_outline);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -248,7 +251,6 @@ class RaceDetailScreen extends ConsumerWidget {
 
   Widget _buildChipList(String title, List<String> items) {
     if (items.isEmpty) return const SizedBox.shrink();
-
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -285,6 +287,55 @@ class RaceDetailScreen extends ConsumerWidget {
               spacing: 8.0,
               runSpacing: 4.0,
               children: rawList.map((item) => Chip(label: Text(item))).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

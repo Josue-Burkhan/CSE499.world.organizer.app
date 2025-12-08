@@ -170,8 +170,8 @@ class CharacterDetailScreen extends ConsumerWidget {
             delegate: SliverChildListDelegate([
               _buildBasicInfo(character),
               _buildRelationships(context, 'Relationships', family, friends, enemies, romance),
-              if (appearance != null) _buildAppearance(appearance),
-              if (personality != null) _buildPersonality(personality),
+              _buildAppearance(appearance),
+              _buildPersonality(personality),
               _buildRawList('Factions', character.rawFactions),
               _buildRawList('Races', character.rawRaces),
               _buildRawList('Abilities', character.rawAbilities),
@@ -266,7 +266,7 @@ class CharacterDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAppearance(Appearance appearance) {
+  Widget _buildAppearance(Appearance? appearance) {
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Column(
@@ -277,15 +277,15 @@ class CharacterDetailScreen extends ConsumerWidget {
             child: Text('Appearance', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ),
           ListTile(
-            title: Text(appearance.height?.toString() ?? 'Unknown'),
+            title: Text(appearance?.height?.toString() ?? 'Unknown'),
             subtitle: const Text('Height (cm)'),
           ),
           ListTile(
-            title: Text(appearance.weight?.toString() ?? 'Unknown'),
+            title: Text(appearance?.weight?.toString() ?? 'Unknown'),
             subtitle: const Text('Weight (kg)'),
           ),
           ListTile(
-            title: Text(appearance.hairColor ?? 'Unknown'),
+            title: Text(appearance?.hairColor ?? 'Unknown'),
             subtitle: const Text('Hair Color'),
           ),
         ],
@@ -293,7 +293,10 @@ class CharacterDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPersonality(Personality personality) {
+  Widget _buildPersonality(Personality? personality) {
+    if (personality == null) {
+         return _buildEmptyStateCard('Personality', Icons.psychology_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -348,6 +351,55 @@ class CharacterDetailScreen extends ConsumerWidget {
           children: items.map((item) => Chip(label: Text(item))).toList(),
         ),
       ],
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

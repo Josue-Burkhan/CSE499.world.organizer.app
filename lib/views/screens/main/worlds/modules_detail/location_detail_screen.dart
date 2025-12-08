@@ -132,8 +132,8 @@ class LocationDetailScreen extends ConsumerWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               _buildBasicInfo(location),
-              if (location.description != null) _buildDescription(location.description!),
-              if (location.customNotes != null) _buildCustomNotes(location.customNotes!),
+              _buildDescription(location.description),
+              _buildCustomNotes(location.customNotes),
               _buildRawList('Locations', location.rawLocations),
               _buildRawList('Factions', location.rawFactions),
               _buildRawList('Events', location.rawEvents),
@@ -156,36 +156,32 @@ class LocationDetailScreen extends ConsumerWidget {
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: Column(
         children: [
-          if (loc.climate != null)
-            ListTile(
-              leading: const Icon(Icons.wb_sunny_outlined),
-              title: Text(loc.climate!),
-              subtitle: const Text('Climate'),
-            ),
-          if (loc.terrain != null)
-            ListTile(
-              leading: const Icon(Icons.terrain),
-              title: Text(loc.terrain!),
-              subtitle: const Text('Terrain'),
-            ),
-          if (loc.population != null)
-            ListTile(
-              leading: const Icon(Icons.people_outline),
-              title: Text(loc.population.toString()),
-              subtitle: const Text('Population'),
-            ),
-          if (loc.economy != null)
-            ListTile(
-              leading: const Icon(Icons.account_balance),
-              title: Text(loc.economy!),
-              subtitle: const Text('Economy'),
-            ),
+          ListTile(
+            leading: const Icon(Icons.wb_sunny_outlined),
+            title: Text(loc.climate?.isEmpty == true ? 'Unknown' : loc.climate ?? 'Unknown'),
+            subtitle: const Text('Climate'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.terrain),
+            title: Text(loc.terrain?.isEmpty == true ? 'Unknown' : loc.terrain ?? 'Unknown'),
+            subtitle: const Text('Terrain'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.people_outline),
+            title: Text(loc.population == null ? 'Unknown' : loc.population.toString()),
+            subtitle: const Text('Population'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.account_balance),
+            title: Text(loc.economy?.isEmpty == true ? 'Unknown' : loc.economy ?? 'Unknown'),
+            subtitle: const Text('Economy'),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDescription(String description) {
+  Widget _buildDescription(String? description) {
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -198,14 +194,14 @@ class LocationDetailScreen extends ConsumerWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(description),
+            Text(description?.isEmpty == true ? 'No description available.' : description ?? 'No description available.'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCustomNotes(String notes) {
+  Widget _buildCustomNotes(String? notes) {
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -218,7 +214,7 @@ class LocationDetailScreen extends ConsumerWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(notes),
+            Text(notes?.isEmpty == true ? 'No custom notes.' : notes ?? 'No custom notes.'),
           ],
         ),
       ),
@@ -271,5 +267,54 @@ class FullScreenImageViewer extends StatelessWidget {
         ),
       ),
     );
+    Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
+}
 }
