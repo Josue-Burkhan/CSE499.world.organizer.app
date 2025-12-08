@@ -15,6 +15,7 @@ import 'story_detail_screen.dart';
 import 'technology_detail_screen.dart';
 import 'location_detail_screen.dart';
 import 'faction_detail_screen.dart';
+import '../modules_form/creature_form_screen.dart';
 
 final creatureDetailStreamProvider =
     StreamProvider.family.autoDispose<CreatureEntity?, String>((ref, serverId) {
@@ -125,6 +126,21 @@ class CreatureDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CreatureFormScreen(
+                        creatureLocalId: creature.localId,
+                        worldLocalId: creature.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(creature.name),
               background: GestureDetector(

@@ -15,6 +15,7 @@ import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/tech
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/powersystem_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/language_detail_screen.dart';
+import '../modules_form/item_form_screen.dart';
 
 final itemDetailStreamProvider =
     StreamProvider.family.autoDispose<ItemEntity?, String>((ref, serverId) {
@@ -125,6 +126,21 @@ class ItemDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ItemFormScreen(
+                        itemLocalId: item.localId,
+                        worldLocalId: item.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(item.name),
               background: GestureDetector(

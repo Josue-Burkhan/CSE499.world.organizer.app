@@ -13,6 +13,7 @@ import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/crea
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/language_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
+import '../modules_form/location_form_screen.dart';
 
 final locationDetailStreamProvider =
     StreamProvider.family.autoDispose<LocationEntity?, String>((ref, serverId) {
@@ -123,6 +124,21 @@ class LocationDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => LocationFormScreen(
+                        locationLocalId: location.localId,
+                        worldLocalId: location.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(location.name),
               background: GestureDetector(

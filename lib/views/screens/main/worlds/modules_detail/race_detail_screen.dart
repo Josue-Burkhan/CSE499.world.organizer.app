@@ -12,6 +12,7 @@ import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/even
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/powersystem_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/language_detail_screen.dart';
+import '../modules_form/race_form_screen.dart';
 
 final raceDetailStreamProvider =
     StreamProvider.family.autoDispose<RaceEntity?, String>((ref, serverId) {
@@ -122,6 +123,21 @@ class RaceDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => RaceFormScreen(
+                        raceLocalId: race.localId,
+                        worldLocalId: race.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(race.name),
               background: GestureDetector(

@@ -12,6 +12,7 @@ import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/even
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/powersystem_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
+import '../modules_form/religion_form_screen.dart';
 
 final religionDetailStreamProvider =
     StreamProvider.family.autoDispose<ReligionEntity?, String>((ref, serverId) {
@@ -122,6 +123,21 @@ class ReligionDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ReligionFormScreen(
+                        religionLocalId: religion.localId,
+                        worldLocalId: religion.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(religion.name),
               background: GestureDetector(

@@ -13,6 +13,7 @@ import 'race_detail_screen.dart';
 import 'religion_detail_screen.dart';
 import 'story_detail_screen.dart';
 import 'technology_detail_screen.dart';
+import '../modules_form/ability_form_screen.dart';
 
 final abilityDetailStreamProvider =
     StreamProvider.family.autoDispose<AbilityEntity?, String>((ref, serverId) {
@@ -123,6 +124,21 @@ class AbilityDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AbilityFormScreen(
+                        abilityLocalId: ability.localId,
+                        worldLocalId: ability.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(ability.name),
               background: GestureDetector(

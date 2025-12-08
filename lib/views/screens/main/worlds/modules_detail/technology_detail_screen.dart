@@ -11,6 +11,7 @@ import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/item
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/event_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/powersystem_detail_screen.dart';
+import '../modules_form/technology_form_screen.dart';
 
 final technologyDetailStreamProvider =
     StreamProvider.family.autoDispose<TechnologyEntity?, String>((ref, serverId) {
@@ -121,6 +122,21 @@ class TechnologyDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => TechnologyFormScreen(
+                        technologyLocalId: technology.localId,
+                        worldLocalId: technology.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(technology.name),
               background: GestureDetector(

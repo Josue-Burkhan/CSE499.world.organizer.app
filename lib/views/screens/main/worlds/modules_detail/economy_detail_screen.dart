@@ -12,6 +12,7 @@ import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/loca
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/item_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/race_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
+import '../modules_form/economy_form_screen.dart';
 
 final economyDetailStreamProvider =
     StreamProvider.family.autoDispose<EconomyEntity?, String>((ref, serverId) {
@@ -127,6 +128,21 @@ class EconomyDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EconomyFormScreen(
+                        economyLocalId: economy.localId,
+                        worldLocalId: economy.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(economy.name),
               background: GestureDetector(

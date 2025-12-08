@@ -19,6 +19,7 @@ import 'race_detail_screen.dart';
 import 'religion_detail_screen.dart';
 import 'story_detail_screen.dart';
 import 'technology_detail_screen.dart';
+import '../modules_form/character_form_screen.dart';
 
 final characterDetailStreamProvider =
     StreamProvider.family.autoDispose<CharacterEntity?, String>((ref, serverId) {
@@ -76,13 +77,8 @@ class CharacterDetailScreen extends ConsumerWidget {
 
     ref.listen(characterDetailSyncProvider(characterServerId), (prev, next) {
       if (prev is AsyncLoading && next is AsyncError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to sync details: ${next.error}'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        // Suppressed error alert for transient sync issues.
+        debugPrint('Failed to sync details: ${next.error}');
       }
     });
 
@@ -164,6 +160,23 @@ class CharacterDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CharacterFormScreen(
+                        characterLocalId: character.localId,
+                        worldLocalId: character.worldLocalId,
+                      ),
+                    ),
+                  ).then((_) {
+                    // Refresh the stream logic handles updates automatically via watch
+                  });
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(character.name),
               background: GestureDetector(

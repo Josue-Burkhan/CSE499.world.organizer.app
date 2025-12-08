@@ -10,6 +10,7 @@ import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/loca
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/race_detail_screen.dart';
+import '../modules_form/language_form_screen.dart';
 
 final languageDetailStreamProvider =
     StreamProvider.family.autoDispose<LanguageEntity?, String>((ref, serverId) {
@@ -120,6 +121,21 @@ class LanguageDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => LanguageFormScreen(
+                        languageLocalId: language.localId,
+                        worldLocalId: language.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(language.name),
               background: GestureDetector(

@@ -14,6 +14,7 @@ import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/stor
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/language_detail_screen.dart';
+import '../modules_form/faction_form_screen.dart';
 
 final factionDetailStreamProvider =
     StreamProvider.family.autoDispose<FactionEntity?, String>((ref, serverId) {
@@ -139,6 +140,21 @@ class FactionDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => FactionFormScreen(
+                        factionLocalId: faction.localId,
+                        worldLocalId: faction.worldLocalId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(faction.name),
               background: GestureDetector(

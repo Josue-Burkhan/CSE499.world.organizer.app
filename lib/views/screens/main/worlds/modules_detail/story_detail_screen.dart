@@ -6,6 +6,7 @@ import 'package:worldorganizer_app/models/api_models/modules/story_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 import 'package:worldorganizer_app/models/api_models/module_link.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/event_detail_screen.dart';
+import '../modules_form/story_form_screen.dart';
 
 final storyDetailStreamProvider =
     StreamProvider.family.autoDispose<StoryEntity?, String>((ref, serverId) {
@@ -98,6 +99,21 @@ class StoryDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(story.name),
         backgroundColor: tagColor,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => StoryFormScreen(
+                    storyLocalId: story.localId,
+                    worldLocalId: story.worldLocalId,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
