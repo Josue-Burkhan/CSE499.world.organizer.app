@@ -61,6 +61,7 @@ class StoryListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => StoryFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class StoryListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => StoryFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class StoryListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => StoryFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     storyLocalId: story.localId,
                   ),
                 ),

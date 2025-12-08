@@ -138,5 +138,120 @@ class EventSyncService {
     final dirtyEvents = await _dao.getDirtyEvents();
     if (dirtyEvents.isEmpty) return;
     
+    for (final event in dirtyEvents) {
+      try {
+        if (event.syncStatus == SyncStatus.created) {
+          await _syncCreatedEvent(event);
+        } else if (event.syncStatus == SyncStatus.edited) {
+          await _syncEditedEvent(event);
+        } else if (event.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedEvent(event);
+        }
+      } catch (e) {
+        print('Error syncing event ${event.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedEvent(EventEntity event) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(event.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync event for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(event, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiEvent = Event.fromJson(jsonDecode(response.body));
+      final companion = event.toCompanion(true).copyWith(
+        serverId: d.Value(apiEvent.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateEvent(companion);
+    } else {
+      throw Exception('Failed to create event: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedEvent(EventEntity event) async {
+    if (event.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(event.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(event, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${event.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = event.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateEvent(companion);
+    } else {
+      throw Exception('Failed to update event: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedEvent(EventEntity event) async {
+    if (event.serverId == null) {
+      await _dao.deleteEvent(event.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${event.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteEvent(event.localId);
+    } else {
+      throw Exception('Failed to delete event: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(EventEntity event, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': event.name,
+      'date': event.date,
+      'description': event.description,
+      'customNotes': event.customNotes,
+      'tagColor': event.tagColor,
+      'images': event.images,
+      
+      'rawCharacters': event.rawCharacters,
+      'rawFactions': event.rawFactions,
+      'rawLocations': event.rawLocations,
+      'rawItems': event.rawItems,
+      'rawAbilities': event.rawAbilities,
+      'rawStories': event.rawStories,
+      'rawPowerSystems': event.rawPowerSystems,
+      'rawCreatures': event.rawCreatures,
+      'rawReligions': event.rawReligions,
+      'rawTechnologies': event.rawTechnologies,
+    };
   }
 }

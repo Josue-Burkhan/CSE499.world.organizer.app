@@ -61,6 +61,7 @@ class CreatureListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => CreatureFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class CreatureListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => CreatureFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class CreatureListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => CreatureFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     creatureLocalId: creature.localId,
                   ),
                 ),

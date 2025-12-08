@@ -61,6 +61,7 @@ class LocationListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => LocationFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class LocationListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => LocationFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class LocationListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => LocationFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     locationLocalId: location.localId,
                   ),
                 ),

@@ -61,6 +61,7 @@ class AbilityListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => AbilityFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class AbilityListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => AbilityFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class AbilityListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => AbilityFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     abilityLocalId: ability.localId,
                   ),
                 ),

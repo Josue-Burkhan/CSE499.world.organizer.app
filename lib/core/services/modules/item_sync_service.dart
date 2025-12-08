@@ -161,6 +161,132 @@ class ItemSyncService {
   Future<void> syncDirtyItems() async {
     final dirtyItems = await _dao.getDirtyItems();
     if (dirtyItems.isEmpty) return;
-    
+    for (final item in dirtyItems) {
+      try {
+        if (item.syncStatus == SyncStatus.created) {
+          await _syncCreatedItem(item);
+        } else if (item.syncStatus == SyncStatus.edited) {
+          await _syncEditedItem(item);
+        } else if (item.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedItem(item);
+        }
+      } catch (e) {
+        print('Error syncing item ${item.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedItem(ItemEntity item) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(item.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync item for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(item, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiItem = Item.fromJson(jsonDecode(response.body));
+      final companion = item.toCompanion(true).copyWith(
+        serverId: d.Value(apiItem.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateItem(companion);
+    } else {
+      throw Exception('Failed to create item: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedItem(ItemEntity item) async {
+    if (item.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(item.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(item, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${item.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = item.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateItem(companion);
+    } else {
+      throw Exception('Failed to update item: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedItem(ItemEntity item) async {
+    if (item.serverId == null) {
+      await _dao.deleteItem(item.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${item.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteItem(item.localId);
+    } else {
+      throw Exception('Failed to delete item: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(ItemEntity item, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': item.name,
+      'description': item.description,
+      'type': item.type,
+      'origin': item.origin,
+      'material': item.material,
+      'weight': item.weight,
+      'value': item.value,
+      'rarity': item.rarity,
+      'magicalProperties': item.magicalProperties,
+      'technologicalFeatures': item.technologicalFeatures,
+      'customEffects': item.customEffects,
+      'isUnique': item.isUnique,
+      'isDestroyed': item.isDestroyed,
+      'customNotes': item.customNotes,
+      'tagColor': item.tagColor,
+      'images': item.images,
+      
+      'rawCreatedBy': item.rawCreatedBy,
+      'rawUsedBy': item.rawUsedBy,
+      'rawCurrentOwnerCharacter': item.rawCurrentOwnerCharacter,
+      'rawFactions': item.rawFactions,
+      'rawEvents': item.rawEvents,
+      'rawStories': item.rawStories,
+      'rawLocations': item.rawLocations,
+      'rawReligions': item.rawReligions,
+      'rawTechnologies': item.rawTechnologies,
+      'rawPowerSystems': item.rawPowerSystems,
+      'rawLanguages': item.rawLanguages,
+      'rawAbilities': item.rawAbilities,
+    };
   }
 }

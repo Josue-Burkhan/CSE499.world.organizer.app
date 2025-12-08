@@ -61,6 +61,7 @@ class PowerSystemListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => PowerSystemFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class PowerSystemListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => PowerSystemFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class PowerSystemListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => PowerSystemFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     powerSystemLocalId: powerSystem.localId,
                   ),
                 ),

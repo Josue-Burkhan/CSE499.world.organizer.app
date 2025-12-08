@@ -138,5 +138,118 @@ class EconomySyncService {
     final dirtyEconomies = await _dao.getDirtyEconomies();
     if (dirtyEconomies.isEmpty) return;
     
+    for (final economy in dirtyEconomies) {
+      try {
+        if (economy.syncStatus == SyncStatus.created) {
+          await _syncCreatedEconomy(economy);
+        } else if (economy.syncStatus == SyncStatus.edited) {
+          await _syncEditedEconomy(economy);
+        } else if (economy.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedEconomy(economy);
+        }
+      } catch (e) {
+        print('Error syncing economy ${economy.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedEconomy(EconomyEntity economy) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(economy.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync economy for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(economy, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiEconomy = Economy.fromJson(jsonDecode(response.body));
+      final companion = economy.toCompanion(true).copyWith(
+        serverId: d.Value(apiEconomy.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateEconomy(companion);
+    } else {
+      throw Exception('Failed to create economy: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedEconomy(EconomyEntity economy) async {
+    if (economy.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(economy.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(economy, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${economy.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = economy.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateEconomy(companion);
+    } else {
+      throw Exception('Failed to update economy: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedEconomy(EconomyEntity economy) async {
+    if (economy.serverId == null) {
+      await _dao.deleteEconomy(economy.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${economy.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteEconomy(economy.localId);
+    } else {
+      throw Exception('Failed to delete economy: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(EconomyEntity economy, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': economy.name,
+      'description': economy.description,
+      'currency': economy.currencyJson != null ? jsonDecode(economy.currencyJson!) : null,
+      'tradeGoods': economy.tradeGoods,
+      'keyIndustries': economy.keyIndustries,
+      'economicSystem': economy.economicSystem,
+      'tagColor': economy.tagColor,
+      'images': economy.images,
+      
+      'rawCharacters': economy.rawCharacters,
+      'rawFactions': economy.rawFactions,
+      'rawLocations': economy.rawLocations,
+      'rawItems': economy.rawItems,
+      'rawRaces': economy.rawRaces,
+      'rawStories': economy.rawStories,
+    };
   }
 }

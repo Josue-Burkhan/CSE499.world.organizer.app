@@ -61,6 +61,7 @@ class RaceListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => RaceFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class RaceListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => RaceFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class RaceListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => RaceFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     raceLocalId: race.localId,
                   ),
                 ),

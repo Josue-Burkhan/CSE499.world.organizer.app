@@ -61,6 +61,7 @@ class FactionListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => FactionFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class FactionListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => FactionFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class FactionListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => FactionFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     factionLocalId: faction.localId,
                   ),
                 ),

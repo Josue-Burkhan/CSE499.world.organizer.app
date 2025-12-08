@@ -141,6 +141,122 @@ class PowerSystemSyncService {
   Future<void> syncDirtyPowerSystems() async {
     final dirtyPowerSystems = await _dao.getDirtyPowerSystems();
     if (dirtyPowerSystems.isEmpty) return;
-    
+    for (final ps in dirtyPowerSystems) {
+      try {
+        if (ps.syncStatus == SyncStatus.created) {
+          await _syncCreatedPowerSystem(ps);
+        } else if (ps.syncStatus == SyncStatus.edited) {
+          await _syncEditedPowerSystem(ps);
+        } else if (ps.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedPowerSystem(ps);
+        }
+      } catch (e) {
+        print('Error syncing power system ${ps.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedPowerSystem(PowerSystemEntity ps) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(ps.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync power system for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(ps, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiPS = PowerSystem.fromJson(jsonDecode(response.body));
+      final companion = ps.toCompanion(true).copyWith(
+        serverId: d.Value(apiPS.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updatePowerSystem(companion);
+    } else {
+      throw Exception('Failed to create power system: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedPowerSystem(PowerSystemEntity ps) async {
+    if (ps.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(ps.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(ps, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${ps.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = ps.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updatePowerSystem(companion);
+    } else {
+      throw Exception('Failed to update power system: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedPowerSystem(PowerSystemEntity ps) async {
+    if (ps.serverId == null) {
+      await _dao.deletePowerSystem(ps.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${ps.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deletePowerSystem(ps.localId);
+    } else {
+      throw Exception('Failed to delete power system: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(PowerSystemEntity ps, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': ps.name,
+      'description': ps.description,
+      'sourceOfPower': ps.sourceOfPower,
+      'rules': ps.rules,
+      'limitations': ps.limitations,
+      'classificationTypes': ps.classificationTypes,
+      'symbolsOrMarks': ps.symbolsOrMarks,
+      'customNotes': ps.customNotes,
+      'tagColor': ps.tagColor,
+      'images': ps.images,
+      
+      'rawCharacters': ps.rawCharacters,
+      'rawAbilities': ps.rawAbilities,
+      'rawFactions': ps.rawFactions,
+      'rawEvents': ps.rawEvents,
+      'rawStories': ps.rawStories,
+      'rawCreatures': ps.rawCreatures,
+      'rawReligions': ps.rawReligions,
+      'rawTechnologies': ps.rawTechnologies,
+    };
   }
 }

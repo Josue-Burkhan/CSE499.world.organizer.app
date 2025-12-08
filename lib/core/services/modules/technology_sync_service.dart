@@ -143,6 +143,123 @@ class TechnologySyncService {
   Future<void> syncDirtyTechnologies() async {
     final dirtyTechnologies = await _dao.getDirtyTechnologies();
     if (dirtyTechnologies.isEmpty) return;
-    
+    for (final tech in dirtyTechnologies) {
+      try {
+        if (tech.syncStatus == SyncStatus.created) {
+          await _syncCreatedTechnology(tech);
+        } else if (tech.syncStatus == SyncStatus.edited) {
+          await _syncEditedTechnology(tech);
+        } else if (tech.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedTechnology(tech);
+        }
+      } catch (e) {
+        print('Error syncing technology ${tech.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedTechnology(TechnologyEntity tech) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(tech.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync technology for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(tech, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiTech = Technology.fromJson(jsonDecode(response.body));
+      final companion = tech.toCompanion(true).copyWith(
+        serverId: d.Value(apiTech.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateTechnology(companion);
+    } else {
+      throw Exception('Failed to create technology: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedTechnology(TechnologyEntity tech) async {
+    if (tech.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(tech.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(tech, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${tech.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = tech.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateTechnology(companion);
+    } else {
+      throw Exception('Failed to update technology: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedTechnology(TechnologyEntity tech) async {
+    if (tech.serverId == null) {
+      await _dao.deleteTechnology(tech.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${tech.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteTechnology(tech.localId);
+    } else {
+      throw Exception('Failed to delete technology: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(TechnologyEntity tech, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': tech.name,
+      'description': tech.description,
+      'techType': tech.techType,
+      'origin': tech.origin,
+      'yearCreated': tech.yearCreated,
+      'currentUse': tech.currentUse,
+      'limitations': tech.limitations,
+      'energySource': tech.energySource,
+      'customNotes': tech.customNotes,
+      'tagColor': tech.tagColor,
+      'images': tech.images,
+      
+      'rawCreators': tech.rawCreators,
+      'rawCharacters': tech.rawCharacters,
+      'rawFactions': tech.rawFactions,
+      'rawItems': tech.rawItems,
+      'rawEvents': tech.rawEvents,
+      'rawStories': tech.rawStories,
+      'rawLocations': tech.rawLocations,
+      'rawPowerSystems': tech.rawPowerSystems,
+    };
   }
 }

@@ -117,6 +117,107 @@ class StorySyncService {
   Future<void> syncDirtyStories() async {
     final dirtyStories = await _dao.getDirtyStories();
     if (dirtyStories.isEmpty) return;
-    
+    for (final story in dirtyStories) {
+      try {
+        if (story.syncStatus == SyncStatus.created) {
+          await _syncCreatedStory(story);
+        } else if (story.syncStatus == SyncStatus.edited) {
+          await _syncEditedStory(story);
+        } else if (story.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedStory(story);
+        }
+      } catch (e) {
+        print('Error syncing story ${story.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedStory(StoryEntity story) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(story.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync story for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(story, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiStory = Story.fromJson(jsonDecode(response.body));
+      final companion = story.toCompanion(true).copyWith(
+        serverId: d.Value(apiStory.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateStory(companion);
+    } else {
+      throw Exception('Failed to create story: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedStory(StoryEntity story) async {
+    if (story.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(story.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(story, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${story.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = story.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateStory(companion);
+    } else {
+      throw Exception('Failed to update story: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedStory(StoryEntity story) async {
+    if (story.serverId == null) {
+      await _dao.deleteStory(story.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${story.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteStory(story.localId);
+    } else {
+      throw Exception('Failed to delete story: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(StoryEntity story, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': story.name,
+      'summary': story.summary,
+      'timeline': story.timelineJson != null ? jsonDecode(story.timelineJson!) : null,
+      'tagColor': story.tagColor,
+    };
   }
 }

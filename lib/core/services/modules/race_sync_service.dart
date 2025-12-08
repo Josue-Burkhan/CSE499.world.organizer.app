@@ -141,6 +141,122 @@ class RaceSyncService {
   Future<void> syncDirtyRaces() async {
     final dirtyRaces = await _dao.getDirtyRaces();
     if (dirtyRaces.isEmpty) return;
-    
+    for (final race in dirtyRaces) {
+      try {
+        if (race.syncStatus == SyncStatus.created) {
+          await _syncCreatedRace(race);
+        } else if (race.syncStatus == SyncStatus.edited) {
+          await _syncEditedRace(race);
+        } else if (race.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedRace(race);
+        }
+      } catch (e) {
+        print('Error syncing race ${race.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedRace(RaceEntity race) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(race.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync race for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(race, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiRace = Race.fromJson(jsonDecode(response.body));
+      final companion = race.toCompanion(true).copyWith(
+        serverId: d.Value(apiRace.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateRace(companion);
+    } else {
+      throw Exception('Failed to create race: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedRace(RaceEntity race) async {
+    if (race.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(race.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(race, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${race.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = race.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateRace(companion);
+    } else {
+      throw Exception('Failed to update race: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedRace(RaceEntity race) async {
+    if (race.serverId == null) {
+      await _dao.deleteRace(race.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${race.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteRace(race.localId);
+    } else {
+      throw Exception('Failed to delete race: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(RaceEntity race, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': race.name,
+      'description': race.description,
+      'traits': race.traits,
+      'lifespan': race.lifespan,
+      'averageHeight': race.averageHeight,
+      'averageWeight': race.averageWeight,
+      'culture': race.culture,
+      'isExtinct': race.isExtinct,
+      'tagColor': race.tagColor,
+      'images': race.images,
+      
+      'rawLanguages': race.rawLanguages,
+      'rawCharacters': race.rawCharacters,
+      'rawLocations': race.rawLocations,
+      'rawReligions': race.rawReligions,
+      'rawStories': race.rawStories,
+      'rawEvents': race.rawEvents,
+      'rawPowerSystems': race.rawPowerSystems,
+      'rawTechnologies': race.rawTechnologies,
+    };
   }
 }

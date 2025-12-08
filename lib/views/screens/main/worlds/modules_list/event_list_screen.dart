@@ -61,6 +61,7 @@ class EventListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => EventFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class EventListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => EventFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class EventListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => EventFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     eventLocalId: event.localId,
                   ),
                 ),

@@ -61,6 +61,7 @@ class TechnologyListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => TechnologyFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class TechnologyListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => TechnologyFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class TechnologyListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => TechnologyFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     technologyLocalId: technology.localId,
                   ),
                 ),

@@ -148,5 +148,125 @@ class AbilitySyncService {
     final dirtyAbilities = await _dao.getDirtyAbilities();
     if (dirtyAbilities.isEmpty) return;
     
+    for (final ability in dirtyAbilities) {
+      try {
+        if (ability.syncStatus == SyncStatus.created) {
+          await _syncCreatedAbility(ability);
+        } else if (ability.syncStatus == SyncStatus.edited) {
+          await _syncEditedAbility(ability);
+        } else if (ability.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedAbility(ability);
+        }
+      } catch (e) {
+        print('Error syncing ability ${ability.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedAbility(AbilityEntity ability) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(ability.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync ability for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(ability, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiAbility = Ability.fromJson(jsonDecode(response.body));
+      final companion = ability.toCompanion(true).copyWith(
+        serverId: d.Value(apiAbility.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateAbility(companion);
+    } else {
+      throw Exception('Failed to create ability: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedAbility(AbilityEntity ability) async {
+    if (ability.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(ability.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(ability, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${ability.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = ability.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateAbility(companion);
+    } else {
+      throw Exception('Failed to update ability: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedAbility(AbilityEntity ability) async {
+    if (ability.serverId == null) {
+      await _dao.deleteAbility(ability.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${ability.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteAbility(ability.localId);
+    } else {
+      throw Exception('Failed to delete ability: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(AbilityEntity ability, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': ability.name,
+      'description': ability.description,
+      'type': ability.type,
+      'element': ability.element,
+      'cooldown': ability.cooldown,
+      'cost': ability.cost,
+      'level': ability.level,
+      'requirements': ability.requirements,
+      'effect': ability.effect,
+      'customNotes': ability.customNotes,
+      'tagColor': ability.tagColor,
+      'images': ability.images,
+      
+      'rawCharacters': ability.rawCharacters,
+      'rawPowerSystems': ability.rawPowerSystems,
+      'rawStories': ability.rawStories,
+      'rawEvents': ability.rawEvents,
+      'rawItems': ability.rawItems,
+      'rawReligions': ability.rawReligions,
+      'rawTechnologies': ability.rawTechnologies,
+      'rawCreatures': ability.rawCreatures,
+      'rawRaces': ability.rawRaces,
+    };
   }
 }

@@ -135,6 +135,119 @@ class LanguageSyncService {
   Future<void> syncDirtyLanguages() async {
     final dirtyLanguages = await _dao.getDirtyLanguages();
     if (dirtyLanguages.isEmpty) return;
-    
+    for (final language in dirtyLanguages) {
+      try {
+        if (language.syncStatus == SyncStatus.created) {
+          await _syncCreatedLanguage(language);
+        } else if (language.syncStatus == SyncStatus.edited) {
+          await _syncEditedLanguage(language);
+        } else if (language.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedLanguage(language);
+        }
+      } catch (e) {
+        print('Error syncing language ${language.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedLanguage(LanguageEntity language) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(language.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync language for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(language, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiLanguage = Language.fromJson(jsonDecode(response.body));
+      final companion = language.toCompanion(true).copyWith(
+        serverId: d.Value(apiLanguage.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateLanguage(companion);
+    } else {
+      throw Exception('Failed to create language: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedLanguage(LanguageEntity language) async {
+    if (language.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(language.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(language, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${language.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = language.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateLanguage(companion);
+    } else {
+      throw Exception('Failed to update language: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedLanguage(LanguageEntity language) async {
+    if (language.serverId == null) {
+      await _dao.deleteLanguage(language.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${language.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteLanguage(language.localId);
+    } else {
+      throw Exception('Failed to delete language: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(LanguageEntity language, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': language.name,
+      'alphabet': language.alphabet,
+      'pronunciationRules': language.pronunciationRules,
+      'grammarNotes': language.grammarNotes,
+      'isSacred': language.isSacred,
+      'isExtinct': language.isExtinct,
+      'customNotes': language.customNotes,
+      'tagColor': language.tagColor,
+      'images': language.images,
+      
+      'rawRaces': language.rawRaces,
+      'rawFactions': language.rawFactions,
+      'rawCharacters': language.rawCharacters,
+      'rawLocations': language.rawLocations,
+      'rawStories': language.rawStories,
+      'rawReligions': language.rawReligions,
+    };
   }
 }

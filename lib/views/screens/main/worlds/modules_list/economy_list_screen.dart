@@ -61,6 +61,7 @@ class EconomyListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => EconomyFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class EconomyListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => EconomyFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class EconomyListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => EconomyFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     economyLocalId: economy.localId,
                   ),
                 ),

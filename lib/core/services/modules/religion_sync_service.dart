@@ -145,6 +145,124 @@ class ReligionSyncService {
   Future<void> syncDirtyReligions() async {
     final dirtyReligions = await _dao.getDirtyReligions();
     if (dirtyReligions.isEmpty) return;
-    
+    for (final religion in dirtyReligions) {
+      try {
+        if (religion.syncStatus == SyncStatus.created) {
+          await _syncCreatedReligion(religion);
+        } else if (religion.syncStatus == SyncStatus.edited) {
+          await _syncEditedReligion(religion);
+        } else if (religion.syncStatus == SyncStatus.deleted) {
+          await _syncDeletedReligion(religion);
+        }
+      } catch (e) {
+        print('Error syncing religion ${religion.name}: $e');
+      }
+    }
+  }
+
+  Future<void> _syncCreatedReligion(ReligionEntity religion) async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(religion.worldLocalId);
+    if (world == null || world.serverId == null) {
+      throw Exception('Cannot sync religion for unsynced world');
+    }
+
+    final body = _createBodyFromEntity(religion, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 201) {
+      final apiReligion = Religion.fromJson(jsonDecode(response.body));
+      final companion = religion.toCompanion(true).copyWith(
+        serverId: d.Value(apiReligion.id),
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateReligion(companion);
+    } else {
+      throw Exception('Failed to create religion: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> _syncEditedReligion(ReligionEntity religion) async {
+    if (religion.serverId == null) return;
+    final token = await _getToken();
+    if (token == null) return;
+
+    final world = await _worldsDao.getWorldByLocalId(religion.worldLocalId);
+    if (world == null || world.serverId == null) return;
+
+    final body = _createBodyFromEntity(religion, world.serverId!);
+    final headers = await _getHeaders();
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/${religion.serverId}'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final companion = religion.toCompanion(true).copyWith(
+        syncStatus: const d.Value(SyncStatus.synced),
+      );
+      await _dao.updateReligion(companion);
+    } else {
+      throw Exception('Failed to update religion: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _syncDeletedReligion(ReligionEntity religion) async {
+    if (religion.serverId == null) {
+      await _dao.deleteReligion(religion.localId);
+      return;
+    }
+
+    final token = await _getToken();
+    if (token == null) return;
+
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/${religion.serverId}'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      await _dao.deleteReligion(religion.localId);
+    } else {
+      throw Exception('Failed to delete religion: ${response.statusCode}');
+    }
+  }
+
+  Map<String, dynamic> _createBodyFromEntity(ReligionEntity religion, String worldServerId) {
+    return {
+      'world': worldServerId,
+      'name': religion.name,
+      'description': religion.description,
+      'deityNames': religion.deityNames,
+      'originStory': religion.originStory,
+      'practices': religion.practices,
+      'taboos': religion.taboos,
+      'sacredTexts': religion.sacredTexts,
+      'festivals': religion.festivals,
+      'symbols': religion.symbols,
+      'customNotes': religion.customNotes,
+      'tagColor': religion.tagColor,
+      'images': religion.images,
+      
+      'rawCharacters': religion.rawCharacters,
+      'rawFactions': religion.rawFactions,
+      'rawLocations': religion.rawLocations,
+      'rawCreatures': religion.rawCreatures,
+      'rawEvents': religion.rawEvents,
+      'rawPowerSystems': religion.rawPowerSystems,
+      'rawStories': religion.rawStories,
+      'rawTechnologies': religion.rawTechnologies,
+    };
   }
 }

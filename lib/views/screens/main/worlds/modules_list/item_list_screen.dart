@@ -61,6 +61,7 @@ class ItemListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => ItemFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class ItemListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => ItemFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class ItemListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => ItemFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     itemLocalId: item.localId,
                   ),
                 ),

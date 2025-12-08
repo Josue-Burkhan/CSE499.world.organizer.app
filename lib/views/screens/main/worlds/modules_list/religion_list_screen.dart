@@ -61,6 +61,7 @@ class ReligionListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => ReligionFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -146,6 +147,7 @@ class ReligionListScreen extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => ReligionFormScreen(
                         worldLocalId: worldLocalId,
+                        worldServerId: worldServerId,
                       ),
                     ),
                   );
@@ -199,6 +201,7 @@ class ReligionListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => ReligionFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     religionLocalId: religion.localId,
                   ),
                 ),
