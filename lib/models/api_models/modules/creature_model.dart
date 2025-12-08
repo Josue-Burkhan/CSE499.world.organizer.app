@@ -1,3 +1,5 @@
+import '../module_link.dart';
+
 class CreatureRelation {
   final String id;
   final String name;
@@ -25,14 +27,14 @@ class Creature {
     final List<String> images;
     final String tagColor;
 
-    final List<String> rawCharacters;
-    final List<String> rawAbilities;
-    final List<String> rawFactions;
-    final List<String> rawEvents;
-    final List<String> rawStories;
-    final List<String> rawLocations;
-    final List<String> rawPowerSystems;
-    final List<String> rawReligions;
+    final List<ModuleLink> rawCharacters;
+    final List<ModuleLink> rawAbilities;
+    final List<ModuleLink> rawFactions;
+    final List<ModuleLink> rawEvents;
+    final List<ModuleLink> rawStories;
+    final List<ModuleLink> rawLocations;
+    final List<ModuleLink> rawPowerSystems;
+    final List<ModuleLink> rawReligions;
 
     Creature({
         required this.id,
@@ -64,22 +66,23 @@ class Creature {
         return [];
     }
 
-    static List<String> _listFromPopulatedOrRaw(dynamic populated, dynamic raw) {
-        // Try raw first
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first - if it's a list of strings
         if (raw is List && raw.isNotEmpty) {
-            return List<String>.from(raw.map((item) => item.toString()));
+             return raw.map((item) {
+                return ModuleLink(id: '', name: item.toString());
+            }).toList();
         }
-        // Fallback to populated if it contains objects with names
+        
+        // Fallback to populated if it contains objects
         if (populated is List) {
             return populated.map((item) {
                 if (item is Map<String, dynamic> && item['name'] != null) {
-                    return item['name'].toString();
-                }
-                if (item is String) {
-                    return item;
+                    final id = item['id'] ?? item['_id'] ?? '';
+                    return ModuleLink(id: id, name: item['name'].toString());
                 }
                 return null;
-            }).whereType<String>().toList();
+            }).whereType<ModuleLink>().toList();
         }
         return [];
     }
@@ -97,14 +100,14 @@ class Creature {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawCharacters: _listFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
-            rawAbilities: _listFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
-            rawFactions: _listFromPopulatedOrRaw(json['factions'], json['rawFactions']),
-            rawEvents: _listFromPopulatedOrRaw(json['events'], json['rawEvents']),
-            rawStories: _listFromPopulatedOrRaw(json['stories'], json['rawStories']),
-            rawLocations: _listFromPopulatedOrRaw(json['locations'], json['rawLocations']),
-            rawPowerSystems: _listFromPopulatedOrRaw(json['powerSystems'], json['rawPowerSystems']),
-            rawReligions: _listFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawCharacters: _linksFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawAbilities: _linksFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
+            rawFactions: _linksFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawEvents: _linksFromPopulatedOrRaw(json['events'], json['rawEvents']),
+            rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawLocations: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawPowerSystems: _linksFromPopulatedOrRaw(json['powerSystems'], json['rawPowerSystems']),
+            rawReligions: _linksFromPopulatedOrRaw(json['religions'], json['rawReligions']),
         );
     }
 }

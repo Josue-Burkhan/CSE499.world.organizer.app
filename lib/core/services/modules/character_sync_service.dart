@@ -289,18 +289,19 @@ class CharacterSyncService {
       'rawEnemies': char.rawEnemies,
       'rawRomance': char.rawRomance,
       
-      'rawAbilities': char.rawAbilities,
-      'rawItems': char.rawItems,
-      'rawLanguages': char.rawLanguages,
-      'rawRaces': char.rawRaces,
-      'rawFactions': char.rawFactions,
-      'rawLocations': char.rawLocations,
-      'rawPowerSystems': char.rawPowerSystems,
-      'rawReligions': char.rawReligions,
-      'rawCreatures': char.rawCreatures,
-      'rawEconomies': char.rawEconomies,
-      'rawStories': char.rawStories,
-      'rawTechnologies': char.rawTechnologies,
+      // Send raw lists as list of strings (names) to match API expectation
+      'rawAbilities': char.rawAbilities.map((e) => e.name).toList(),
+      'rawItems': char.rawItems.map((e) => e.name).toList(),
+      'rawLanguages': char.rawLanguages.map((e) => e.name).toList(),
+      'rawRaces': char.rawRaces.map((e) => e.name).toList(),
+      'rawFactions': char.rawFactions.map((e) => e.name).toList(),
+      'rawLocations': char.rawLocations.map((e) => e.name).toList(),
+      'rawPowerSystems': char.rawPowerSystems.map((e) => e.name).toList(),
+      'rawReligions': char.rawReligions.map((e) => e.name).toList(),
+      'rawCreatures': char.rawCreatures.map((e) => e.name).toList(),
+      'rawEconomies': char.rawEconomies.map((e) => e.name).toList(),
+      'rawStories': char.rawStories.map((e) => e.name).toList(),
+      'rawTechnologies': char.rawTechnologies.map((e) => e.name).toList(),
     };
   }
 }

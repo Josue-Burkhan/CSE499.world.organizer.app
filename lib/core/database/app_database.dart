@@ -5,6 +5,7 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
+import '../../models/api_models/module_link.dart';
 
 import 'tables/user_profile.dart';
 import 'tables/worlds.dart';
@@ -39,6 +40,7 @@ import 'daos/religions_dao.dart';
 import 'daos/stories_dao.dart';
 import 'daos/technologies_dao.dart';
 import 'converters/list_string_converter.dart';
+import 'converters/module_link_list_converter.dart';
 
 part 'app_database.g.dart';
 

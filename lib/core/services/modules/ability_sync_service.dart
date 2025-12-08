@@ -258,15 +258,15 @@ class AbilitySyncService {
       'tagColor': ability.tagColor,
       'images': ability.images,
       
-      'rawCharacters': ability.rawCharacters,
-      'rawPowerSystems': ability.rawPowerSystems,
-      'rawStories': ability.rawStories,
-      'rawEvents': ability.rawEvents,
-      'rawItems': ability.rawItems,
-      'rawReligions': ability.rawReligions,
-      'rawTechnologies': ability.rawTechnologies,
-      'rawCreatures': ability.rawCreatures,
-      'rawRaces': ability.rawRaces,
+      'rawCharacters': ability.rawCharacters.map((e) => e.name).toList(),
+      'rawPowerSystems': ability.rawPowerSystems.map((e) => e.name).toList(),
+      'rawStories': ability.rawStories.map((e) => e.name).toList(),
+      'rawEvents': ability.rawEvents.map((e) => e.name).toList(),
+      'rawItems': ability.rawItems.map((e) => e.name).toList(),
+      'rawReligions': ability.rawReligions.map((e) => e.name).toList(),
+      'rawTechnologies': ability.rawTechnologies.map((e) => e.name).toList(),
+      'rawCreatures': ability.rawCreatures.map((e) => e.name).toList(),
+      'rawRaces': ability.rawRaces.map((e) => e.name).toList(),
     };
   }
 }

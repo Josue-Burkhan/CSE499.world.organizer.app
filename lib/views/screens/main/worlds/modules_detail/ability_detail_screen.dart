@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'character_detail_screen.dart';
+import 'creature_detail_screen.dart';
+import 'event_detail_screen.dart';
+import 'item_detail_screen.dart';
+import 'powersystem_detail_screen.dart';
+import 'race_detail_screen.dart';
+import 'religion_detail_screen.dart';
+import 'story_detail_screen.dart';
+import 'technology_detail_screen.dart';
 
 final abilityDetailStreamProvider =
     StreamProvider.family.autoDispose<AbilityEntity?, String>((ref, serverId) {
@@ -119,11 +130,11 @@ class AbilityDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
-                          Container(color: tagColor.withOpacity(0.5)),
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
+                        errorWidget: (context, url, error) => Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
               ),
@@ -136,15 +147,15 @@ class AbilityDetailScreen extends ConsumerWidget {
               _buildEffect(ability.effect),
               _buildRequirements(ability.requirements),
               _buildCustomNotes(ability.customNotes),
-              _buildRawList('Characters', ability.rawCharacters),
-              _buildRawList('Power Systems', ability.rawPowerSystems),
-              _buildRawList('Stories', ability.rawStories),
-              _buildRawList('Events', ability.rawEvents),
-              _buildRawList('Items', ability.rawItems),
-              _buildRawList('Religions', ability.rawReligions),
-              _buildRawList('Technologies', ability.rawTechnologies),
-              _buildRawList('Creatures', ability.rawCreatures),
-              _buildRawList('Races', ability.rawRaces),
+              _buildLinkList(context, 'Characters', ability.rawCharacters, 'character'),
+              _buildLinkList(context, 'Power Systems', ability.rawPowerSystems, 'powersystem'),
+              _buildLinkList(context, 'Stories', ability.rawStories, 'story'),
+              _buildLinkList(context, 'Events', ability.rawEvents, 'event'),
+              _buildLinkList(context, 'Items', ability.rawItems, 'item'),
+              _buildLinkList(context, 'Religions', ability.rawReligions, 'religion'),
+              _buildLinkList(context, 'Technologies', ability.rawTechnologies, 'technology'),
+              _buildLinkList(context, 'Creatures', ability.rawCreatures, 'creature'),
+              _buildLinkList(context, 'Races', ability.rawRaces, 'race'),
             ]),
           ),
         ],
@@ -267,7 +278,7 @@ class AbilityDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links, String type) {
     // FORCE VISIBILITY: Check if empty and show "No links"
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -278,17 +289,57 @@ class AbilityDetailScreen extends ConsumerWidget {
           children: [
             Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            rawList.isEmpty
+            links.isEmpty
                 ? const Text('No links')
                 : Wrap(
                     spacing: 8.0,
                     runSpacing: 4.0,
-                    children: rawList.map((item) => Chip(label: Text(item))).toList(),
+                    children: links.map((link) => ActionChip(
+                      label: Text(link.name),
+                      onPressed: () => _navigateToModule(context, type, link.id),
+                    )).toList(),
                   ),
           ],
         ),
       ),
     );
+  }
+
+  void _navigateToModule(BuildContext context, String type, String id) {
+    if (id.isEmpty) return;
+
+    // TODO: Implement navigation for other modules
+    // This requires references to other detail screens which might not be imported yet.
+    // For now, we just implement the structure.
+    switch (type) {
+        case 'character':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => CharacterDetailScreen(characterServerId: id)));
+          break;
+        case 'powersystem':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => PowerSystemDetailScreen(powerSystemServerId: id)));
+          break;
+        case 'story':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => StoryDetailScreen(storyServerId: id)));
+          break;
+        case 'event':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => EventDetailScreen(eventServerId: id)));
+          break;
+        case 'item':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailScreen(itemServerId: id)));
+          break;
+        case 'religion':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ReligionDetailScreen(religionServerId: id)));
+          break;
+        case 'technology':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => TechnologyDetailScreen(technologyServerId: id)));
+          break;
+        case 'creature':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => CreatureDetailScreen(creatureServerId: id)));
+          break;
+        case 'race':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => RaceDetailScreen(raceServerId: id)));
+          break;
+    }
   }
 
   Widget _buildEmptyStateCard(String title, IconData icon) {
@@ -361,7 +412,11 @@ class FullScreenImageViewer extends StatelessWidget {
           panEnabled: true,
           minScale: 1.0,
           maxScale: 4.0,
-          child: Image.network(imageUrl),
+          child: CachedNetworkImage(
+            imageUrl: imageUrl,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.white),
+          ),
         ),
       ),
     );

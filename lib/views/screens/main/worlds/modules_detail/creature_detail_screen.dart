@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'character_detail_screen.dart';
+import 'ability_detail_screen.dart';
+import 'event_detail_screen.dart';
+import 'item_detail_screen.dart';
+import 'powersystem_detail_screen.dart';
+import 'race_detail_screen.dart';
+import 'religion_detail_screen.dart';
+import 'story_detail_screen.dart';
+import 'technology_detail_screen.dart';
+import 'location_detail_screen.dart';
+import 'faction_detail_screen.dart';
 
 final creatureDetailStreamProvider =
     StreamProvider.family.autoDispose<CreatureEntity?, String>((ref, serverId) {
@@ -119,11 +132,11 @@ class CreatureDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
-                          Container(color: tagColor.withOpacity(0.5)),
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
+                        errorWidget: (context, url, error) => Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
               ),
@@ -135,14 +148,14 @@ class CreatureDetailScreen extends ConsumerWidget {
               _buildDescription(creature),
               _buildWeaknesses(creature),
               _buildCustomNotes(creature.customNotes),
-              _buildRawList('Characters', creature.rawCharacters),
-              _buildRawList('Abilities', creature.rawAbilities),
-              _buildRawList('Factions', creature.rawFactions),
-              _buildRawList('Events', creature.rawEvents),
-              _buildRawList('Stories', creature.rawStories),
-              _buildRawList('Locations', creature.rawLocations),
-              _buildRawList('Power Systems', creature.rawPowerSystems),
-              _buildRawList('Religions', creature.rawReligions),
+              _buildLinkList(context, 'Characters', creature.rawCharacters, 'character'),
+              _buildLinkList(context, 'Abilities', creature.rawAbilities, 'ability'),
+              _buildLinkList(context, 'Factions', creature.rawFactions, 'faction'),
+              _buildLinkList(context, 'Events', creature.rawEvents, 'event'),
+              _buildLinkList(context, 'Stories', creature.rawStories, 'story'),
+              _buildLinkList(context, 'Locations', creature.rawLocations, 'location'),
+              _buildLinkList(context, 'Power Systems', creature.rawPowerSystems, 'powersystem'),
+              _buildLinkList(context, 'Religions', creature.rawReligions, 'religion'),
             ]),
           ),
         ],
@@ -244,8 +257,8 @@ class CreatureDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links, String type) {
+    if (links.isEmpty) return const SizedBox.shrink();
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -259,12 +272,46 @@ class CreatureDetailScreen extends ConsumerWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: rawList.map((item) => Chip(label: Text(item))).toList(),
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: () => _navigateToModule(context, type, link.id),
+              )).toList(),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _navigateToModule(BuildContext context, String type, String id) {
+    if (id.isEmpty) return;
+    
+    switch (type) {
+        case 'character':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => CharacterDetailScreen(characterServerId: id)));
+          break;
+        case 'ability':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => AbilityDetailScreen(abilityServerId: id)));
+          break;
+        case 'faction':
+           Navigator.push(context, MaterialPageRoute(builder: (_) => FactionDetailScreen(factionServerId: id)));
+          break;
+        case 'event':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => EventDetailScreen(eventServerId: id)));
+          break;
+        case 'story':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => StoryDetailScreen(storyServerId: id)));
+          break;
+        case 'location':
+           Navigator.push(context, MaterialPageRoute(builder: (_) => LocationDetailScreen(locationServerId: id)));
+          break;
+        case 'powersystem':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => PowerSystemDetailScreen(powerSystemServerId: id)));
+          break;
+        case 'religion':
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ReligionDetailScreen(religionServerId: id)));
+          break;
+    }
   }
   Widget _buildEmptyStateCard(String title, IconData icon) {
     return Card(
@@ -335,7 +382,11 @@ class FullScreenImageViewer extends StatelessWidget {
           panEnabled: true,
           minScale: 1.0,
           maxScale: 4.0,
-          child: Image.network(imageUrl),
+          child: CachedNetworkImage(
+            imageUrl: imageUrl,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.white),
+          ),
         ),
       ),
     );

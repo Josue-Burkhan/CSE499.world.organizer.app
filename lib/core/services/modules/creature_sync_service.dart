@@ -253,14 +253,14 @@ class CreatureSyncService {
       'tagColor': creature.tagColor,
       'images': creature.images,
       
-      'rawCharacters': creature.rawCharacters,
-      'rawAbilities': creature.rawAbilities,
-      'rawFactions': creature.rawFactions,
-      'rawEvents': creature.rawEvents,
-      'rawStories': creature.rawStories,
-      'rawLocations': creature.rawLocations,
-      'rawPowerSystems': creature.rawPowerSystems,
-      'rawReligions': creature.rawReligions,
+      'rawCharacters': creature.rawCharacters.map((e) => e.name).toList(),
+      'rawAbilities': creature.rawAbilities.map((e) => e.name).toList(),
+      'rawFactions': creature.rawFactions.map((e) => e.name).toList(),
+      'rawEvents': creature.rawEvents.map((e) => e.name).toList(),
+      'rawStories': creature.rawStories.map((e) => e.name).toList(),
+      'rawLocations': creature.rawLocations.map((e) => e.name).toList(),
+      'rawPowerSystems': creature.rawPowerSystems.map((e) => e.name).toList(),
+      'rawReligions': creature.rawReligions.map((e) => e.name).toList(),
     };
   }
 }

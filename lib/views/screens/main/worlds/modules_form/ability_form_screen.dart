@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/widgets/autocomplete_chips.dart';
 
@@ -39,15 +40,26 @@ class _AbilityFormScreenState extends ConsumerState<AbilityFormScreen> {
   String _tagColor = 'neutral';
 
   // Links (Raw)
-  List<String> _rawCharacters = [];
-  List<String> _rawPowerSystems = [];
-  List<String> _rawStories = [];
-  List<String> _rawEvents = [];
-  List<String> _rawItems = [];
-  List<String> _rawReligions = [];
-  List<String> _rawTechnologies = [];
-  List<String> _rawCreatures = [];
-  List<String> _rawRaces = [];
+  List<ModuleLink> _rawCharacters = [];
+  List<ModuleLink> _rawPowerSystems = [];
+  List<ModuleLink> _rawStories = [];
+  List<ModuleLink> _rawEvents = [];
+  List<ModuleLink> _rawItems = [];
+  List<ModuleLink> _rawReligions = [];
+  List<ModuleLink> _rawTechnologies = [];
+  List<ModuleLink> _rawCreatures = [];
+  List<ModuleLink> _rawRaces = [];
+
+  List<ModuleLink> _updateLinksList(List<String> newNames, List<ModuleLink> currentLinks) {
+    return newNames.map((name) {
+      final existing = currentLinks.cast<ModuleLink?>().firstWhere(
+        (link) => link?.name == name,
+        orElse: () => null,
+      );
+      if (existing != null) return existing;
+      return ModuleLink(id: '', name: name);
+    }).toList();
+  }
 
   @override
   void initState() {
@@ -320,64 +332,64 @@ class _AbilityFormScreenState extends ConsumerState<AbilityFormScreen> {
         children: [
           AutocompleteChips(
             label: 'Characters',
-            initialValues: _rawCharacters,
-            onChanged: (values) => _rawCharacters = values,
+            initialValues: _rawCharacters.map((e) => e.name).toList(),
+            onChanged: (values) => _rawCharacters = _updateLinksList(values, _rawCharacters),
             searchFunction: (q) => _search(q, 'character'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Power Systems',
-            initialValues: _rawPowerSystems,
-            onChanged: (values) => _rawPowerSystems = values,
+            initialValues: _rawPowerSystems.map((e) => e.name).toList(),
+            onChanged: (values) => _rawPowerSystems = _updateLinksList(values, _rawPowerSystems),
             searchFunction: (q) => _search(q, 'powersystem'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Stories',
-            initialValues: _rawStories,
-            onChanged: (values) => _rawStories = values,
+            initialValues: _rawStories.map((e) => e.name).toList(),
+            onChanged: (values) => _rawStories = _updateLinksList(values, _rawStories),
             searchFunction: (q) => _search(q, 'story'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Events',
-            initialValues: _rawEvents,
-            onChanged: (values) => _rawEvents = values,
+            initialValues: _rawEvents.map((e) => e.name).toList(),
+            onChanged: (values) => _rawEvents = _updateLinksList(values, _rawEvents),
             searchFunction: (q) => _search(q, 'event'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Items',
-            initialValues: _rawItems,
-            onChanged: (values) => _rawItems = values,
+            initialValues: _rawItems.map((e) => e.name).toList(),
+            onChanged: (values) => _rawItems = _updateLinksList(values, _rawItems),
             searchFunction: (q) => _search(q, 'item'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Religions',
-            initialValues: _rawReligions,
-            onChanged: (values) => _rawReligions = values,
+            initialValues: _rawReligions.map((e) => e.name).toList(),
+            onChanged: (values) => _rawReligions = _updateLinksList(values, _rawReligions),
             searchFunction: (q) => _search(q, 'religion'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Technologies',
-            initialValues: _rawTechnologies,
-            onChanged: (values) => _rawTechnologies = values,
+            initialValues: _rawTechnologies.map((e) => e.name).toList(),
+            onChanged: (values) => _rawTechnologies = _updateLinksList(values, _rawTechnologies),
             searchFunction: (q) => _search(q, 'technology'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Creatures',
-            initialValues: _rawCreatures,
-            onChanged: (values) => _rawCreatures = values,
+            initialValues: _rawCreatures.map((e) => e.name).toList(),
+            onChanged: (values) => _rawCreatures = _updateLinksList(values, _rawCreatures),
             searchFunction: (q) => _search(q, 'creature'),
           ),
           const SizedBox(height: 16),
           AutocompleteChips(
             label: 'Races',
-            initialValues: _rawRaces,
-            onChanged: (values) => _rawRaces = values,
+            initialValues: _rawRaces.map((e) => e.name).toList(),
+            onChanged: (values) => _rawRaces = _updateLinksList(values, _rawRaces),
             searchFunction: (q) => _search(q, 'race'),
           ),
         ],
