@@ -1,11 +1,13 @@
-class FactionRelation {
+import '../module_link.dart';
+
+class PowerSystemRelation {
   final String id;
   final String name;
 
-  FactionRelation({required this.id, required this.name});
+  PowerSystemRelation({required this.id, required this.name});
 
-  factory FactionRelation.fromJson(Map<String, dynamic> json) {
-    return FactionRelation(
+  factory PowerSystemRelation.fromJson(Map<String, dynamic> json) {
+    return PowerSystemRelation(
       id: json['_id'],
       name: json['name'] ?? 'Unknown',
     );
@@ -31,14 +33,14 @@ class PowerSystem {
     final List<String> images;
     final String tagColor;
 
-    final List<String> rawCharacters;
-    final List<String> rawAbilities;
-    final List<String> rawFactions;
-    final List<String> rawEvents;
-    final List<String> rawStories;
-    final List<String> rawCreatures;
-    final List<String> rawReligions;
-    final List<String> rawTechnologies;
+    final List<ModuleLink> rawCharacters;
+    final List<ModuleLink> rawAbilities;
+    final List<ModuleLink> rawFactions;
+    final List<ModuleLink> rawEvents;
+    final List<ModuleLink> rawStories;
+    final List<ModuleLink> rawCreatures;
+    final List<ModuleLink> rawReligions;
+    final List<ModuleLink> rawTechnologies;
 
     PowerSystem({
         required this.id,
@@ -70,6 +72,25 @@ class PowerSystem {
         return [];
     }
 
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        if (populated is List) {
+          final links = <ModuleLink>[];
+          for (var item in populated) {
+            if (item is Map<String, dynamic> && item['name'] != null) {
+              links.add(ModuleLink(id: item['_id'] ?? item['id'] ?? '', name: item['name']));
+            } else if (item is String) {
+               links.add(ModuleLink(id: '', name: item));
+            }
+          }
+          if (links.isNotEmpty) return links;
+        }
+
+        if (raw is List) {
+          return raw.map((item) => ModuleLink(id: '', name: item.toString())).toList();
+        }
+        return [];
+    }
+
     factory PowerSystem.fromJson(Map<String, dynamic> json) {
         return PowerSystem(
             id: json['_id'],
@@ -84,14 +105,14 @@ class PowerSystem {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawCharacters: _listFromRaw(json['rawCharacters']),
-            rawAbilities: _listFromRaw(json['rawAbilities']),
-            rawFactions: _listFromRaw(json['rawFactions']),
-            rawEvents: _listFromRaw(json['rawEvents']),
-            rawStories: _listFromRaw(json['rawStories']),
-            rawCreatures: _listFromRaw(json['rawCreatures']),
-            rawReligions: _listFromRaw(json['rawReligions']),
-            rawTechnologies: _listFromRaw(json['rawTechnologies']),
+            rawCharacters: _linksFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawAbilities: _linksFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
+            rawFactions: _linksFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawEvents: _linksFromPopulatedOrRaw(json['events'], json['rawEvents']),
+            rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawCreatures: _linksFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
+            rawReligions: _linksFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawTechnologies: _linksFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
         );
     }
 }

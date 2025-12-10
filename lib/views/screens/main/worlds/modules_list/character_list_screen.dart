@@ -61,6 +61,7 @@ class CharacterListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => CharacterFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                   ),
                 ),
               );
@@ -199,6 +200,7 @@ class CharacterListScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => CharacterFormScreen(
                     worldLocalId: worldLocalId,
+                    worldServerId: worldServerId,
                     characterLocalId: character.localId,
                   ),
                 ),

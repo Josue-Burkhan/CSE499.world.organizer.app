@@ -4,6 +4,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/models/api_models/modules/character_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'ability_detail_screen.dart';
+import 'creature_detail_screen.dart';
+import 'economy_detail_screen.dart';
+import 'event_detail_screen.dart';
+import 'faction_detail_screen.dart';
+import 'item_detail_screen.dart';
+import 'language_detail_screen.dart';
+import 'location_detail_screen.dart';
+import 'powersystem_detail_screen.dart';
+import 'race_detail_screen.dart';
+import 'religion_detail_screen.dart';
+import 'story_detail_screen.dart';
+import 'technology_detail_screen.dart';
+import '../modules_form/character_form_screen.dart';
 
 final characterDetailStreamProvider =
     StreamProvider.family.autoDispose<CharacterEntity?, String>((ref, serverId) {
@@ -61,13 +77,8 @@ class CharacterDetailScreen extends ConsumerWidget {
 
     ref.listen(characterDetailSyncProvider(characterServerId), (prev, next) {
       if (prev is AsyncLoading && next is AsyncError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to sync details: ${next.error}'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        // Suppressed error alert for transient sync issues.
+        debugPrint('Failed to sync details: ${next.error}');
       }
     });
 
@@ -149,6 +160,23 @@ class CharacterDetailScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: tagColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CharacterFormScreen(
+                        characterLocalId: character.localId,
+                        worldLocalId: character.worldLocalId,
+                      ),
+                    ),
+                  ).then((_) {
+                    // Refresh the stream logic handles updates automatically via watch
+                  });
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(character.name),
               background: GestureDetector(
@@ -156,11 +184,11 @@ class CharacterDetailScreen extends ConsumerWidget {
                   ? () => _openFullScreenImage(context, imageUrl) 
                   : null,
                 child: imageUrl != null
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
-                          Container(color: tagColor.withOpacity(0.5)),
+                        placeholder: (context, url) => Container(color: tagColor.withOpacity(0.5)),
+                        errorWidget: (context, url, error) => Container(color: tagColor.withOpacity(0.5)),
                       )
                     : Container(color: tagColor.withOpacity(0.5)),
               ),
@@ -170,12 +198,20 @@ class CharacterDetailScreen extends ConsumerWidget {
             delegate: SliverChildListDelegate([
               _buildBasicInfo(character),
               _buildRelationships(context, 'Relationships', family, friends, enemies, romance),
-              if (appearance != null) _buildAppearance(appearance),
-              if (personality != null) _buildPersonality(personality),
-              _buildRawList('Factions', character.rawFactions),
-              _buildRawList('Races', character.rawRaces),
-              _buildRawList('Abilities', character.rawAbilities),
-              _buildRawList('Items', character.rawItems),
+              _buildAppearance(appearance),
+              _buildPersonality(personality),
+              _buildLinkList(context, 'Factions', character.rawFactions, 'faction'),
+              _buildLinkList(context, 'Races', character.rawRaces, 'race'),
+              _buildLinkList(context, 'Abilities', character.rawAbilities, 'ability'),
+              _buildLinkList(context, 'Items', character.rawItems, 'item'),
+              _buildLinkList(context, 'Locations', character.rawLocations, 'location'),
+              _buildLinkList(context, 'Creatures', character.rawCreatures, 'creature'),
+              _buildLinkList(context, 'Power Systems', character.rawPowerSystems, 'powersystem'),
+              _buildLinkList(context, 'Religions', character.rawReligions, 'religion'),
+              _buildLinkList(context, 'Economies', character.rawEconomies, 'economy'),
+              _buildLinkList(context, 'Stories', character.rawStories, 'story'),
+              _buildLinkList(context, 'Technologies', character.rawTechnologies, 'technology'),
+              _buildLinkList(context, 'Languages', character.rawLanguages, 'language'),
             ]),
           ),
         ],
@@ -266,7 +302,7 @@ class CharacterDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAppearance(Appearance appearance) {
+  Widget _buildAppearance(Appearance? appearance) {
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Column(
@@ -277,15 +313,15 @@ class CharacterDetailScreen extends ConsumerWidget {
             child: Text('Appearance', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ),
           ListTile(
-            title: Text(appearance.height?.toString() ?? 'Unknown'),
+            title: Text(appearance?.height?.toString() ?? 'Unknown'),
             subtitle: const Text('Height (cm)'),
           ),
           ListTile(
-            title: Text(appearance.weight?.toString() ?? 'Unknown'),
+            title: Text(appearance?.weight?.toString() ?? 'Unknown'),
             subtitle: const Text('Weight (kg)'),
           ),
           ListTile(
-            title: Text(appearance.hairColor ?? 'Unknown'),
+            title: Text(appearance?.hairColor ?? 'Unknown'),
             subtitle: const Text('Hair Color'),
           ),
         ],
@@ -293,7 +329,10 @@ class CharacterDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPersonality(Personality personality) {
+  Widget _buildPersonality(Personality? personality) {
+    if (personality == null) {
+         return _buildEmptyStateCard('Personality', Icons.psychology_outlined);
+    }
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Padding(
@@ -311,8 +350,8 @@ class CharacterDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRawList(String title, List<String> rawList) {
-    if (rawList.isEmpty) return const SizedBox.shrink();
+  Widget _buildLinkList(BuildContext context, String title, List<ModuleLink> links, String type) {
+    if (links.isEmpty) return const SizedBox.shrink();
 
     return Card(
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -326,13 +365,42 @@ class CharacterDetailScreen extends ConsumerWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: rawList.map((item) => Chip(label: Text(item))).toList(),
+              children: links.map((link) => ActionChip(
+                label: Text(link.name),
+                onPressed: () => _navigateToModule(context, type, link.id),
+              )).toList(),
             ),
           ],
         ),
       ),
     );
   }
+
+  void _navigateToModule(BuildContext context, String type, String id) {
+    if (id.isEmpty) return; // Cannot navigate without ID
+
+    Widget? screen;
+    switch (type) {
+      case 'faction': screen = FactionDetailScreen(factionServerId: id); break;
+      case 'race': screen = RaceDetailScreen(raceServerId: id); break;
+      case 'ability': screen = AbilityDetailScreen(abilityServerId: id); break;
+      case 'item': screen = ItemDetailScreen(itemServerId: id); break;
+      case 'location': screen = LocationDetailScreen(locationServerId: id); break;
+      case 'creature': screen = CreatureDetailScreen(creatureServerId: id); break;
+      case 'powersystem': screen = PowerSystemDetailScreen(powerSystemServerId: id); break;
+      case 'religion': screen = ReligionDetailScreen(religionServerId: id); break;
+      case 'economy': screen = EconomyDetailScreen(economyServerId: id); break;
+      case 'story': screen = StoryDetailScreen(storyServerId: id); break;
+      case 'technology': screen = TechnologyDetailScreen(technologyServerId: id); break;
+      case 'language': screen = LanguageDetailScreen(languageServerId: id); break;
+    }
+
+    if (screen != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => screen!));
+    }
+  }
+
+  // Removed _buildRawList as it is replaced by _buildLinkList
 
   Widget _buildChipSection(String title, List<String> items) {
     if (items.isEmpty) return const SizedBox.shrink();
@@ -348,6 +416,55 @@ class CharacterDetailScreen extends ConsumerWidget {
           children: items.map((item) => Chip(label: Text(item))).toList(),
         ),
       ],
+    );
+  }
+  Widget _buildEmptyStateCard(String title, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+      elevation: 0,
+      color: Colors.grey.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1))),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.grey, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No information available.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -370,7 +487,11 @@ class FullScreenImageViewer extends StatelessWidget {
           panEnabled: true,
           minScale: 1.0,
           maxScale: 4.0,
-          child: Image.network(imageUrl),
+          child: CachedNetworkImage(
+            imageUrl: imageUrl,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.white),
+          ),
         ),
       ),
     );

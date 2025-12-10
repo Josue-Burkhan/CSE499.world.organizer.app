@@ -1,3 +1,5 @@
+import '../module_link.dart';
+
 class StoryRelation {
   final String id;
   final String name;
@@ -68,7 +70,7 @@ class Timeline {
 
 class TimelineEvent {
     final num year;
-    final List<String> rawEvents;
+    final List<ModuleLink> rawEvents;
     final String description;
 
     TimelineEvent({
@@ -77,17 +79,36 @@ class TimelineEvent {
         required this.description,
     });
 
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        if (populated is List) {
+          final links = <ModuleLink>[];
+          for (var item in populated) {
+            if (item is Map<String, dynamic> && item['name'] != null) {
+              links.add(ModuleLink(id: item['_id'] ?? item['id'] ?? '', name: item['name']));
+            } else if (item is String) {
+               links.add(ModuleLink(id: '', name: item));
+            }
+          }
+          if (links.isNotEmpty) return links;
+        }
+
+        if (raw is List) {
+          return raw.map((item) => ModuleLink(id: '', name: item.toString())).toList();
+        }
+        return [];
+    }
+
     factory TimelineEvent.fromJson(Map<String, dynamic> json) {
         return TimelineEvent(
             year: json['year'],
-            rawEvents: List<String>.from(json['rawEvents'] ?? []),
+            rawEvents: _linksFromPopulatedOrRaw(json['events'], json['rawEvents']),
             description: json['description'],
         );
     }
 
     Map<String, dynamic> toJson() => {
         'year': year,
-        'rawEvents': rawEvents,
+        'rawEvents': rawEvents.map((e) => e.name).toList(),
         'description': description,
     };
 }

@@ -25,7 +25,7 @@ class World {
       modules: json['modules'] != null
           ? Modules.fromJson(json['modules'])
           : null,
-      coverImage: json['cover_image'],
+      coverImage: json['cover_image'] ?? json['image'],
       customImage: json['custom_image'],
     );
   }

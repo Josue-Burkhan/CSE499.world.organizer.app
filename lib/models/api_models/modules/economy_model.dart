@@ -1,3 +1,5 @@
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+
 class EconomyRelation {
     final String id;
     final String name;
@@ -24,12 +26,12 @@ class Economy {
     final List<String> images;
     final String tagColor;
 
-    final List<String> rawCharacters;
-    final List<String> rawFactions;
-    final List<String> rawLocations;
-    final List<String> rawItems;
-    final List<String> rawRaces;
-    final List<String> rawStories;
+    final List<ModuleLink> rawCharacters;
+    final List<ModuleLink> rawFactions;
+    final List<ModuleLink> rawLocations;
+    final List<ModuleLink> rawItems;
+    final List<ModuleLink> rawRaces;
+    final List<ModuleLink> rawStories;
 
     Economy({
         required this.id,
@@ -57,6 +59,23 @@ class Economy {
         return [];
     }
 
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first
+        if (raw is List && raw.isNotEmpty) {
+             return raw.map((item) => ModuleLink(id: '', name: item.toString())).toList();
+        }
+        // Fallback to populated if it contains objects with names
+        if (populated is List) {
+            return populated.map((item) {
+                if (item is Map<String, dynamic>) {
+                    return ModuleLink.fromJson(item);
+                }
+                return null;
+            }).whereType<ModuleLink>().toList();
+        }
+        return [];
+    }
+
     factory Economy.fromJson(Map<String, dynamic> json) {
         return Economy(
             id: json['_id'],
@@ -68,15 +87,15 @@ class Economy {
                 : null,
             tradeGoods: _listFromRaw(json['tradeGoods']),
             keyIndustries: _listFromRaw(json['keyIndustries']),
-            economicSystem: json['economicSystem'],
+            economicSystem: json['economicSystem'] ?? 'Unknown',
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawCharacters: _listFromRaw(json['rawCharacters']),
-            rawFactions: _listFromRaw(json['rawFactions']),
-            rawLocations: _listFromRaw(json['rawLocations']),
-            rawItems: _listFromRaw(json['rawItems']),
-            rawRaces: _listFromRaw(json['rawRaces']),
-            rawStories: _listFromRaw(json['rawStories']),
+            rawCharacters: _linksFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawFactions: _linksFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawLocations: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawItems: _linksFromPopulatedOrRaw(json['items'], json['rawItems']),
+            rawRaces: _linksFromPopulatedOrRaw(json['races'], json['rawRaces']),
+            rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
         );
     }
 }

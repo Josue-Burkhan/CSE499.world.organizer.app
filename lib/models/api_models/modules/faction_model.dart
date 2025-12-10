@@ -1,3 +1,5 @@
+import 'package:worldorganizer_app/models/api_models/module_link.dart';
+
 class FactionRelation {
   final String id;
   final String name;
@@ -35,17 +37,17 @@ class Faction {
     final List<FactionRelation> allies;
     final List<FactionRelation> enemies;
     
-    final List<String> rawCharacters;
-    final List<String> rawLocations;
-    final List<String> rawHeadquarters;
-    final List<String> rawTerritory;
-    final List<String> rawEvents;
-    final List<String> rawItems;
-    final List<String> rawStories;
-    final List<String> rawReligions;
-    final List<String> rawTechnologies;
-    final List<String> rawLanguages;
-    final List<String> rawPowerSystems;
+    final List<ModuleLink> rawCharacters;
+    final List<ModuleLink> rawLocations;
+    final List<ModuleLink> rawHeadquarters;
+    final List<ModuleLink> rawTerritory;
+    final List<ModuleLink> rawEvents;
+    final List<ModuleLink> rawItems;
+    final List<ModuleLink> rawStories;
+    final List<ModuleLink> rawReligions;
+    final List<ModuleLink> rawTechnologies;
+    final List<ModuleLink> rawLanguages;
+    final List<ModuleLink> rawPowerSystems;
 
     Faction({
         required this.id,
@@ -83,6 +85,23 @@ class Faction {
         return [];
     }
 
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        // Try raw first
+        if (raw is List && raw.isNotEmpty) {
+             return raw.map((item) => ModuleLink(id: '', name: item.toString())).toList();
+        }
+        // Fallback to populated if it contains objects with names
+        if (populated is List) {
+            return populated.map((item) {
+                if (item is Map<String, dynamic>) {
+                    return ModuleLink.fromJson(item);
+                }
+                return null;
+            }).whereType<ModuleLink>().toList();
+        }
+        return [];
+    }
+
     static List<FactionRelation> _relationsFromRaw(dynamic raw) {
         if (raw is List) {
             return raw.map((item) {
@@ -113,17 +132,17 @@ class Faction {
             tagColor: json['tagColor'] ?? 'neutral',
             allies: _relationsFromRaw(relationships['allies']),
             enemies: _relationsFromRaw(relationships['enemies']),
-            rawCharacters: _listFromRaw(json['rawCharacters']),
-            rawLocations: _listFromRaw(json['rawLocations']),
-            rawHeadquarters: _listFromRaw(json['rawLocations']),
-            rawTerritory: _listFromRaw(json['rawLocations']),
-            rawEvents: _listFromRaw(json['rawEvents']),
-            rawItems: _listFromRaw(json['rawItems']),
-            rawStories: _listFromRaw(json['rawStories']),
-            rawReligions: _listFromRaw(json['rawReligions']),
-            rawTechnologies: _listFromRaw(json['rawTechnologies']),
-            rawLanguages: _listFromRaw(json['rawLanguages']),
-            rawPowerSystems: _listFromRaw(json['rawPowerSystems']),
+            rawCharacters: _linksFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawLocations: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawHeadquarters: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawTerritory: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawEvents: _linksFromPopulatedOrRaw(json['events'], json['rawEvents']),
+            rawItems: _linksFromPopulatedOrRaw(json['items'], json['rawItems']),
+            rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawReligions: _linksFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawTechnologies: _linksFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
+            rawLanguages: _linksFromPopulatedOrRaw(json['languages'], json['rawLanguages']),
+            rawPowerSystems: _linksFromPopulatedOrRaw(json['powerSystems'], json['rawPowerSystems']),
         );
     }
 }

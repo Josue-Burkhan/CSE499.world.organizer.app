@@ -1,3 +1,5 @@
+import '../module_link.dart';
+
 class LocationRelation {
   final String id;
   final String name;
@@ -30,16 +32,16 @@ class Location {
     final List<String> images;
     final String tagColor;
 
-    final List<String> rawLocations;
-    final List<String> rawFactions;
-    final List<String> rawEvents;
-    final List<String> rawCharacters;
-    final List<String> rawItems;
-    final List<String> rawCreatures;
-    final List<String> rawStories;
-    final List<String> rawLanguages;
-    final List<String> rawReligions;
-    final List<String> rawTechnologies;
+    final List<ModuleLink> rawLocations;
+    final List<ModuleLink> rawFactions;
+    final List<ModuleLink> rawEvents;
+    final List<ModuleLink> rawCharacters;
+    final List<ModuleLink> rawItems;
+    final List<ModuleLink> rawCreatures;
+    final List<ModuleLink> rawStories;
+    final List<ModuleLink> rawLanguages;
+    final List<ModuleLink> rawReligions;
+    final List<ModuleLink> rawTechnologies;
 
     Location({
         required this.id,
@@ -72,6 +74,25 @@ class Location {
         return [];
     }
 
+    static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+        if (populated is List) {
+          final links = <ModuleLink>[];
+          for (var item in populated) {
+            if (item is Map<String, dynamic> && item['name'] != null) {
+              links.add(ModuleLink(id: item['_id'] ?? item['id'] ?? '', name: item['name']));
+            } else if (item is String) {
+               links.add(ModuleLink(id: '', name: item));
+            }
+          }
+          if (links.isNotEmpty) return links;
+        }
+
+        if (raw is List) {
+          return raw.map((item) => ModuleLink(id: '', name: item.toString())).toList();
+        }
+        return [];
+    }
+
     factory Location.fromJson(Map<String, dynamic> json) {
         return Location(
             id: json['_id'],
@@ -85,16 +106,16 @@ class Location {
             customNotes: json['customNotes'],
             images: _listFromRaw(json['images']),
             tagColor: json['tagColor'] ?? 'neutral',
-            rawLocations: _listFromRaw(json['rawLocations']),
-            rawFactions: _listFromRaw(json['rawFactions']),
-            rawEvents: _listFromRaw(json['rawEvents']),
-            rawCharacters: _listFromRaw(json['rawCharacters']),
-            rawItems: _listFromRaw(json['rawItems']),
-            rawCreatures: _listFromRaw(json['rawCreatures']),
-            rawStories: _listFromRaw(json['rawStories']),
-            rawLanguages: _listFromRaw(json['rawLanguages']),
-            rawReligions: _listFromRaw(json['rawReligions']),
-            rawTechnologies: _listFromRaw(json['rawTechnologies']),
+            rawLocations: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+            rawFactions: _linksFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+            rawEvents: _linksFromPopulatedOrRaw(json['events'], json['rawEvents']),
+            rawCharacters: _linksFromPopulatedOrRaw(json['characters'], json['rawCharacters']),
+            rawItems: _linksFromPopulatedOrRaw(json['items'], json['rawItems']),
+            rawCreatures: _linksFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
+            rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
+            rawLanguages: _linksFromPopulatedOrRaw(json['languages'], json['rawLanguages']),
+            rawReligions: _linksFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+            rawTechnologies: _linksFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
         );
     }
 }

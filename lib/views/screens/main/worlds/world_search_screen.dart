@@ -4,6 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worldorganizer_app/models/api_models/search_result_model.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
 import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/character_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/ability_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/creature_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/economy_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/event_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/faction_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/item_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/language_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/location_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/powersystem_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/race_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/religion_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/story_detail_screen.dart';
+import 'package:worldorganizer_app/views/screens/main/worlds/modules_detail/technology_detail_screen.dart';
 
 final searchResultsProvider = StateProvider<AsyncValue<List<SearchResult>>>(
   (ref) => const AsyncValue.data([])
@@ -80,6 +93,123 @@ class _WorldSearchScreenState extends ConsumerState<WorldSearchScreen> {
           MaterialPageRoute(
             builder: (context) => CharacterDetailScreen(
               characterServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'ability':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => AbilityDetailScreen(
+              abilityServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'location':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => LocationDetailScreen(
+              locationServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'faction':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => FactionDetailScreen(
+              factionServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'item':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ItemDetailScreen(
+              itemServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'event':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => EventDetailScreen(
+              eventServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'language':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => LanguageDetailScreen(
+              languageServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'technology':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => TechnologyDetailScreen(
+              technologyServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'powersystem':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PowerSystemDetailScreen(
+              powerSystemServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'creature':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => CreatureDetailScreen(
+              creatureServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'religion':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ReligionDetailScreen(
+              religionServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'story':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => StoryDetailScreen(
+              storyServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'race':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => RaceDetailScreen(
+              raceServerId: result.id,
+            ),
+          ),
+        );
+        break;
+      case 'economy':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => EconomyDetailScreen(
+              economyServerId: result.id,
             ),
           ),
         );

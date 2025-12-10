@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:worldorganizer_app/core/database/app_database.dart';
 import 'package:worldorganizer_app/providers/core_providers.dart';
-import 'package:worldorganizer_app/repositories/profile_repository.dart';
 import 'package:worldorganizer_app/views/screens/auth/login_screen.dart';
 
 final sessionTypeProvider = FutureProvider<String?>((ref) {

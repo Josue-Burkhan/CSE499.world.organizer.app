@@ -1,0 +1,9 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'locations_dao.dart';
+
+// ignore_for_file: type=lint
+mixin _$LocationsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $WorldsTable get worlds => attachedDatabase.worlds;
+  $LocationsTable get locations => attachedDatabase.locations;
+}

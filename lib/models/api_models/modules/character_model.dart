@@ -1,3 +1,5 @@
+import '../module_link.dart';
+
 class CharacterRelation {
   final String id;
   final String name;
@@ -6,7 +8,7 @@ class CharacterRelation {
 
   factory CharacterRelation.fromJson(Map<String, dynamic> json) {
     return CharacterRelation(
-      id: json['_id'],
+      id: json['_id'] ?? '',
       name: json['name'] ?? 'Unknown',
     );
   }
@@ -37,18 +39,18 @@ class Character {
   final List<CharacterRelation> enemies;
   final List<CharacterRelation> romance;
 
-  final List<String> rawAbilities;
-  final List<String> rawItems;
-  final List<String> rawLanguages;
-  final List<String> rawRaces;
-  final List<String> rawFactions;
-  final List<String> rawLocations;
-  final List<String> rawPowerSystems;
-  final List<String> rawReligions;
-  final List<String> rawCreatures;
-  final List<String> rawEconomies;
-  final List<String> rawStories;
-  final List<String> rawTechnologies;
+  final List<ModuleLink> rawAbilities;
+  final List<ModuleLink> rawItems;
+  final List<ModuleLink> rawLanguages;
+  final List<ModuleLink> rawRaces;
+  final List<ModuleLink> rawFactions;
+  final List<ModuleLink> rawLocations;
+  final List<ModuleLink> rawPowerSystems;
+  final List<ModuleLink> rawReligions;
+  final List<ModuleLink> rawCreatures;
+  final List<ModuleLink> rawEconomies;
+  final List<ModuleLink> rawStories;
+  final List<ModuleLink> rawTechnologies;
 
   Character({
     required this.id,
@@ -92,11 +94,54 @@ class Character {
     if (raw is List) {
       return raw.map((item) {
         if (item is Map<String, dynamic>) {
-          return CharacterRelation.fromJson(item);
+          final rel = CharacterRelation.fromJson(item);
+          if (rel.id.isEmpty) return null;
+          return rel;
+        }
+        if (item is String) {
+          if (item.isEmpty) return null;
+          return CharacterRelation(id: item, name: item);
         }
         return null; 
       }).whereType<CharacterRelation>().toList();
     }
+    return [];
+  }
+
+
+
+  static List<ModuleLink> _linksFromPopulatedOrRaw(dynamic populated, dynamic raw) {
+    // Try raw first IF it is a list of maps (from DB sync or full objects)
+    // But API sends populated in 'abilities' and list-of-strings in 'rawAbilities'?
+    // Wait, API sends populated objects now.
+    
+    // Check populated first for full objects
+    if (populated is List) {
+      return populated.map((item) {
+        if (item is Map<String, dynamic>) {
+           return ModuleLink.fromJson(item);
+        }
+        return null; // Skip if not object
+      }).whereType<ModuleLink>().toList();
+    }
+    
+    // Check raw (might be strings or maps depending on context)
+    if (raw is List) {
+       return raw.map((item) {
+         if (item is Map<String, dynamic>) {
+           return ModuleLink.fromJson(item);
+         }
+         // If string, we don't have ID, so we can't make a valid link?
+         // Or we make a link with empty ID?
+         // The requirement is clickable ID.
+         // If we only have name, we can't click.
+         if (item is String) {
+           return ModuleLink(id: '', name: item);
+         }
+         return null;
+       }).whereType<ModuleLink>().toList();
+    }
+
     return [];
   }
 
@@ -125,18 +170,18 @@ class Character {
       friends: _relationsFromRaw(relationships['friends']),
       enemies: _relationsFromRaw(relationships['enemies']),
       romance: _relationsFromRaw(relationships['romance']),
-      rawAbilities: _listFromRaw(json['rawAbilities']),
-      rawItems: _listFromRaw(json['rawItems']),
-      rawLanguages: _listFromRaw(json['rawLanguages']),
-      rawRaces: _listFromRaw(json['rawRaces']),
-      rawFactions: _listFromRaw(json['rawFactions']),
-      rawLocations: _listFromRaw(json['rawLocations']),
-      rawPowerSystems: _listFromRaw(json['rawPowerSystems']),
-      rawReligions: _listFromRaw(json['rawReligions']),
-      rawCreatures: _listFromRaw(json['rawCreatures']),
-      rawEconomies: _listFromRaw(json['rawEconomies']),
-      rawStories: _listFromRaw(json['rawStories']),
-      rawTechnologies: _listFromRaw(json['rawTechnologies']),
+      rawAbilities: _linksFromPopulatedOrRaw(json['abilities'], json['rawAbilities']),
+      rawItems: _linksFromPopulatedOrRaw(json['items'], json['rawItems']),
+      rawLanguages: _linksFromPopulatedOrRaw(json['languages'], json['rawLanguages']),
+      rawRaces: _linksFromPopulatedOrRaw(json['races'], json['rawRaces']),
+      rawFactions: _linksFromPopulatedOrRaw(json['factions'], json['rawFactions']),
+      rawLocations: _linksFromPopulatedOrRaw(json['locations'], json['rawLocations']),
+      rawPowerSystems: _linksFromPopulatedOrRaw(json['powerSystems'], json['rawPowerSystems']),
+      rawReligions: _linksFromPopulatedOrRaw(json['religions'], json['rawReligions']),
+      rawCreatures: _linksFromPopulatedOrRaw(json['creatures'], json['rawCreatures']),
+      rawEconomies: _linksFromPopulatedOrRaw(json['economies'], json['rawEconomies']),
+      rawStories: _linksFromPopulatedOrRaw(json['stories'], json['rawStories']),
+      rawTechnologies: _linksFromPopulatedOrRaw(json['technologies'], json['rawTechnologies']),
     );
   }
 }
